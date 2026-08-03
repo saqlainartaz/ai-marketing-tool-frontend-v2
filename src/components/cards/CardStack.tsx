@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ActionButton } from "@/components/ui/action-button";
 import { CardShell } from "@/components/ui/card-shell";
-import { PostPreview } from "@/components/preview/post-preview";
+import { ContentPreview } from "@/components/preview/ContentPreview";
 import { SourcedBody } from "@/components/preview/SourcedBody";
 import { GuardrailLine } from "@/components/preview/GuardrailLine";
 import { getFixtureClient } from "@/lib/fixtures/clients";
@@ -49,12 +49,15 @@ export function CardStack({ clientId }: { clientId: string }) {
     return (
       <div data-testid="card-stack">
         <div className="relative">
-          <PostPreview
+          <ContentPreview
+            kind={current.kind}
             platform={current.platform}
             businessName={client.businessName}
             avatarInitial={client.avatarInitial}
             meta={current.meta}
             withImage={current.withImage}
+            review={current.review}
+            subject={current.subject}
           >
             {isEditing ? (
               <textarea
@@ -67,7 +70,7 @@ export function CardStack({ clientId }: { clientId: string }) {
             ) : (
               <SourcedBody body={body} provenance={current.provenance} />
             )}
-          </PostPreview>
+          </ContentPreview>
           {stamped === current.id ? (
             <div
               data-testid="stamp"

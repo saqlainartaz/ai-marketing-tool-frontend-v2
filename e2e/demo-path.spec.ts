@@ -118,12 +118,15 @@ test("the complete product loop: create → library → handoff → plan → set
   await page.getByRole("link", { name: /dave · meridian roofing/i }).click();
   await page.goto("/today");
 
-  // Clear the three prepared drafts (approve, approve, skip).
+  // Clear the prepared items: two posts, skip one, then the review reply —
+  // a different marketing tool arriving through the same card system.
   await page.getByRole("button", { name: /good to go/i }).click();
   await expect(page.getByText(/Lakeway Ave/)).toBeVisible({ timeout: 5000 });
   await page.getByRole("button", { name: /good to go/i }).click();
   await expect(page.getByText(/#1 question/)).toBeVisible({ timeout: 5000 });
   await page.getByRole("button", { name: /not this one/i }).click();
+  await expect(page.getByText(/Karen L\./)).toBeVisible({ timeout: 5000 });
+  await page.getByRole("button", { name: /good to go/i }).click();
 
   // The MAKE card appears → guided create.
   await page.getByRole("link", { name: /tell the story/i }).click();

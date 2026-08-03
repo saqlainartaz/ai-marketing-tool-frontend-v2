@@ -17,6 +17,8 @@ export type ProvenanceSpan = {
 
 export type FixtureDraft = {
   id: string;
+  /** The marketing tool this came from — new tools add kinds, not screens. */
+  kind?: "post" | "review_reply" | "email";
   platform: Platform;
   meta: string;
   body: string;
@@ -26,6 +28,10 @@ export type FixtureDraft = {
   provenance?: ProvenanceSpan[];
   /** Protection already applied — shown as the honey line + diff. */
   guardrail?: { note: string; from: string; to: string };
+  /** review_reply: the review being answered. */
+  review?: { reviewer: string; stars: number; text: string };
+  /** email: subject line. */
+  subject?: string;
 };
 
 export type QuestionCardFixture = {
@@ -126,6 +132,26 @@ const dave: FixtureClient = {
       body: 'The #1 question we get every storm season: "Should I file a claim?" Here\'s how to know in five minutes — before you call anyone.',
       consequence: "pull it back anytime",
       pillar: "Questions customers ask",
+    },
+    {
+      id: "dave-4",
+      kind: "review_reply",
+      platform: "google_business",
+      meta: "New Google review · reply drafted",
+      review: {
+        reviewer: "Karen L.",
+        stars: 5,
+        text: "They finished our entire roof in two days flat and left the yard cleaner than they found it.",
+      },
+      body: "Thank you, Karen — the crew still talks about your dog supervising from the porch. Two days is what good prep looks like; glad the cleanup showed too. We're here whenever you need us.",
+      consequence: "posts to your Google reviews · pull it back anytime",
+      pillar: "Reviews",
+      provenance: [
+        {
+          phrase: "Two days is what good prep looks like",
+          label: "your episode, March · 31:02",
+        },
+      ],
     },
   ],
   questionCards: [
@@ -239,6 +265,23 @@ const amara: FixtureClient = {
         from: "I win the cases others give up on.",
         to: "I take on the cases others find difficult.",
       },
+    },
+    {
+      id: "amara-3",
+      kind: "email",
+      platform: "linkedin",
+      meta: "Email · consultation follow-up · awaiting your review",
+      subject: "What we covered — and your next step, when you're ready",
+      body: "It was good to meet you this week. As promised, here's the short version of what we discussed, in plain language, plus the two documents worth gathering before anything else. No deadline on any of this — when you're ready, you know where I am.",
+      consequence: "sent from your inbox after you approve · never automatic",
+      pillar: "How consultations actually work",
+      provenance: [
+        {
+          phrase: "in plain language",
+          label: "your onboarding call, Mar 12",
+          quote: "I never want a client to need a dictionary to read my emails.",
+        },
+      ],
     },
   ],
   questionCards: [

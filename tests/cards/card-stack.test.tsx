@@ -77,10 +77,25 @@ describe("CardStack (store-driven)", () => {
     );
   });
 
-  it("after all drafts, the question card appears; question cards link to create", async () => {
+  it("non-post tools render as cards too: Dave's review reply", async () => {
     const user = userEvent.setup();
     renderStack();
     for (let i = 0; i < 3; i++) {
+      await user.click(
+        await screen.findByRole("button", { name: /not this one/i }),
+      );
+    }
+    expect(screen.getByText(/Karen L\./)).toBeInTheDocument();
+    expect(screen.getByText(/Your reply/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/the crew still talks about your dog/),
+    ).toBeInTheDocument();
+  });
+
+  it("after all drafts, the question card appears; question cards link to create", async () => {
+    const user = userEvent.setup();
+    renderStack();
+    for (let i = 0; i < 4; i++) {
       await user.click(
         await screen.findByRole("button", { name: /not this one/i }),
       );

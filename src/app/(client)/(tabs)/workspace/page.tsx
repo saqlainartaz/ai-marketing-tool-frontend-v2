@@ -105,6 +105,40 @@ export default function WorkspacePage() {
         )}
       </CardShell>
 
+      <h2 className="mt-8 font-display text-lg font-semibold">
+        What we can make for you
+      </h2>
+      <p className="mt-1 text-xs text-ink-2">
+        Your plan picks the tools that fit your business — outputs always
+        arrive as cards on Today.
+      </p>
+      <div className="mt-3 grid grid-cols-2 gap-2" data-testid="tool-gallery">
+        {[
+          { icon: "✍", label: "Posts", desc: "Facebook, LinkedIn, GBP", on: true },
+          { icon: "⭐", label: "Review replies", desc: "Google & Facebook", on: true },
+          { icon: "✉", label: "Emails", desc: "Follow-ups & updates", on: true },
+          { icon: "📍", label: "GBP updates", desc: "Offers & news", on: true },
+          { icon: "🎬", label: "Video scripts", desc: "From your episode", on: false },
+          { icon: "📄", label: "Landing pages", desc: "For campaigns", on: false },
+        ].map((tool) => (
+          <div
+            key={tool.label}
+            className={`rounded-xl border p-3 ${tool.on ? "border-line bg-card" : "border-dashed border-line opacity-60"}`}
+          >
+            <p className="text-sm font-semibold">
+              <span aria-hidden className="mr-1">{tool.icon}</span>
+              {tool.label}
+            </p>
+            <p className="mt-0.5 text-[10.5px] text-ink-2">{tool.desc}</p>
+            {!tool.on ? (
+              <p className="mt-1 text-[9.5px] text-ink-3">
+                joins when your plan calls for it
+              </p>
+            ) : null}
+          </div>
+        ))}
+      </div>
+
       </div>
       <div>
       <h2 className="mt-8 font-display text-lg font-semibold lg:mt-0">
