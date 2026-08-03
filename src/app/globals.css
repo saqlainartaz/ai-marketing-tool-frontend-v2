@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import "../lib/theme/tokens.css";
+
+/*
+ * Bridge tokens into Tailwind v4 utilities:
+ * bg-paper, text-ink-2, border-line, bg-clay, text-onact, font-display, …
+ */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-clay: var(--clay);
+  --color-clay-deep: var(--clay-deep);
+  --color-clay-mist: var(--clay-mist);
+  --color-moss: var(--moss);
+  --color-moss-mist: var(--moss-mist);
+  --color-honey: var(--honey);
+  --color-honey-mist: var(--honey-mist);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-onact: var(--onact);
+  --font-display: var(--font-bricolage), Georgia, serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

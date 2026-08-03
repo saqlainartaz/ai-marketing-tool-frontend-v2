@@ -18,3 +18,18 @@ Append-only. Every dependency gets a ledger row at install time.
 | Dependency | Version | Licence | Verified | Notes |
 |---|---|---|---|---|
 | _(rows added at install time — see master plan §Stack licence ledger for expected values)_ | | | | |
+
+### Ledger entries — 2026-08-03 (T1)
+
+| Dependency | Version | Licence | Verified | Notes |
+|---|---|---|---|---|
+| next | 16.2.12 | MIT | npm | |
+| react / react-dom | 19.2.4 | MIT | npm | |
+| tailwindcss / @tailwindcss/postcss | ^4 | MIT | npm | |
+| typescript | ^5 | Apache-2.0 | npm | |
+| eslint / eslint-config-next | ^9 / 16.2.12 | MIT | npm | |
+| vitest | ^4 | MIT | npm | |
+| jsdom | latest | MIT | npm | |
+| @vitejs/plugin-react | latest | MIT | npm | |
+| @testing-library/react / jest-dom / user-event | latest | MIT | npm | |
+| Bricolage Grotesque, Inter (next/font) | — | SIL OFL 1.1 | Google Fonts | self-hosted at build |

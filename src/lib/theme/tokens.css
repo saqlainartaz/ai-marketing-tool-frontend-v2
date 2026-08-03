@@ -1,0 +1,76 @@
+/*
+ * Design tokens — the four switchable palettes.
+ * Token names are the contract with the wireframes (AI Marketing Tool v2/wireframes/).
+ * Default theme: cobalt (decision log 2026-08-03).
+ * Semantic roles: clay = the one action per screen · moss = wins/good news ·
+ * honey = protection (guardrails, never warnings) · paper/ink/card/line = surfaces.
+ */
+
+:root,
+:root[data-theme="cobalt"] {
+  --paper: #ffffff;
+  --ink: #101318;
+  --ink-2: #5d6470;
+  --ink-3: #9aa2ad;
+  --clay: #2f45e0;
+  --clay-deep: #2333ad;
+  --clay-mist: #e8ebfc;
+  --moss: #0c8a5f;
+  --moss-mist: #e4f4ee;
+  --honey: #9a6d12;
+  --honey-mist: #f7f1e2;
+  --card: #f7f8fa;
+  --line: #e6e9ee;
+  --onact: #ffffff;
+}
+
+:root[data-theme="clay"] {
+  --paper: #faf7f2;
+  --ink: #201b15;
+  --ink-2: #6f6459;
+  --ink-3: #a99e91;
+  --clay: #e8613a;
+  --clay-deep: #c74e2c;
+  --clay-mist: #fbeae3;
+  --moss: #3d7a4f;
+  --moss-mist: #e9f2ec;
+  --honey: #a1651a;
+  --honey-mist: #faf3e6;
+  --card: #ffffff;
+  --line: #ece5db;
+  --onact: #ffffff;
+}
+
+:root[data-theme="forest"] {
+  --paper: #f7f8f4;
+  --ink: #17251c;
+  --ink-2: #5c6b60;
+  --ink-3: #98a69b;
+  --clay: #1e6b47;
+  --clay-deep: #164f35;
+  --clay-mist: #e3f0e8;
+  --moss: #b07c1a;
+  --moss-mist: #f6efdb;
+  --honey: #a1651a;
+  --honey-mist: #faf3e6;
+  --card: #ffffff;
+  --line: #e3e8df;
+  --onact: #ffffff;
+}
+
+:root[data-theme="night"] {
+  --paper: #15171d;
+  --ink: #f2f1ee;
+  --ink-2: #a6a8ad;
+  --ink-3: #6c6f76;
+  --clay: #d6f245;
+  --clay-deep: #9db123;
+  --clay-mist: #2b3020;
+  --moss: #7fd6a8;
+  --moss-mist: #22302a;
+  --honey: #e0b05c;
+  --honey-mist: #2f2718;
+  --card: #1f2229;
+  --line: #2e323b;
+  --onact: #15171d;
+}
