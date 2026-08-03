@@ -108,6 +108,18 @@ test("desktop is a real app: sidebar, two-column Today, context rail", async ({
   await expect(page.getByTestId("source-pop")).toHaveText(
     /your onboarding call, Mar 12/,
   );
+
+  // The profile: her legible memory, one click from the sidebar identity.
+  await page
+    .getByTestId("sidebar")
+    .getByRole("link", { name: /osei family law/i })
+    .click();
+  await expect(page).toHaveURL(/\/profile/);
+  await expect(
+    page.getByText(/Every draft is built from what's on this page/),
+  ).toBeVisible();
+  await expect(page.getByText(/No outcome guarantees/)).toBeVisible();
+  await expect(page.getByText(/Measured and warm/)).toBeVisible();
 });
 
 test("the complete product loop: create → library → handoff → plan → settings → workspace", async ({

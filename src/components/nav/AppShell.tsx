@@ -15,6 +15,7 @@ const NAV = [
   { href: "/library", label: "Library", icon: "▤" },
   { href: "/plan", label: "Plan", icon: "◎" },
   { href: "/workspace", label: "Workspace", icon: "✳" },
+  { href: "/profile", label: "Profile", icon: "◉" },
   { href: "/settings", label: "Settings", icon: "⚙" },
 ] as const;
 
@@ -36,14 +37,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         data-testid="sidebar"
         className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-line bg-card px-4 py-6 lg:flex"
       >
-        <div className="px-2">
-          <p className="font-display text-[15px] font-semibold">
-            {client.businessName}
-          </p>
-          <p className="mt-0.5 text-[11px] text-ink-3">
-            with InsideSuccess — nothing goes out without your yes
-          </p>
-        </div>
+        <Link
+          href="/profile"
+          className="flex items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-paper"
+        >
+          <span
+            aria-hidden
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-clay-mist font-display text-sm font-bold text-clay-deep"
+          >
+            {client.avatarInitial}
+          </span>
+          <span>
+            <span className="block font-display text-[14px] leading-tight font-semibold">
+              {client.businessName}
+            </span>
+            <span className="mt-0.5 block text-[10.5px] text-ink-3">
+              {client.firstName} · your profile →
+            </span>
+          </span>
+        </Link>
         <nav className="mt-6 space-y-1">
           {NAV.map((item) => {
             const active = pathname.startsWith(item.href);

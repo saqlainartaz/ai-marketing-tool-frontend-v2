@@ -42,13 +42,23 @@ export function BottomNav() {
               </span>
             </Link>
             <Link
+              href="/profile"
+              className="block rounded-xl px-3 py-3 text-sm font-semibold hover:bg-clay-mist"
+              onClick={() => setMenuOpen(false)}
+            >
+              Your profile
+              <span className="block text-xs font-normal text-ink-2">
+                Everything we know about you — every line correctable
+              </span>
+            </Link>
+            <Link
               href="/settings"
               className="block rounded-xl px-3 py-3 text-sm font-semibold hover:bg-clay-mist"
               onClick={() => setMenuOpen(false)}
             >
               Settings
               <span className="block text-xs font-normal text-ink-2">
-                Your goal, your never-do list, how much we handle
+                Your never-do list, how much we handle
               </span>
             </Link>
             <div className="mt-2 flex items-center justify-between border-t border-line px-3 pt-3">

@@ -38,19 +38,16 @@ export default function SettingsPage() {
 
         <CardShell>
           <p className="text-sm font-semibold">Your business</p>
-          <ul className="mt-1">
-            {client.profileLines.map((line) => (
-              <li
-                key={line}
-                className="border-b border-dashed border-line py-2 text-[12.5px] text-ink-2 last:border-0"
-              >
-                {line}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-2 text-[10.5px] text-ink-3">
-            Something changed? Tell us — editing lands in M2.
+          <p className="mt-1 text-[12.5px] text-ink-2">
+            Everything we know about you lives on your profile — one page,
+            every line correctable.
           </p>
+          <Link
+            href="/profile"
+            className="mt-2 inline-block text-[11px] text-clay-deep underline"
+          >
+            See what we know about you →
+          </Link>
         </CardShell>
 
         <CardShell>
