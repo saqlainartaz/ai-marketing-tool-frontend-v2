@@ -12,14 +12,15 @@ export default function PlanPage() {
 
   return (
     <>
-      <h1 className="font-display text-[26px] font-semibold tracking-tight">
+      <div className="w-full lg:max-w-3xl">
+      <h1 className="font-display text-[26px] font-semibold tracking-tight lg:text-[32px]">
         Your plan
       </h1>
       <p className="mt-1 text-xs text-ink-2">
         Built from your episode and your answers — nothing generic.
       </p>
 
-      <div className="mt-4 space-y-2.5">
+      <div className="mt-4 space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0">
         <CardShell>
           <p className="text-sm font-semibold">Where to show up</p>
           <p className="mt-1 text-[12.5px] text-ink-2">{client.plan.where}</p>
@@ -45,6 +46,7 @@ export default function PlanPage() {
         </Link>
         .
       </p>
+      </div>
     </>
   );
 }

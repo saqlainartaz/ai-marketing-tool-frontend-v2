@@ -45,11 +45,12 @@ export default function WorkspacePage() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-md px-5 pt-6 pb-10">
-      <Link href="/today" className="text-xs text-ink-2">
+    <div className="w-full lg:grid lg:max-w-4xl lg:grid-cols-2 lg:gap-10">
+      <div>
+      <Link href="/today" className="text-xs text-ink-2 lg:hidden">
         ← Back to Today
       </Link>
-      <h1 className="mt-3 font-display text-[26px] font-semibold tracking-tight">
+      <h1 className="mt-3 font-display text-[26px] font-semibold tracking-tight lg:mt-0 lg:text-[32px]">
         Workspace
       </h1>
       <p className="mt-1 text-xs text-ink-2">
@@ -104,7 +105,9 @@ export default function WorkspacePage() {
         )}
       </CardShell>
 
-      <h2 className="mt-8 font-display text-lg font-semibold">
+      </div>
+      <div>
+      <h2 className="mt-8 font-display text-lg font-semibold lg:mt-0">
         How you sound
       </h2>
       <p className="mt-1 text-xs text-ink-2">
@@ -133,6 +136,7 @@ export default function WorkspacePage() {
           Something here wrong? Tell us — corrections land in M2.
         </p>
       </CardShell>
-    </main>
+      </div>
+    </div>
   );
 }

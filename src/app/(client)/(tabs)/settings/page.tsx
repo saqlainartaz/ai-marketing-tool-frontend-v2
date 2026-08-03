@@ -15,11 +15,11 @@ export default function SettingsPage() {
   const workMode = useWorkMode(clientId);
 
   return (
-    <main className="mx-auto w-full max-w-md px-5 pt-6 pb-10">
-      <Link href="/today" className="text-xs text-ink-2">
+    <div className="w-full lg:max-w-2xl">
+      <Link href="/today" className="text-xs text-ink-2 lg:hidden">
         ← Back to Today
       </Link>
-      <h1 className="mt-3 font-display text-[26px] font-semibold tracking-tight">
+      <h1 className="mt-3 font-display text-[26px] font-semibold tracking-tight lg:mt-0 lg:text-[32px]">
         Settings
       </h1>
 
@@ -74,6 +74,6 @@ export default function SettingsPage() {
           </div>
         </CardShell>
       </div>
-    </main>
+    </div>
   );
 }

@@ -78,7 +78,8 @@ export default function LibraryPage() {
 
   return (
     <>
-      <h1 className="font-display text-[26px] font-semibold tracking-tight">
+      <div className="w-full lg:max-w-3xl">
+      <h1 className="font-display text-[26px] font-semibold tracking-tight lg:text-[32px]">
         Library
       </h1>
       <p className="mt-1 text-xs text-ink-2">What went out, and when.</p>
@@ -174,6 +175,7 @@ export default function LibraryPage() {
             </CardShell>
           ))
         )}
+      </div>
       </div>
     </>
   );

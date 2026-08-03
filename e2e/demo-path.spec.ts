@@ -76,11 +76,39 @@ for (const theme of THEMES) {
     await expect(
       page.getByRole("heading", { name: /\d+ ready/i }),
     ).toBeVisible();
-    await expect(page.getByText(/412 neighbors/)).toBeVisible();
+    await expect(page.getByText(/412 neighbors/).first()).toBeVisible();
     await page.getByRole("button", { name: /good to go/i }).click();
     await expect(page.getByTestId("stamp")).toHaveText(/ON ITS WAY/);
   });
 }
+
+test("desktop is a real app: sidebar, two-column Today, context rail", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1366, height: 850 });
+  await page.goto("/login");
+  // Desktop login shows the brand panel.
+  await expect(page.getByText(/Every claim in every draft/)).toBeVisible();
+  await page.getByRole("link", { name: /amara · osei family law/i }).click();
+  await page.goto("/today");
+  // Sidebar with full nav, no bottom tab bar duplication in view.
+  await expect(page.getByTestId("sidebar")).toBeVisible();
+  await expect(
+    page.getByTestId("sidebar").getByRole("link", { name: /workspace/i }),
+  ).toBeVisible();
+  // Two-column: context rail present alongside the card column.
+  await expect(page.getByTestId("context-rail")).toBeVisible();
+  await expect(
+    page.getByTestId("context-rail").getByText(/89 people in your network/),
+  ).toBeVisible();
+  // Amara's provenance opens on desktop too.
+  await page
+    .getByRole("button", { name: /fifteen years of family practice/i })
+    .click();
+  await expect(page.getByTestId("source-pop")).toHaveText(
+    /your onboarding call, Mar 12/,
+  );
+});
 
 test("the complete product loop: create → library → handoff → plan → settings → workspace", async ({
   page,
