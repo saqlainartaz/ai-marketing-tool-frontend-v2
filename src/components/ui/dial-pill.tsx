@@ -32,7 +32,7 @@ export function DialPill({ mode, onChange, className }: DialPillProps) {
       <span
         data-mode={mode}
         className={cn(
-          "rounded-full border border-line bg-card px-3 py-1 text-[10.5px] text-ink-2",
+          "inline-block max-w-full rounded-full border border-line bg-card px-3 py-1.5 text-center text-[10.5px] leading-snug whitespace-normal text-ink-2",
           className,
         )}
       >
