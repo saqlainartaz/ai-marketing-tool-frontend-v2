@@ -2,8 +2,10 @@
 
 import { CardStack } from "@/components/cards/CardStack";
 import { DialPill } from "@/components/ui/dial-pill";
-import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
-import { useFixtureClient } from "@/lib/fixtures/useFixtureClient";
+import { useClientId } from "@/components/auth/ClientSession";
+import { getFixtureClient } from "@/lib/fixtures/clients";
+import { useContentItems } from "@/lib/store/content";
+import { useWorkMode } from "@/lib/store/settings";
 
 function greeting(): string {
   const h = new Date().getHours();
@@ -13,37 +15,35 @@ function greeting(): string {
 }
 
 export default function TodayPage() {
-  const client = useFixtureClient();
-  const readyCount = client.cards.length;
+  const clientId = useClientId();
+  const client = getFixtureClient(clientId);
+  const items = useContentItems(clientId);
+  const workMode = useWorkMode(clientId);
+  const readyCount =
+    items.filter((i) => i.status === "ready").length +
+    client.questionCards.filter(
+      (qc) => !items.some((i) => i.id === `${qc.id}-out`),
+    ).length;
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 pb-5">
+    <>
       <header className="flex items-center justify-between">
         <span className="font-display text-[13px] font-semibold lowercase">
           {client.businessName.split(" ")[0]} ⌂
         </span>
-        <DialPill mode={client.workMode} />
+        <DialPill mode={workMode} />
       </header>
 
       <h1 className="mt-6 font-display text-[32px] leading-[1.1] font-semibold tracking-tight">
         {greeting()}, {client.firstName}.
         <br />
-        {readyCount} ready.
+        {readyCount > 0 ? `${readyCount} ready.` : "All clear."}
       </h1>
       <p className="mt-2 text-[11.5px] text-moss">📈 {client.winLine}</p>
 
       <div className="mt-5 flex-1">
-        <CardStack
-          cards={client.cards}
-          businessName={client.businessName}
-          avatarInitial={client.avatarInitial}
-        />
+        <CardStack clientId={clientId} />
       </div>
-
-      <footer className="mt-6 flex items-center justify-between gap-3">
-        <span className="text-[11px] text-ink-3">Open workspace</span>
-        <ThemeSwitcher />
-      </footer>
-    </main>
+    </>
   );
 }

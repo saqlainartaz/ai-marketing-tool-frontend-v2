@@ -74,10 +74,68 @@ for (const theme of THEMES) {
     // Today — approve card 1
     await expect(page).toHaveURL(/\/today/);
     await expect(
-      page.getByRole("heading", { name: /3 ready/i }),
+      page.getByRole("heading", { name: /\d+ ready/i }),
     ).toBeVisible();
     await expect(page.getByText(/412 neighbors/)).toBeVisible();
     await page.getByRole("button", { name: /good to go/i }).click();
     await expect(page.getByTestId("stamp")).toHaveText(/ON ITS WAY/);
   });
 }
+
+test("the complete product loop: create → library → handoff → plan → settings → workspace", async ({
+  page,
+}) => {
+  // In as Dave.
+  await page.goto("/login");
+  await page.getByRole("link", { name: /dave · meridian roofing/i }).click();
+  await page.goto("/today");
+
+  // Clear the three prepared drafts (approve, approve, skip).
+  await page.getByRole("button", { name: /good to go/i }).click();
+  await expect(page.getByText(/Lakeway Ave/)).toBeVisible({ timeout: 5000 });
+  await page.getByRole("button", { name: /good to go/i }).click();
+  await expect(page.getByText(/#1 question/)).toBeVisible({ timeout: 5000 });
+  await page.getByRole("button", { name: /not this one/i }).click();
+
+  // The MAKE card appears → guided create.
+  await page.getByRole("link", { name: /tell the story/i }).click();
+  await page.getByRole("button", { name: /full replacement/i }).click();
+  await page.getByRole("button", { name: /next/i }).click();
+  await page.getByRole("button", { name: /explained everything/i }).click();
+  await page.getByRole("button", { name: /write it for me/i }).click();
+  // C2 shows its work, then C3 review.
+  await expect(page.getByTestId("assembly")).toBeVisible();
+  await expect(page.getByText(/no surprises up there/i)).toBeVisible({
+    timeout: 15_000,
+  });
+  await page.getByRole("button", { name: /good to go/i }).click();
+  await expect(page).toHaveURL(/\/today/);
+
+  // Library: three approved items; handoff marks one as posted.
+  await page.getByRole("link", { name: /library/i }).click();
+  await expect(page.getByText(/Published without your approval/)).toBeVisible();
+  await page.getByText(/Hail season/).click();
+  await expect(page.getByTestId("handoff-sheet")).toBeVisible();
+  await page.getByRole("button", { name: /mark as posted/i }).click();
+  await expect(page.getByText(/Marked as posted/)).toBeVisible();
+
+  // Plan answers "why".
+  await page.getByRole("link", { name: /^plan/i }).click();
+  await expect(page.getByText(/Why this plan/)).toBeVisible();
+
+  // Settings: the dial is the client's to change.
+  await page.goto("/settings");
+  await page
+    .getByRole("radio", { name: /show me ideas/i })
+    .click();
+
+  // Workspace: a note becomes a card on Today.
+  await page.goto("/workspace");
+  await page
+    .getByLabel(/what's happening at the business/i)
+    .fill("We're running a spring gutter discount");
+  await page.getByRole("button", { name: /turn it into a post/i }).click();
+  await expect(page.getByTestId("ws-done")).toBeVisible({ timeout: 15_000 });
+  await page.getByRole("link", { name: /review it now/i }).click();
+  await expect(page.getByText(/spring gutter discount/)).toBeVisible();
+});

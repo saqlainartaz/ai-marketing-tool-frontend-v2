@@ -2,22 +2,39 @@ import type { Platform } from "@/components/preview/post-preview";
 import type { WorkMode } from "@/components/ui/dial-pill";
 
 /**
- * M1A fixture clients — Dave and Amara from the walkthrough (the visual
- * contract). All names and numbers are sample data. Replaced by the real
- * BFF in M2; the shapes anticipate `client_profile` / `action_card`.
+ * M1 fixture clients — Dave and Amara from the walkthrough (the visual
+ * contract). All names and numbers are sample data. M2 replaces this with
+ * the real BFF; the shapes anticipate `client_profile` / `content_item` /
+ * `action_card`.
  */
 
-export type ActionCardFixture = {
+/** A claim-bearing phrase traceable to the client's own words. */
+export type ProvenanceSpan = {
+  phrase: string;
+  label: string; // "your episode, Mar 12"
+  quote?: string; // the exact grounding words
+};
+
+export type FixtureDraft = {
   id: string;
-  type: "draft_approval" | "question" | "win";
-  platform?: Platform;
-  meta?: string;
-  body?: string;
+  platform: Platform;
+  meta: string;
+  body: string;
   withImage?: boolean;
   consequence?: string;
-  /** question cards */
-  prompt?: string;
-  timeCost?: string;
+  pillar?: string;
+  provenance?: ProvenanceSpan[];
+  /** Protection already applied — shown as the honey line + diff. */
+  guardrail?: { note: string; from: string; to: string };
+};
+
+export type QuestionCardFixture = {
+  id: string;
+  prompt: string;
+  timeCost: string;
+  questions: { q: string; chips: string[] }[];
+  /** The draft this card produces (mock generation). */
+  produces: Omit<FixtureDraft, "id">;
 };
 
 export type FixtureClient = {
@@ -26,21 +43,15 @@ export type FixtureClient = {
   businessName: string;
   avatarInitial: string;
   workMode: WorkMode;
-  /** Endowed-progress lines on S1 — work already done for them. */
   checks: string[];
-  /** The confirm card rows, plain second person. */
   profileLines: string[];
-  /** S5: pre-locked compliance chips + why. */
   lockedReason: string;
   lockedNeverChips: string[];
-  /** S6 plan reveal. */
-  plan: {
-    where: string;
-    what: string;
-    rhythm: string;
-  };
+  plan: { where: string; what: string; rhythm: string; why: string };
   winLine: string;
-  cards: ActionCardFixture[];
+  drafts: FixtureDraft[];
+  questionCards: QuestionCardFixture[];
+  voice: { summary: string; sounds: string[]; avoids: string[] };
 };
 
 const dave: FixtureClient = {
@@ -66,36 +77,98 @@ const dave: FixtureClient = {
       "Google Business first — your customers search when the roof leaks. Facebook second — neighbors recommend roofers there.",
     what: "Before & after jobs · Questions customers always ask · Storm-season prep",
     rhythm: "2 posts a week — about 10 minutes of your time.",
+    why: "Your goal is calls and booked jobs. Homeowners with a leak search Google and ask neighbors on Facebook — so that's where you show up, with proof of work and answers to the questions they're already asking.",
   },
   winLine: "Your last post reached 412 neighbors",
-  cards: [
+  drafts: [
     {
       id: "dave-1",
-      type: "draft_approval",
       platform: "facebook",
       meta: "Facebook · ready for Tue 9 AM",
       body: "Hail season's coming, Austin. Last month we caught three roofs their owners thought were fine. Here's the 10-minute check you can do from the ground — no ladder needed. 👇",
       withImage: true,
       consequence: "pull it back anytime",
+      pillar: "Storm-season prep",
+      provenance: [
+        {
+          phrase: "we caught three roofs their owners thought were fine",
+          label: "your episode, March · 22:14",
+          quote:
+            "…just last month we had three inspections where the homeowner had no idea…",
+        },
+      ],
     },
     {
       id: "dave-2",
-      type: "draft_approval",
       platform: "google_business",
       meta: "Google Business · ready for Thu 9 AM",
       body: "Before & after from Lakeway Ave — full replacement in two days, family in the house the whole time.",
       withImage: true,
       consequence: "pull it back anytime",
+      pillar: "Before & after jobs",
+      provenance: [
+        {
+          phrase: "full replacement in two days",
+          label: "your review from Karen L., May",
+          quote: "They finished our entire roof in two days flat…",
+        },
+      ],
+      guardrail: {
+        note: "One claim softened for your trade rules — see what changed",
+        from: "We guarantee your insurance claim gets approved.",
+        to: "We help you document everything your insurer asks for.",
+      },
     },
     {
       id: "dave-3",
-      type: "draft_approval",
       platform: "facebook",
       meta: "Facebook · ready for Sat 10 AM",
-      body: "The #1 question we get every storm season: \"Should I file a claim?\" Here's how to know in five minutes — before you call anyone.",
+      body: 'The #1 question we get every storm season: "Should I file a claim?" Here\'s how to know in five minutes — before you call anyone.',
       consequence: "pull it back anytime",
+      pillar: "Questions customers ask",
     },
   ],
+  questionCards: [
+    {
+      id: "dave-q1",
+      prompt: "Tell the story of a job you finished this week",
+      timeCost: "~3 min",
+      questions: [
+        {
+          q: "What kind of job was it?",
+          chips: ["Full replacement", "Storm repair", "Leak fix", "Inspection"],
+        },
+        {
+          q: "What would the homeowner say about it?",
+          chips: [
+            "Fast",
+            "Cleaned up great",
+            "Explained everything",
+            "Saved us money",
+          ],
+        },
+      ],
+      produces: {
+        platform: "facebook",
+        meta: "Facebook · ready when you are",
+        body: "Wrapped up another one this week — and the part the homeowner mentioned first wasn't the roof. It was that the crew explained every step before it happened. That's how we like it: no surprises up there, none on the bill either.",
+        consequence: "pull it back anytime",
+        pillar: "Before & after jobs",
+        provenance: [
+          {
+            phrase: "the crew explained every step",
+            label: "your answer, just now",
+          },
+        ],
+      },
+    },
+  ],
+  voice: {
+    summary:
+      "Plain-spoken and practical. Talks like a neighbor who happens to know roofs — short sentences, real jobs, zero sales pitch.",
+    sounds: ["No ladder needed", "Here's the honest answer", "We caught it early"],
+    avoids: ["Guarantee", "Best in Austin", "Act now", "Free estimate!!!"],
+  },
 };
 
 const amara: FixtureClient = {
@@ -125,26 +198,99 @@ const amara: FixtureClient = {
       "LinkedIn first — your referral network lives there. Your website's articles second — people research before they call a lawyer.",
     what: "What to ask before a crisis · Mediation myths · How consultations actually work",
     rhythm: "1 post a week, reviewed by you line by line.",
+    why: "Your goal is more clients at zero reputational risk. Referrals come from peers who see your thinking on LinkedIn; families in trouble read your articles at 2 AM. Every post is claim-checked against bar rules before you ever see it.",
   },
   winLine: "Your last post was read by 89 people in your network",
-  cards: [
+  drafts: [
     {
       id: "amara-1",
-      type: "draft_approval",
       platform: "linkedin",
       meta: "LinkedIn · awaiting your review",
       body: "In fifteen years of family practice, the cases that end well usually start with a conversation months earlier — before positions harden. You don't need a crisis to book a consultation. You need twenty minutes and a list of what's keeping you up at night.",
       consequence: "nothing publishes without you · ever",
+      pillar: "What to ask before a crisis",
+      provenance: [
+        {
+          phrase: "fifteen years of family practice",
+          label: "your onboarding call, Mar 12",
+          quote: "I've been doing family law for fifteen years now…",
+        },
+        {
+          phrase: "before positions harden",
+          label: "your episode, February · 08:41",
+        },
+      ],
     },
     {
       id: "amara-2",
-      type: "draft_approval",
       platform: "linkedin",
       meta: "LinkedIn · awaiting your review",
-      body: "Mediation isn't about \"giving in.\" In my experience it's where families keep the most control over their own outcome. Three myths I hear every week — and what actually happens in the room.",
+      body: 'Mediation isn\'t about "giving in." In my experience it\'s where families keep the most control over their own outcome. Three myths I hear every week — and what actually happens in the room.',
       consequence: "nothing publishes without you · ever",
+      pillar: "Mediation myths",
+      provenance: [
+        {
+          phrase: "families keep the most control over their own outcome",
+          label: "your episode, February · 14:03",
+        },
+      ],
+      guardrail: {
+        note: "One claim softened for your bar rules — see what changed",
+        from: "I win the cases others give up on.",
+        to: "I take on the cases others find difficult.",
+      },
     },
   ],
+  questionCards: [
+    {
+      id: "amara-q1",
+      prompt: "Answer the question clients ask you most",
+      timeCost: "~3 min",
+      questions: [
+        {
+          q: "Which question comes up most?",
+          chips: [
+            "How long will this take?",
+            "What will it cost?",
+            "Will we end up in court?",
+            "What about the kids?",
+          ],
+        },
+        {
+          q: "What's the honest short answer?",
+          chips: [
+            "It depends — here's on what",
+            "Sooner than you fear",
+            "Usually not",
+            "They come first, always",
+          ],
+        },
+      ],
+      produces: {
+        platform: "linkedin",
+        meta: "LinkedIn · ready for your review",
+        body: '"Will we end up in court?" It\'s the question behind almost every first consultation. The honest answer: usually not — and the path that avoids it starts earlier than most people think.',
+        consequence: "nothing publishes without you · ever",
+        pillar: "How consultations actually work",
+        provenance: [
+          {
+            phrase: "usually not",
+            label: "your answer, just now",
+          },
+        ],
+      },
+    },
+  ],
+  voice: {
+    summary:
+      "Measured and warm. Writes like she speaks to a worried client across the desk — precise, never dramatic, always leaving a next step.",
+    sounds: [
+      "Here's what that means for you",
+      "In my experience",
+      "You have more options than you think",
+    ],
+    avoids: ["I win", "Guaranteed outcome", "Don't hire a cheap lawyer", "Act fast"],
+  },
 };
 
 const CLIENTS: Record<string, FixtureClient> = { dave, amara };
