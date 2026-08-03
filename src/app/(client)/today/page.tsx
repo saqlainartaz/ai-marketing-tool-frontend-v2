@@ -1,6 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
 import { CardStack } from "@/components/cards/CardStack";
 import { DialPill } from "@/components/ui/dial-pill";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
@@ -13,7 +12,7 @@ function greeting(): string {
   return "Evening";
 }
 
-function TodayInner() {
+export default function TodayPage() {
   const client = useFixtureClient();
   const readyCount = client.cards.length;
 
@@ -46,13 +45,5 @@ function TodayInner() {
         <ThemeSwitcher />
       </footer>
     </main>
-  );
-}
-
-export default function TodayPage() {
-  return (
-    <Suspense>
-      <TodayInner />
-    </Suspense>
   );
 }

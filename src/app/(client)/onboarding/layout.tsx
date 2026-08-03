@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { OnboardingProvider } from "@/components/onboarding/OnboardingProvider";
 
 export default function OnboardingLayout({
@@ -7,10 +6,8 @@ export default function OnboardingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Suspense>
-      <OnboardingProvider>
-        <div className="mx-auto w-full max-w-md">{children}</div>
-      </OnboardingProvider>
-    </Suspense>
+    <OnboardingProvider>
+      <div className="mx-auto w-full max-w-md">{children}</div>
+    </OnboardingProvider>
   );
 }

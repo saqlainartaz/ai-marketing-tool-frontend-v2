@@ -1,24 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { ClientSessionProvider } from "@/components/auth/ClientSession";
 import { OnboardingProvider } from "@/components/onboarding/OnboardingProvider";
 import { GoalScreen } from "@/components/onboarding/screens/GoalScreen";
 import { ObstacleScreen } from "@/components/onboarding/screens/ObstacleScreen";
 import { NeverScreen } from "@/components/onboarding/screens/NeverScreen";
 import { ConfirmScreen } from "@/components/onboarding/screens/ConfirmScreen";
 
-let params = new URLSearchParams("");
-vi.mock("next/navigation", () => ({
-  useSearchParams: () => params,
-  useRouter: () => ({ push: vi.fn() }),
-}));
-
-function wrap(ui: React.ReactNode) {
-  return render(<OnboardingProvider>{ui}</OnboardingProvider>);
+function wrap(ui: React.ReactNode, clientId = "dave") {
+  return render(
+    <ClientSessionProvider clientId={clientId}>
+      <OnboardingProvider>{ui}</OnboardingProvider>
+    </ClientSessionProvider>,
+  );
 }
 
 beforeEach(() => {
-  params = new URLSearchParams("");
   window.sessionStorage.clear();
 });
 
@@ -69,9 +67,8 @@ describe("NeverScreen (S5)", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("renders Amara's bar-rule chips when the fixture is amara", async () => {
-    params = new URLSearchParams("c=amara");
-    wrap(<NeverScreen onNext={() => {}} onBack={() => {}} />);
+  it("renders Amara's bar-rule chips when the session client is amara", async () => {
+    wrap(<NeverScreen onNext={() => {}} onBack={() => {}} />, "amara");
     expect(await screen.findByText(/licensed attorney/)).toBeInTheDocument();
     expect(screen.getByText(/No outcome guarantees/)).toBeInTheDocument();
     expect(screen.getByText(/No client details, ever/)).toBeInTheDocument();

@@ -14,8 +14,13 @@ for (const theme of THEMES) {
       window.localStorage.setItem("v2theme", t);
     }, theme);
 
-    // S1 — confirm
+    // The gate: /onboarding without a session bounces to /login.
     await page.goto("/onboarding/confirm");
+    await expect(page).toHaveURL(/\/login/);
+
+    // Magic link in → session cookie → S1.
+    await page.getByRole("link", { name: /dave · meridian roofing/i }).click();
+    await expect(page).toHaveURL(/\/onboarding\/confirm/);
     await expect(
       page.getByRole("heading", { name: /here.s what we already know/i }),
     ).toBeVisible();

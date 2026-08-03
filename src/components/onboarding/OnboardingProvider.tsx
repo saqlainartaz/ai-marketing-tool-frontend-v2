@@ -8,8 +8,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useSearchParams } from "next/navigation";
 import { getFixtureClient, type FixtureClient } from "@/lib/fixtures/clients";
+import { useClientId } from "@/components/auth/ClientSession";
 
 /** Channel selection cycles: off → using now → want to try → off. */
 export type ChannelState = "now" | "want";
@@ -42,32 +42,23 @@ type OnboardingContextValue = {
 const OnboardingContext = createContext<OnboardingContextValue | null>(null);
 
 const STORAGE_KEY = "v2onboarding";
-const CLIENT_KEY = "v2client";
 
 export function OnboardingProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const searchParams = useSearchParams();
-  const [clientId, setClientId] = useState<string>("dave");
+  const clientId = useClientId();
   const [answers, setAnswers] = useState<OnboardingAnswers>(EMPTY);
 
   useEffect(() => {
-    const fromUrl = searchParams.get("c");
     try {
-      if (fromUrl) {
-        window.sessionStorage.setItem(CLIENT_KEY, fromUrl);
-        setClientId(fromUrl);
-      } else {
-        setClientId(window.sessionStorage.getItem(CLIENT_KEY) ?? "dave");
-      }
       const saved = window.sessionStorage.getItem(STORAGE_KEY);
       if (saved) setAnswers({ ...EMPTY, ...JSON.parse(saved) });
     } catch {
       /* storage unavailable — in-memory only */
     }
-  }, [searchParams]);
+  }, []);
 
   const setAnswer = useCallback(
     <K extends keyof OnboardingAnswers>(

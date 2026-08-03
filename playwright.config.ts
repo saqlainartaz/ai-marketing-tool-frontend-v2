@@ -13,5 +13,11 @@ export default defineConfig({
     port: 3100,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
+    env: {
+      // next start is production mode, which (correctly) refuses to boot
+      // without a signing secret — e2e provides one the way Vercel will.
+      CLIENT_LOGIN_SECRET:
+        process.env.CLIENT_LOGIN_SECRET ?? "e2e-secret-not-for-production",
+    },
   },
 });
