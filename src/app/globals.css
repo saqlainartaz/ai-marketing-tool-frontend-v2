@@ -1,8 +1,12 @@
 @import "tailwindcss";
 @import "../lib/theme/tokens.css";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /*
- * Bridge tokens into Tailwind v4 utilities:
+ * Bridge OUR tokens into Tailwind v4 utilities:
  * bg-paper, text-ink-2, border-line, bg-clay, text-onact, font-display, …
  */
 @theme inline {
@@ -22,13 +26,46 @@
   --color-onact: var(--onact);
   --font-display: var(--font-bricolage), Georgia, serif;
   --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+
+  /* shadcn semantic vars → derived from OUR tokens, so vendored components
+   * re-theme automatically across all four palettes. */
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--card);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--clay);
+  --color-primary-foreground: var(--onact);
+  --color-secondary: var(--clay-mist);
+  --color-secondary-foreground: var(--clay-deep);
+  --color-muted: var(--clay-mist);
+  --color-muted-foreground: var(--ink-2);
+  --color-accent: var(--clay-mist);
+  --color-accent-foreground: var(--clay-deep);
+  --color-destructive: #dc2626;
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--clay);
+
+  --radius: 1rem;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
 }
 
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--font-inter), system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-inter), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
