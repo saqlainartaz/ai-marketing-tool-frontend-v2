@@ -33,3 +33,4 @@ Append-only. Every dependency gets a ledger row at install time.
 | @vitejs/plugin-react | latest | MIT | npm | |
 | @testing-library/react / jest-dom / user-event | latest | MIT | npm | |
 | Bricolage Grotesque, Inter (next/font) | — | SIL OFL 1.1 | Google Fonts | self-hosted at build |
+| gsap / @gsap/react | 3.15.0 | GSAP Standard "no charge" license (gsap.com/standard-license) — free incl. commercial use since Webflow acquisition | package.json license field + gsap.com | NOT OSI; permitted for our commercial SaaS use |

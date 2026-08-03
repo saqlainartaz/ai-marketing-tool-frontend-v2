@@ -1,6 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(useGSAP);
 
 type AssemblyMomentProps = {
   steps: string[];
@@ -14,9 +18,10 @@ type AssemblyMomentProps = {
  * then the plan reveals. We genuinely do this work — showing it is the
  * TurboTax/Perplexity trust pattern.
  *
- * M1A ships the CSS/timer version (works everywhere, respects
- * prefers-reduced-motion by skipping straight to done). T4 layers the GSAP
- * facts-click-together timeline on top without changing this API.
+ * Sequencing is timer-driven (deterministic, testable); GSAP handles only
+ * the presentational entrance — each fact drifts in and settles with a
+ * spring, and the set pulses together before the reveal. Reduced motion
+ * skips straight to the finished state.
  */
 export function AssemblyMoment({
   steps,
@@ -25,6 +30,7 @@ export function AssemblyMoment({
 }: AssemblyMomentProps) {
   const [visible, setVisible] = useState(0);
   const done = useRef(false);
+  const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const reduced = window.matchMedia(
@@ -46,19 +52,46 @@ export function AssemblyMoment({
           done.current = true;
           onDone();
         }
-      }, 700);
+      }, 800);
       return () => clearTimeout(t);
     }
     const t = setTimeout(() => setVisible((v) => v + 1), stepDelay);
     return () => clearTimeout(t);
   }, [visible, steps.length, stepDelay, onDone]);
 
+  useGSAP(
+    () => {
+      if (visible === 0) return;
+      // Newest fact drifts in and clicks into place.
+      gsap.from(`[data-step="${visible - 1}"]`, {
+        opacity: 0,
+        y: 14,
+        scale: 0.97,
+        duration: 0.42,
+        ease: "back.out(1.6)",
+      });
+      // All facts assembled: one quiet pulse together before the reveal.
+      if (visible === steps.length) {
+        gsap.to("[data-step]", {
+          scale: 1.02,
+          duration: 0.18,
+          yoyo: true,
+          repeat: 1,
+          ease: "power1.inOut",
+          stagger: 0.03,
+          delay: 0.25,
+        });
+      }
+    },
+    { dependencies: [visible], scope: container },
+  );
+
   return (
-    <div aria-live="polite" data-testid="assembly">
+    <div ref={container} aria-live="polite" data-testid="assembly">
       {steps.slice(0, visible).map((step, i) => (
         <p
           key={step}
-          className="animate-in fade-in slide-in-from-bottom-1 py-1 text-[13px] text-ink-2 duration-300"
+          className="py-1 text-[13px] text-ink-2"
           data-step={i}
         >
           <span className="font-bold text-moss">✓</span> {step}
