@@ -13,17 +13,21 @@ app, deployed on Vercel.
 
 **M1A complete** (2026-08-03): four-theme token system (Cobalt default),
 primitives, first-run flow S1–S6 on fixtures (Dave + Amara), GSAP assembly
-moment, mock Today card pager. 22 unit/component tests + 4-theme e2e, all
-keyless.
+moment, mock Today card pager.
 
-**Next: M1B** — Supabase team auth + HMAC client magic links + Vercel deploy.
-Blocked on Saqlain's setup: Vercel project · Supabase project · git remote.
+**M1B client auth complete** (2026-08-03): HMAC magic-link tokens →
+`/api/client-login` → httpOnly session; the `(client)` layout is the gate
+(no session → `/login`); components receive only the verified clientId.
+27 unit tests + 4-theme e2e through the real auth path, all keyless.
+
+**Remaining in M1B** (needs Saqlain's accounts): Supabase project (team
+auth, `profiles`, RLS harness) · Vercel project + deploy · git remote.
 
 ## Run it
 
 ```bash
 npm install
-npm run dev        # → http://localhost:3000/onboarding  (Dave; ?c=amara for the lawyer)
+npm run dev        # → http://localhost:3000/login  (pick Dave or Amara)
 npm test           # unit/component (keyless)
-npm run e2e        # build + playwright, all four themes
+npm run e2e        # build + playwright, all four themes through auth
 ```
