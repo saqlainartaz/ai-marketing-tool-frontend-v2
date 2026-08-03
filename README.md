@@ -20,8 +20,16 @@ moment, mock Today card pager.
 (no session → `/login`); components receive only the verified clientId.
 27 unit tests + 4-theme e2e through the real auth path, all keyless.
 
-**Remaining in M1B** (needs Saqlain's accounts): Supabase project (team
-auth, `profiles`, RLS harness) · Vercel project + deploy · git remote.
+**Complete client UI on fixtures** (2026-08-03): guided create C1→C3
+(chips → visible work → review), provenance-in-text, guardrail diffs,
+edit-in-preview, bottom nav, Library + handoff kit (copy/download/share/
+mark-as-posted), living Plan, Settings (interactive work-mode dial),
+Workspace (note → card + legible voice profile). Mock store shaped like
+`/api/me/content` — M2 swaps the implementation, not the UI.
+30 unit tests + 5 e2e (4 themes + the complete product loop).
+
+**Deferred by decision** (2026-08-03): Supabase team auth + Vercel deploy —
+resume when accounts exist.
 
 ## Run it
 
@@ -29,5 +37,5 @@ auth, `profiles`, RLS harness) · Vercel project + deploy · git remote.
 npm install
 npm run dev        # → http://localhost:3000/login  (pick Dave or Amara)
 npm test           # unit/component (keyless)
-npm run e2e        # build + playwright, all four themes through auth
+npm run e2e        # build + playwright: 4 themes + full product loop
 ```
