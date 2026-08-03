@@ -7,7 +7,7 @@ export default function OnboardingLayout({
 }) {
   return (
     <OnboardingProvider>
-      <div className="mx-auto w-full max-w-md">{children}</div>
+      <div className="w-full">{children}</div>
     </OnboardingProvider>
   );
 }

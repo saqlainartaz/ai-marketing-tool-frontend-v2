@@ -63,11 +63,11 @@ export default function CreatePage({
     const q = card.questions[phase.step];
     const isLast = phase.step === card.questions.length - 1;
     return (
-      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 pb-5">
+      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 pb-5 lg:max-w-xl lg:justify-center lg:pb-24">
         <p className="text-[10.5px] tracking-[0.12em] text-ink-3 uppercase">
           {card.prompt} · {phase.step + 1} of {card.questions.length}
         </p>
-        <h1 className="mt-3 font-display text-[26px] leading-tight font-semibold tracking-tight">
+        <h1 className="mt-3 font-display text-[26px] leading-tight font-semibold tracking-tight lg:text-[36px]">
           {q.q}
         </h1>
         <div className="mt-5 flex flex-wrap gap-2">
@@ -87,7 +87,7 @@ export default function CreatePage({
             </Chip>
           ))}
         </div>
-        <div className="mt-auto">
+        <div className="mt-auto lg:mt-10">
           <ActionButton
             disabled={!picks[phase.step]}
             onClick={() =>
@@ -111,11 +111,11 @@ export default function CreatePage({
   // --- C2: visible work ---
   if (phase === "generating") {
     return (
-      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6">
+      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 lg:max-w-xl lg:justify-center">
         <p className="text-[10.5px] tracking-[0.12em] text-ink-3 uppercase">
           Writing your post
         </p>
-        <h1 className="mt-3 font-display text-[26px] font-semibold">
+        <h1 className="mt-3 font-display text-[26px] font-semibold lg:text-[36px]">
           One moment —
         </h1>
         <div className="mt-4">
@@ -136,48 +136,50 @@ export default function CreatePage({
 
   // --- C3: review the real thing ---
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 pb-5">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 pb-5 lg:max-w-3xl lg:justify-center lg:pb-24">
       <p className="text-[10.5px] tracking-[0.12em] text-ink-3 uppercase">
         Here it is — your words, our writing
       </p>
-      <div className="mt-4">
-        <PostPreview
-          platform={produced.platform}
-          businessName={client.businessName}
-          avatarInitial={client.avatarInitial}
-          meta={produced.meta}
-          withImage={produced.withImage}
-        >
-          <SourcedBody body={currentBody} provenance={produced.provenance} />
-        </PostPreview>
-      </div>
-      <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-        <Chip
-          onToggle={() => {
-            const sentences = currentBody.split(". ");
-            if (sentences.length > 2)
-              setBody(sentences.slice(0, 2).join(". ") + ".");
-          }}
-        >
-          Make it shorter
-        </Chip>
-        <Chip onToggle={() => setBody(produced.body)}>Start over</Chip>
-      </div>
-      <div className="mt-auto">
-        <ActionButton onClick={approve} consequence={produced.consequence}>
-          Good to go
-        </ActionButton>
-        <div className="mt-2.5 flex justify-center gap-6 text-xs text-ink-2">
-          <button type="button" className="cursor-pointer" onClick={keepForLater}>
-            Keep for later
-          </button>
-          <button
-            type="button"
-            className="cursor-pointer"
-            onClick={() => router.push("/today")}
+      <div className="flex flex-1 flex-col lg:mt-6 lg:grid lg:flex-none lg:grid-cols-[minmax(0,1fr)_240px] lg:items-start lg:gap-10">
+        <div className="mt-4 lg:mt-0">
+          <PostPreview
+            platform={produced.platform}
+            businessName={client.businessName}
+            avatarInitial={client.avatarInitial}
+            meta={produced.meta}
+            withImage={produced.withImage}
           >
-            Toss it
-          </button>
+            <SourcedBody body={currentBody} provenance={produced.provenance} />
+          </PostPreview>
+          <div className="mt-3 flex flex-wrap justify-center gap-1.5 lg:justify-start">
+            <Chip
+              onToggle={() => {
+                const sentences = currentBody.split(". ");
+                if (sentences.length > 2)
+                  setBody(sentences.slice(0, 2).join(". ") + ".");
+              }}
+            >
+              Make it shorter
+            </Chip>
+            <Chip onToggle={() => setBody(produced.body)}>Start over</Chip>
+          </div>
+        </div>
+        <div className="mt-auto lg:mt-0">
+          <ActionButton onClick={approve} consequence={produced.consequence}>
+            Good to go
+          </ActionButton>
+          <div className="mt-2.5 flex justify-center gap-6 text-xs text-ink-2 lg:flex-col lg:items-center lg:gap-2">
+            <button type="button" className="cursor-pointer" onClick={keepForLater}>
+              Keep for later
+            </button>
+            <button
+              type="button"
+              className="cursor-pointer"
+              onClick={() => router.push("/today")}
+            >
+              Toss it
+            </button>
+          </div>
         </div>
       </div>
     </main>
