@@ -11,6 +11,19 @@ app, deployed on Vercel.
 
 ## Status
 
-Pre-M1. Next: M1A visual shell (detailed plan to be written in docs/plans/).
+**M1A complete** (2026-08-03): four-theme token system (Cobalt default),
+primitives, first-run flow S1–S6 on fixtures (Dave + Amara), GSAP assembly
+moment, mock Today card pager. 22 unit/component tests + 4-theme e2e, all
+keyless.
 
-Saqlain's setup items (block M1B, not M1A): Vercel project · Supabase project · git remote.
+**Next: M1B** — Supabase team auth + HMAC client magic links + Vercel deploy.
+Blocked on Saqlain's setup: Vercel project · Supabase project · git remote.
+
+## Run it
+
+```bash
+npm install
+npm run dev        # → http://localhost:3000/onboarding  (Dave; ?c=amara for the lawyer)
+npm test           # unit/component (keyless)
+npm run e2e        # build + playwright, all four themes
+```
