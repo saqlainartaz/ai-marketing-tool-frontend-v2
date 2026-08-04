@@ -3,33 +3,27 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { CalendarClock, HelpCircle, MapPin, MessageSquareText } from "lucide-react";
+import { CalendarClock, MapPin, MessageSquareText } from "lucide-react";
+import {
+  ChannelCard,
+  RhythmStrip,
+} from "@/components/plan/plan-parts";
 import type { FixtureClient } from "@/lib/fixtures/clients";
 
 gsap.registerPlugin(useGSAP);
 
-const SECTIONS = [
-  { key: "where", n: "01", label: "Where to show up", icon: MapPin },
-  { key: "what", n: "02", label: "What to talk about", icon: MessageSquareText },
-  { key: "rhythm", n: "03", label: "Your rhythm", icon: CalendarClock },
-  { key: "why", n: "04", label: "Why this plan", icon: HelpCircle },
-] as const;
-
 /**
- * The plan as a deliverable, not three grey strips: a titled document
- * with numbered sections, the client's own pillars as chips, and a
- * built-from line. Betterment's lesson — a recommendation is trusted in
- * proportion to how much it looks like something a professional made.
- * `animate` runs the staggered assembly (the demo's money-shot).
+ * The plan as a deliverable — the moment the client sees that someone
+ * did the thinking. Channels as cards with their reasons, pillars as
+ * chips, the rhythm as a picture of the week; assembled with a stagger
+ * so it arrives rather than appears.
  */
 export function PlanDocument({
   client,
   animate,
-  hideWhy,
 }: {
   client: FixtureClient;
   animate?: boolean;
-  hideWhy?: boolean;
 }) {
   const root = useRef<HTMLElement>(null);
 
@@ -44,23 +38,20 @@ export function PlanDocument({
       });
       gsap.from("[data-doc-row]", {
         opacity: 0,
-        y: 14,
-        duration: 0.45,
-        stagger: 0.09,
-        delay: 0.12,
+        y: 16,
+        duration: 0.5,
+        stagger: 0.12,
+        delay: 0.15,
         ease: "power3.out",
       });
       gsap.from("[data-doc-foot]", {
         opacity: 0,
         duration: 0.5,
-        delay: 0.55,
+        delay: 0.7,
       });
     },
     { scope: root, dependencies: [animate] },
   );
-
-  const pillars = client.plan.what.split("·").map((p) => p.trim());
-  const rows = SECTIONS.filter((s) => !(hideWhy && s.key === "why"));
 
   return (
     <article
@@ -79,44 +70,48 @@ export function PlanDocument({
       </header>
 
       <div className="divide-y divide-line">
-        {rows.map((section) => {
-          const Icon = section.icon;
-          return (
-            <section
-              key={section.key}
-              data-doc-row
-              className="flex gap-3 px-4 py-4 sm:gap-4 sm:px-5"
-            >
-              <span className="t-meta w-6 shrink-0 pt-0.5">{section.n}</span>
-              <div className="min-w-0 flex-1">
-                <h3 className="flex items-center gap-1.5 text-[13.5px] font-semibold">
-                  <Icon aria-hidden className="h-3.5 w-3.5 text-ink-3" />
-                  {section.label}
-                </h3>
-                {section.key === "what" ? (
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {pillars.map((p) => (
-                      <span
-                        key={p}
-                        className="rounded-full border border-line bg-paper px-2.5 py-1 text-[12px]"
-                      >
-                        {p}
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="mt-1 text-[13px] leading-relaxed text-ink-2">
-                    {section.key === "where"
-                      ? client.plan.where
-                      : section.key === "rhythm"
-                        ? client.plan.rhythm
-                        : client.plan.why}
-                  </p>
-                )}
-              </div>
-            </section>
-          );
-        })}
+        <section data-doc-row className="px-4 py-4 sm:px-5">
+          <h3 className="flex items-center gap-1.5 text-[13px] font-semibold">
+            <MapPin aria-hidden className="h-3.5 w-3.5 text-ink-3" />
+            Where to show up
+          </h3>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            {client.plan.channels.map((channel) => (
+              <ChannelCard key={channel.platform} channel={channel} />
+            ))}
+          </div>
+        </section>
+
+        <section data-doc-row className="px-4 py-4 sm:px-5">
+          <h3 className="flex items-center gap-1.5 text-[13px] font-semibold">
+            <MessageSquareText aria-hidden className="h-3.5 w-3.5 text-ink-3" />
+            What to talk about
+          </h3>
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
+            {client.plan.pillars.map((p) => (
+              <span
+                key={p}
+                className="rounded-full border border-line bg-paper px-2.5 py-1 text-[12px]"
+              >
+                {p}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        <section data-doc-row className="px-4 py-4 sm:px-5">
+          <h3 className="flex items-center gap-1.5 text-[13px] font-semibold">
+            <CalendarClock aria-hidden className="h-3.5 w-3.5 text-ink-3" />
+            Your rhythm
+          </h3>
+          <div className="mt-3">
+            <RhythmStrip
+              days={client.plan.days}
+              perWeek={client.plan.perWeek}
+              effort={client.plan.effort}
+            />
+          </div>
+        </section>
       </div>
 
       <footer

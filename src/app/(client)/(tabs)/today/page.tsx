@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, TrendingUp } from "lucide-react";
+import { ArrowRight, MessageSquarePlus, TrendingUp } from "lucide-react";
 import { CardStack } from "@/components/cards/CardStack";
 import { CardShell } from "@/components/ui/card-shell";
 import { DialPill } from "@/components/ui/dial-pill";
@@ -121,7 +121,7 @@ export default function TodayPage() {
           ) : null}
         </div>
 
-        {/* Desk rail: the week, the wins, the plan */}
+        {/* Desk rail — the week, the result, the plan. Data, not paragraphs. */}
         <aside className="mt-8 space-y-6 lg:mt-0" data-testid="context-rail">
           <div className="hidden lg:block">
             <SectionLabel right={`${done}/${spine.length}`}>
@@ -132,49 +132,69 @@ export default function TodayPage() {
             </div>
           </div>
 
+          {/* The result, as a number you can't miss */}
           <div>
             <SectionLabel>Last week</SectionLabel>
-            <CardShell quiet className="mt-3">
-              <p className="flex items-start gap-2 text-[13px] leading-snug">
+            <CardShell className="mt-3">
+              <div className="flex items-baseline gap-2">
+                <span className="font-display text-[34px] leading-none font-semibold tracking-tight">
+                  {client.win.value}
+                </span>
                 <TrendingUp
                   aria-hidden
-                  className="mt-0.5 h-3.5 w-3.5 shrink-0 text-moss"
+                  className="h-4 w-4 shrink-0 text-moss"
                 />
-                {client.winLine}
+              </div>
+              <p className="mt-1.5 text-[12.5px] leading-snug">
+                {client.win.unit}
               </p>
+              <p className="t-meta mt-0.5">{client.win.note}</p>
             </CardShell>
           </div>
 
+          {/* Pillars as chips — scannable, and a door to the plan */}
           <div>
-            <SectionLabel>Your pillars</SectionLabel>
-            <CardShell quiet className="mt-3">
-              <p className="text-[12.5px] leading-relaxed text-ink-2">
-                {client.plan.what}
-              </p>
-              <Link
-                href="/plan"
-                className="t-meta mt-2 inline-flex items-center gap-1 text-ink-2 underline underline-offset-4"
-              >
-                The whole plan
-                <ArrowRight aria-hidden className="h-3 w-3" />
-              </Link>
-            </CardShell>
+            <SectionLabel right={`${client.plan.perWeek}/wk`}>
+              Your pillars
+            </SectionLabel>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {client.plan.pillars.map((p) => (
+                <span
+                  key={p}
+                  className="rounded-full border border-line bg-card px-2.5 py-1 text-[11.5px] text-ink-2"
+                >
+                  {p}
+                </span>
+              ))}
+            </div>
+            <Link
+              href="/plan"
+              className="t-meta mt-2.5 inline-flex items-center gap-1 underline underline-offset-4"
+            >
+              The whole plan
+              <ArrowRight aria-hidden className="h-3 w-3" />
+            </Link>
           </div>
 
+          {/* An affordance, not a paragraph */}
           <div className="hidden lg:block">
             <SectionLabel>Anything happening?</SectionLabel>
-            <CardShell quiet className="mt-3">
-              <p className="text-[12.5px] leading-relaxed text-ink-2">
-                Tell us in a sentence — it comes back as a card.
-              </p>
-              <Link
-                href="/workspace"
-                className="t-meta mt-2 inline-flex items-center gap-1 text-ink-2 underline underline-offset-4"
-              >
-                Open workspace
-                <ArrowRight aria-hidden className="h-3 w-3" />
-              </Link>
-            </CardShell>
+            <Link
+              href="/workspace"
+              className="mt-3 flex items-center gap-2.5 rounded-xl border border-dashed border-line bg-card/60 px-3.5 py-3 transition-colors hover:border-ink-3"
+            >
+              <MessageSquarePlus
+                aria-hidden
+                className="h-4 w-4 shrink-0 text-ink-3"
+              />
+              <span className="text-[12.5px] text-ink-2">
+                Tell us in a sentence
+              </span>
+              <ArrowRight
+                aria-hidden
+                className="ml-auto h-3 w-3 shrink-0 text-ink-3"
+              />
+            </Link>
           </div>
         </aside>
       </div>

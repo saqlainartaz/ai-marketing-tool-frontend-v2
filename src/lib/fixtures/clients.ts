@@ -71,8 +71,27 @@ export type FixtureClient = {
   profileLines: string[];
   lockedReason: string;
   lockedNeverChips: string[];
-  plan: { where: string; what: string; rhythm: string; why: string };
+  plan: {
+    where: string;
+    what: string;
+    rhythm: string;
+    why: string;
+    /** Structured plan — drives the living Plan page and the reveal. */
+    channels: {
+      platform: Platform;
+      name: string;
+      why: string;
+      state: "active" | "next";
+    }[];
+    pillars: string[];
+    /** posts per week + the days they usually land */
+    perWeek: number;
+    days: ("MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN")[];
+    effort: string;
+  };
   winLine: string;
+  /** The headline result, split so it can be shown as a stat. */
+  win: { value: string; unit: string; note: string };
   drafts: FixtureDraft[];
   questionCards: QuestionCardFixture[];
   voice: { summary: string; sounds: string[]; avoids: string[] };
@@ -113,8 +132,31 @@ const dave: FixtureClient = {
     what: "Before & after jobs · Questions customers always ask · Storm-season prep",
     rhythm: "2 posts a week — about 10 minutes of your time.",
     why: "Your goal is calls and booked jobs. Homeowners with a leak search Google and ask neighbors on Facebook — so that's where you show up, with proof of work and answers to the questions they're already asking.",
+    channels: [
+      {
+        platform: "google_business",
+        name: "Google Business",
+        why: "Where Austin homeowners search the moment a roof leaks.",
+        state: "active",
+      },
+      {
+        platform: "facebook",
+        name: "Facebook",
+        why: "Where neighbours ask each other who to call.",
+        state: "active",
+      },
+    ],
+    pillars: [
+      "Before & after jobs",
+      "Questions customers ask",
+      "Storm-season prep",
+    ],
+    perWeek: 2,
+    days: ["TUE", "THU"],
+    effort: "about 10 minutes of your time",
   },
   winLine: "Your last post reached 412 neighbors",
+  win: { value: "412", unit: "neighbours reached", note: "your best week yet" },
   drafts: [
     {
       id: "dave-1",
@@ -268,8 +310,31 @@ const amara: FixtureClient = {
     what: "What to ask before a crisis · Mediation myths · How consultations actually work",
     rhythm: "1 post a week, reviewed by you line by line.",
     why: "Your goal is more clients at zero reputational risk. Referrals come from peers who see your thinking on LinkedIn; families in trouble read your articles at 2 AM. Every post is claim-checked against bar rules before you ever see it.",
+    channels: [
+      {
+        platform: "linkedin",
+        name: "LinkedIn",
+        why: "Where your referral network reads and remembers you.",
+        state: "active",
+      },
+      {
+        platform: "google_business",
+        name: "Google Business",
+        why: "For families searching for a family lawyer nearby.",
+        state: "next",
+      },
+    ],
+    pillars: [
+      "What to ask before a crisis",
+      "Mediation myths",
+      "How consultations actually work",
+    ],
+    perWeek: 1,
+    days: ["WED"],
+    effort: "reviewed by you, line by line",
   },
   winLine: "Your last post was read by 89 people in your network",
+  win: { value: "89", unit: "people in your network", note: "read your last post" },
   drafts: [
     {
       id: "amara-1",

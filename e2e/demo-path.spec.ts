@@ -66,7 +66,9 @@ for (const theme of THEMES) {
     await expect(page.getByTestId("plan-reveal")).toBeVisible({
       timeout: 15_000,
     });
-    await expect(page.getByText(/Google Business first/)).toBeVisible();
+    await expect(
+      page.getByTestId("plan-reveal").getByText(/Google Business/).first(),
+    ).toBeVisible();
     await page
       .getByRole("button", { name: /start with this week/i })
       .click();
@@ -76,7 +78,7 @@ for (const theme of THEMES) {
     await expect(
       page.getByRole("heading", { name: /things to look at|thing to look at|all clear/i }),
     ).toBeVisible();
-    await expect(page.getByText(/412 neighbors/).first()).toBeVisible();
+    await expect(page.getByText(/neighbours reached/).first()).toBeVisible();
     await page.getByRole("button", { name: /good to go/i }).click();
     await expect(page.getByTestId("stamp")).toHaveText(/on its way/i);
   });
@@ -99,7 +101,7 @@ test("desktop is a real app: sidebar, two-column Today, context rail", async ({
   // Two-column: context rail present alongside the card column.
   await expect(page.getByTestId("context-rail")).toBeVisible();
   await expect(
-    page.getByTestId("context-rail").getByText(/89 people in your network/),
+    page.getByTestId("context-rail").getByText(/people in your network/),
   ).toBeVisible();
   // Amara's provenance opens on desktop too.
   await page

@@ -52,7 +52,7 @@ export function PlanScreen({ onNext }: { onNext: () => void }) {
         />
       ) : (
         <div data-testid="plan-reveal">
-          <PlanDocument client={client} animate hideWhy />
+          <PlanDocument client={client} animate />
         </div>
       )}
     </ScreenFrame>

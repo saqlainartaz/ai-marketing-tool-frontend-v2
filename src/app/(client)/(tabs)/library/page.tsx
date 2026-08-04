@@ -3,6 +3,7 @@
 import { useState } from "react";
 import {
   CalendarDays,
+  CalendarRange,
   CheckCheck,
   Copy,
   Download,
@@ -25,6 +26,7 @@ import {
 import { PLATFORM_NAME } from "@/components/preview/post-preview";
 import { PlatformMark } from "@/components/preview/platform-mark";
 import { WeekCalendar } from "@/components/library/WeekCalendar";
+import { MonthCalendar } from "@/components/library/MonthCalendar";
 import { Chip } from "@/components/ui/chip";
 import { SectionLabel } from "@/components/ui/section-label";
 import { cn } from "@/lib/utils";
@@ -65,7 +67,7 @@ export default function LibraryPage() {
   const clientId = useClientId();
   const client = getFixtureClient(clientId);
   const items = useContentItems(clientId);
-  const [view, setView] = useState<"week" | "list">("week");
+  const [view, setView] = useState<"week" | "month" | "list">("week");
   const [openId, setOpenId] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
 
@@ -203,7 +205,7 @@ export default function LibraryPage() {
 
       {/* View switch */}
       <div className="mt-6 inline-flex rounded-lg border border-line bg-card p-0.5">
-        {(["week", "list"] as const).map((v) => (
+        {(["week", "month", "list"] as const).map((v) => (
           <button
             key={v}
             type="button"
@@ -218,10 +220,16 @@ export default function LibraryPage() {
           >
             {v === "week" ? (
               <CalendarDays aria-hidden className="h-3.5 w-3.5" />
+            ) : v === "month" ? (
+              <CalendarRange aria-hidden className="h-3.5 w-3.5" />
             ) : (
               <List aria-hidden className="h-3.5 w-3.5" />
             )}
-            {v === "week" ? "This week" : "Everything"}
+            {v === "week"
+              ? "This week"
+              : v === "month"
+                ? "Full calendar"
+                : "Everything"}
           </button>
         ))}
       </div>
@@ -251,6 +259,29 @@ export default function LibraryPage() {
               ))}
             </ul>
           </div>
+        </div>
+      ) : view === "month" ? (
+        <div className="mt-5">
+          <MonthCalendar
+            items={items}
+            onSelect={(id) => setOpenId(openId === id ? null : id)}
+          />
+          {openId ? (
+            <div className="mt-6">
+              <SectionLabel>Selected</SectionLabel>
+              <ul className="surface mt-3 overflow-hidden rounded-xl">
+                {items
+                  .filter((i) => i.id === openId)
+                  .map((item) => (
+                    <Row key={item.id} item={item} last />
+                  ))}
+              </ul>
+            </div>
+          ) : (
+            <p className="t-meta mt-4">
+              Tap any mark to read what&apos;s prepared for that day.
+            </p>
+          )}
         </div>
       ) : (
         <div className="mt-5 space-y-7">
