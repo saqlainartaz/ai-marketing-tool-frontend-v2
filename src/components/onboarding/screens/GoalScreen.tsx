@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowRight } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, TriangleAlert } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { Chip } from "@/components/ui/chip";
 import { OptionCard } from "@/components/ui/option-card";
@@ -25,6 +26,17 @@ export function GoalScreen({
   onBack: () => void;
 }) {
   const { answers, setAnswer } = useOnboarding();
+  const [error, setError] = useState(false);
+
+  /* A greyed-out Continue tells the user they're stuck without telling
+   * them why. The button stays live and answers the question when asked. */
+  function next() {
+    if (!answers.goal) {
+      setError(true);
+      return;
+    }
+    onNext();
+  }
 
   return (
     <ScreenFrame
@@ -34,12 +46,21 @@ export function GoalScreen({
       sub="Everything we prepare from here on serves this one answer."
       onBack={onBack}
       footer={
-        <ActionButton size="lg" onClick={onNext} disabled={!answers.goal}>
+        <ActionButton size="lg" onClick={next}>
           Continue
           <ArrowRight className="h-4 w-4" />
         </ActionButton>
       }
     >
+      {error && !answers.goal ? (
+        <p
+          role="alert"
+          className="mb-3 flex items-center gap-1.5 text-[12.5px] font-medium text-honey"
+        >
+          <TriangleAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />
+          Pick one to carry on — &ldquo;Not sure&rdquo; is a real answer
+        </p>
+      ) : null}
       <div className="space-y-2">
         {GOALS.map((goal) => (
           <OptionCard
@@ -53,7 +74,9 @@ export function GoalScreen({
         ))}
       </div>
       <div className="mt-6">
-        <SectionLabel>Who will drive this</SectionLabel>
+        {/* Most questions here are required, so the exception is the one
+         * that gets marked — the GOV.UK convention. */}
+        <SectionLabel>Who will drive this (optional)</SectionLabel>
         <div className="mt-2.5 flex flex-wrap gap-1.5">
           {DRIVERS.map((d) => (
             <Chip

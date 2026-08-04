@@ -85,7 +85,13 @@ export default function WorkspacePage() {
   return (
     <div className="w-full lg:max-w-4xl">
       <p className="t-label">Workspace</p>
-      <h1 className="t-display mt-3">The door in the back.</h1>
+      {/* A page heading has one job: say what the page is for. "The door
+       * in the back" was a metaphor only we could decode. */}
+      <h1 className="t-display mt-3">Ask for anything.</h1>
+      <p className="t-sub mt-3 max-w-xl">
+        Tell us what&apos;s going on and we&apos;ll write it. Everything we
+        make is checked against how you sound.
+      </p>
 
       <div className="mt-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
         <div>
@@ -99,7 +105,7 @@ export default function WorkspacePage() {
                 {/* The example lives in the hint, not the placeholder — a
                  * placeholder disappears the moment you type, isn't
                  * reliably announced, and rarely passes contrast. */}
-                <p id="ws-hint" className="t-meta mt-0.5">
+                <p id="ws-hint" className="t-hint mt-1">
                   One sentence is enough — for example, we&apos;re running a
                   spring gutter discount
                 </p>

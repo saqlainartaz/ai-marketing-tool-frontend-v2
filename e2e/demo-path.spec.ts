@@ -33,7 +33,12 @@ for (const theme of THEMES) {
       page.getByRole("heading", { name: /what do you want more of/i }),
     ).toBeVisible();
     const next = page.getByRole("button", { name: /continue/i });
-    await expect(next).toBeDisabled();
+    // Pressing Continue with nothing chosen explains itself rather than
+    // sitting there greyed out.
+    await next.click();
+    await expect(page.locator("main").getByRole("alert")).toContainText(
+      /pick one/i,
+    );
     await page
       .getByRole("button", { name: /more calls & booked jobs/i })
       .click();

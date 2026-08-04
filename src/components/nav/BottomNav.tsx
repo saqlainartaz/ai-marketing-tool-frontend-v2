@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -46,6 +46,24 @@ const MORE = [
 export function BottomNav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const sheet = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+
+  /* A sheet that can only be closed by tapping outside it is a trap for
+   * anyone using a keyboard. Escape closes it, focus moves in on open and
+   * returns to the button that opened it. */
+  useEffect(() => {
+    if (!menuOpen) return;
+    sheet.current?.querySelector<HTMLElement>("a, button")?.focus();
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        trigger.current?.focus();
+      }
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   return (
     <>
@@ -55,6 +73,10 @@ export function BottomNav() {
           onClick={() => setMenuOpen(false)}
         >
           <div
+            ref={sheet}
+            role="dialog"
+            aria-modal="true"
+            aria-label="More"
             className="absolute right-3 bottom-[76px] left-3 mx-auto max-w-md overflow-hidden rounded-2xl border border-line bg-card shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
@@ -119,8 +141,8 @@ export function BottomNav() {
             );
           })}
           <button
+            ref={trigger}
             type="button"
-            aria-label="More"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen(!menuOpen)}
             className="flex min-w-16 cursor-pointer flex-col items-center gap-1 px-3 pt-3 pb-2.5 text-[11px] text-ink-2"

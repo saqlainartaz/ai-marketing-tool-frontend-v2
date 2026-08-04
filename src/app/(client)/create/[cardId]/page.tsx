@@ -2,7 +2,7 @@
 
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, TriangleAlert } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { OptionCard } from "@/components/ui/option-card";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -34,6 +34,7 @@ export default function CreatePage({
   const [phase, setPhase] = useState<Phase>({ step: 0 });
   const [picks, setPicks] = useState<string[]>([]);
   const [body, setBody] = useState<string | null>(null);
+  const [stepError, setStepError] = useState(false);
 
   if (!card) {
     router.replace("/today");
@@ -62,8 +63,7 @@ export default function CreatePage({
       <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-7 pb-6 lg:max-w-xl lg:justify-center lg:pb-24">
         <div className="flex items-center gap-2">
           <span className="t-meta shrink-0">
-            {String(phase.step + 1).padStart(2, "0")}/
-            {String(card.questions.length).padStart(2, "0")}
+            Question {phase.step + 1} of {card.questions.length}
           </span>
           <span className="flex flex-1 gap-1">
             {card.questions.map((_, i) => (
@@ -100,13 +100,28 @@ export default function CreatePage({
         </div>
         </div>
 
+        {stepError && !picks[phase.step] ? (
+          <p
+            role="alert"
+            className="mb-3 flex items-center gap-1.5 text-[12.5px] font-medium text-honey"
+          >
+            <TriangleAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />
+            Pick one to carry on
+          </p>
+        ) : null}
+
         <div className="lg:mt-10">
           <ActionButton
             size="lg"
-            disabled={!picks[phase.step]}
-            onClick={() =>
-              isLast ? setPhase("generating") : setPhase({ step: phase.step + 1 })
-            }
+            onClick={() => {
+              if (!picks[phase.step]) {
+                setStepError(true);
+                return;
+              }
+              setStepError(false);
+              if (isLast) setPhase("generating");
+              else setPhase({ step: phase.step + 1 });
+            }}
           >
             {isLast ? "Write it for me" : "Continue"}
             <ArrowRight className="h-4 w-4" />

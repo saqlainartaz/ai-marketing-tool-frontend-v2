@@ -32,15 +32,21 @@ describe("ConfirmScreen (S1)", () => {
 });
 
 describe("GoalScreen (S2)", () => {
-  it("Continue stays disabled until a goal is chosen", async () => {
+  it("Continue explains what it needs instead of going dead", async () => {
     const onNext = vi.fn();
     wrap(<GoalScreen onNext={onNext} onBack={() => {}} />);
     const next = screen.getByRole("button", { name: /continue/i });
-    expect(next).toBeDisabled();
+
+    // A disabled button states no reason, so this one stays live and says
+    // what's missing when it's pressed.
+    expect(next).toBeEnabled();
+    await userEvent.click(next);
+    expect(onNext).not.toHaveBeenCalled();
+    expect(screen.getByRole("alert")).toHaveTextContent(/pick one/i);
+
     await userEvent.click(
       screen.getByRole("button", { name: /More calls & booked jobs/i }),
     );
-    expect(next).toBeEnabled();
     await userEvent.click(next);
     expect(onNext).toHaveBeenCalledOnce();
   });

@@ -44,7 +44,7 @@ export function ScreenFrame({
   const index = STEPS.indexOf(step);
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 pb-6 lg:max-w-4xl lg:justify-center lg:px-10 lg:pt-0 lg:pb-16">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 pb-6 lg:max-w-4xl lg:justify-center lg:px-10 lg:pt-0 lg:pb-16">
       {/* Step rail */}
       <div
         className="flex items-center gap-2"
@@ -54,9 +54,10 @@ export function ScreenFrame({
         aria-valuemax={STEPS.length}
         aria-label={`Step ${index + 1} of ${STEPS.length}: ${STEP_NAME[step]}`}
       >
-        <span className="t-meta shrink-0">
-          {String(index + 1).padStart(2, "0")}/{STEPS.length}
-        </span>
+        {/* No numeral here: each screen's eyebrow already says "Question 1
+         * of 4", and a second counter with a different denominator ("02/6")
+         * made the user do arithmetic to work out where they were. The bar
+         * shows progress; the aria-label carries the exact position. */}
         <span className="flex flex-1 gap-1">
           {STEPS.map((s, i) => (
             <span
@@ -67,9 +68,7 @@ export function ScreenFrame({
             />
           ))}
         </span>
-        <span className="t-label hidden shrink-0 sm:block">
-          {STEP_NAME[step]}
-        </span>
+        <span className="t-label shrink-0">{STEP_NAME[step]}</span>
       </div>
 
       <div className="flex flex-1 flex-col lg:mt-14 lg:grid lg:flex-none lg:grid-cols-[minmax(0,4fr)_minmax(0,5fr)] lg:items-start lg:gap-16">
@@ -106,6 +105,6 @@ export function ScreenFrame({
           ) : null}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

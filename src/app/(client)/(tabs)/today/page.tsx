@@ -124,7 +124,7 @@ export default function TodayPage() {
         {/* Desk rail — the week, the result, the plan. Data, not paragraphs. */}
         <aside className="mt-8 space-y-6 lg:mt-0" data-testid="context-rail">
           <div className="hidden lg:block">
-            <SectionLabel right={`${done}/${spine.length}`}>
+            <SectionLabel right={`${done} of ${spine.length} done`}>
               This week
             </SectionLabel>
             <div className="mt-3">
@@ -154,7 +154,7 @@ export default function TodayPage() {
 
           {/* Pillars as chips — scannable, and a door to the plan */}
           <div>
-            <SectionLabel right={`${client.plan.perWeek}/wk`}>
+            <SectionLabel right={`${client.plan.perWeek} a week`}>
               Your pillars
             </SectionLabel>
             <div className="mt-3 flex flex-wrap gap-1.5">
