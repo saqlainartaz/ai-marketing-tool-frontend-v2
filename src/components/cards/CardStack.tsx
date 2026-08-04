@@ -12,6 +12,8 @@ import { SourcedBody } from "@/components/preview/SourcedBody";
 import { GuardrailLine } from "@/components/preview/GuardrailLine";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import { useContentItems, decideItem, editItemBody } from "@/lib/store/content";
+import { useWorkMode } from "@/lib/store/settings";
+import { IdeaCard } from "@/components/cards/IdeaCard";
 
 /**
  * The decision surface: one prepared object at a time, its consequence
@@ -21,6 +23,7 @@ import { useContentItems, decideItem, editItemBody } from "@/lib/store/content";
 export function CardStack({ clientId }: { clientId: string }) {
   const client = getFixtureClient(clientId);
   const items = useContentItems(clientId);
+  const workMode = useWorkMode(clientId);
   const [stamped, setStamped] = useState<string | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
   const [draftText, setDraftText] = useState("");
@@ -61,6 +64,43 @@ export function CardStack({ clientId }: { clientId: string }) {
       setStamped(null);
       decideItem(clientId, id, "approved");
     }, 700);
+  }
+
+  /* The dial decides what leads. "Show me ideas" means exactly that:
+   * the client picks what to say and we write it, rather than being
+   * handed finished drafts to wave through. */
+  if (workMode === "suggest") {
+    return (
+      <div data-testid="card-stack">
+        <IdeaCard clientId={clientId} />
+        {ready.length > 0 ? (
+          <div className="mt-6">
+            <p className="t-label mb-3">
+              Also prepared for you · {ready.length}
+            </p>
+            <div className="space-y-2">
+              {ready.slice(0, 3).map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center gap-3 rounded-lg border border-line bg-card px-3.5 py-2.5"
+                >
+                  <span className="t-meta truncate">
+                    {item.pillar ?? item.meta}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => approve(item.id)}
+                    className="t-meta ml-auto shrink-0 cursor-pointer underline underline-offset-4"
+                  >
+                    Approve
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
   }
 
   if (current) {

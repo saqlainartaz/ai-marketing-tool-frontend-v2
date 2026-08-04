@@ -30,9 +30,9 @@ export function AssemblyMoment({
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
+    const reduced =
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       setVisible(steps.length);
       const t = setTimeout(() => {

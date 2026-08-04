@@ -17,6 +17,7 @@ import { CardShell } from "@/components/ui/card-shell";
 import { SectionLabel } from "@/components/ui/section-label";
 import { AssemblyMoment } from "@/components/motion/AssemblyMoment";
 import { VoiceCard } from "@/components/voice/VoiceCard";
+import { IdeaCard } from "@/components/cards/IdeaCard";
 import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import { addItem } from "@/lib/store/content";
@@ -139,6 +140,19 @@ export default function WorkspacePage() {
           </div>
         </div>
       </div>
+      <div className="mt-10 border-t border-line pt-8">
+        <SectionLabel right={`${client.ideas.length}`}>
+          Give me ideas
+        </SectionLabel>
+        <p className="t-sub mt-2 max-w-xl">
+          Things worth saying, mined from your episode, your calls and your
+          reviews. Pick one and we write it.
+        </p>
+        <div className="mt-4 lg:max-w-2xl">
+          <IdeaCard clientId={clientId} />
+        </div>
+      </div>
+
       <div className="mt-10 border-t border-line pt-8">
         <SectionLabel right={`${TOOLS.filter((t) => t.on).length} active`}>
           What we can make for you

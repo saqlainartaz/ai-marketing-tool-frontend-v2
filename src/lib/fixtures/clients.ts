@@ -94,7 +94,22 @@ export type FixtureClient = {
   win: { value: string; unit: string; note: string };
   drafts: FixtureDraft[];
   questionCards: QuestionCardFixture[];
+  /** Things worth saying, mined from the client's own material. */
+  ideas: IdeaFixture[];
   voice: { summary: string; sounds: string[]; avoids: string[] };
+};
+
+export type IdeaFixture = {
+  id: string;
+  title: string;
+  /** Why this one is worth saying, in their terms. */
+  angle: string;
+  /** Where it came from — ideas are grounded, never invented. */
+  source: string;
+  pillar: string;
+  platform: Platform;
+  /** The draft this idea becomes. */
+  produces: Omit<FixtureDraft, "id">;
 };
 
 const dave: FixtureClient = {
@@ -260,6 +275,67 @@ const dave: FixtureClient = {
             phrase: "the crew explained every step",
             label: "your answer, just now",
           },
+        ],
+      },
+    },
+  ],
+  ideas: [
+    {
+      id: "dave-i1",
+      title: "What insurers actually look for after a storm",
+      angle: "You explain this on every job — most homeowners have never heard it.",
+      source: "your episode, March · 18:40",
+      pillar: "Questions customers ask",
+      platform: "facebook",
+      produces: {
+        platform: "facebook",
+        meta: "Facebook · ready when you are",
+        body: "After a storm, an adjuster is looking for three things — and homeowners almost never photograph them. Here's what to capture before anyone climbs up, so your claim tells the whole story.",
+        consequence: "pull it back anytime",
+        pillar: "Questions customers ask",
+        scheduledFor: "FRI",
+        provenance: [
+          {
+            phrase: "an adjuster is looking for three things",
+            label: "your episode, March · 18:40",
+          },
+        ],
+      },
+    },
+    {
+      id: "dave-i2",
+      title: "Why you turn some jobs down",
+      angle: "Turning work away builds more trust than any sales line could.",
+      source: "your onboarding call",
+      pillar: "Before & after jobs",
+      platform: "facebook",
+      produces: {
+        platform: "facebook",
+        meta: "Facebook · ready when you are",
+        body: "We told a homeowner last week that her roof had four good years left. No sale, no deposit. She'll call us in four years — and she already sent her neighbour.",
+        consequence: "pull it back anytime",
+        pillar: "Before & after jobs",
+        scheduledFor: "SAT",
+        provenance: [
+          { phrase: "four good years left", label: "your onboarding call" },
+        ],
+      },
+    },
+    {
+      id: "dave-i3",
+      title: "The gutter check nobody does in spring",
+      angle: "Seasonal, useful, and it puts you in mind before the first storm.",
+      source: "your reviews · 3 mentions",
+      pillar: "Storm-season prep",
+      platform: "google_business",
+      produces: {
+        platform: "google_business",
+        meta: "Google Business · ready when you are",
+        body: "Spring gutter check, ten minutes: clear the corners, run the hose, watch where it pools. If it pools by the fascia, call someone before summer storms — that's where the damage starts.",
+        consequence: "pull it back anytime",
+        pillar: "Storm-season prep",
+        provenance: [
+          { phrase: "that's where the damage starts", label: "your reviews · 3 mentions" },
         ],
       },
     },
@@ -431,6 +507,66 @@ const amara: FixtureClient = {
             phrase: "usually not",
             label: "your answer, just now",
           },
+        ],
+      },
+    },
+  ],
+  ideas: [
+    {
+      id: "amara-i1",
+      title: "What to bring to a first consultation",
+      angle: "The question every caller asks before they book — answered once, publicly.",
+      source: "your onboarding call, Mar 12",
+      pillar: "How consultations actually work",
+      platform: "linkedin",
+      produces: {
+        platform: "linkedin",
+        meta: "LinkedIn · ready for your review",
+        body: "People arrive at a first consultation braced for an interrogation. Bring two things: a rough timeline, and the questions keeping you up at night. That is genuinely enough for us to start.",
+        consequence: "nothing publishes without you · ever",
+        pillar: "How consultations actually work",
+        scheduledFor: "FRI",
+        provenance: [
+          {
+            phrase: "a rough timeline, and the questions keeping you up at night",
+            label: "your onboarding call, Mar 12",
+          },
+        ],
+      },
+    },
+    {
+      id: "amara-i2",
+      title: "Why the calm parent usually does better",
+      angle: "Hard-won, uncontroversial, and it shows how you think.",
+      source: "your episode, February · 26:05",
+      pillar: "What to ask before a crisis",
+      platform: "linkedin",
+      produces: {
+        platform: "linkedin",
+        meta: "LinkedIn · ready for your review",
+        body: "In custody matters, the parent who stays calm on paper tends to fare better than the one who is right and furious. Not because courts reward composure — because composure keeps options open.",
+        consequence: "nothing publishes without you · ever",
+        pillar: "What to ask before a crisis",
+        provenance: [
+          { phrase: "composure keeps options open", label: "your episode, February · 26:05" },
+        ],
+      },
+    },
+    {
+      id: "amara-i3",
+      title: "What mediation costs, honestly",
+      angle: "Nobody in your field posts numbers. Ranges alone would stand out.",
+      source: "your onboarding call",
+      pillar: "Mediation myths",
+      platform: "linkedin",
+      produces: {
+        platform: "linkedin",
+        meta: "LinkedIn · ready for your review",
+        body: "Families ask what mediation costs and get a shrug. Here is the honest shape of it: fewer sessions than you fear, priced per session, and the total is usually a fraction of a contested filing.",
+        consequence: "nothing publishes without you · ever",
+        pillar: "Mediation myths",
+        provenance: [
+          { phrase: "fewer sessions than you fear", label: "your onboarding call" },
         ],
       },
     },

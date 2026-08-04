@@ -185,5 +185,10 @@ test("the complete product loop: create → library → handoff → plan → set
   await page.getByRole("button", { name: /turn it into a post/i }).click();
   await expect(page.getByTestId("ws-done")).toBeVisible({ timeout: 15_000 });
   await page.getByRole("link", { name: /review it now/i }).click();
-  await expect(page.getByText(/spring gutter discount/)).toBeVisible();
+  // The dial was switched to "show me ideas" a moment ago, so Today now
+  // leads with ideas — the new note is waiting in the prepared list.
+  await expect(page.getByTestId("idea-card")).toBeVisible();
+  await expect(
+    page.getByTestId("card-stack").getByText(/From your note/),
+  ).toBeVisible();
 });
