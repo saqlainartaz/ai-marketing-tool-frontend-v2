@@ -9,6 +9,7 @@ import {
   ThumbsUp,
   type LucideIcon,
 } from "lucide-react";
+import { PlatformMark } from "@/components/preview/platform-mark";
 import { cn } from "@/lib/utils";
 
 export type Platform = "facebook" | "linkedin" | "google_business";
@@ -79,11 +80,16 @@ export function PostPreview({
       )}
     >
       <div className="flex items-center gap-2.5 px-4 pt-3.5 pb-2">
-        <div
-          aria-hidden
-          className="flex h-9 w-9 items-center justify-center rounded-full bg-paper font-display text-sm font-bold text-ink"
-        >
-          {avatarInitial}
+        <div className="relative shrink-0">
+          <div
+            aria-hidden
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-paper font-display text-sm font-bold text-ink"
+          >
+            {avatarInitial}
+          </div>
+          <span className="absolute -right-0.5 -bottom-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-card ring-1 ring-line">
+            <PlatformMark platform={platform} className="h-2.5 w-2.5" />
+          </span>
         </div>
         <div className="min-w-0">
           <div className="truncate text-[13px] font-semibold">

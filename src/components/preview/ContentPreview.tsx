@@ -4,6 +4,7 @@ import {
   PLATFORM_NAME,
   type Platform,
 } from "@/components/preview/post-preview";
+import { PlatformMark } from "@/components/preview/platform-mark";
 
 export type ContentKind = "post" | "review_reply" | "email";
 
@@ -58,7 +59,8 @@ export function ContentPreview({
   return (
     <article className="surface overflow-hidden rounded-xl">
       {/* Object header — what this is, where it came from, its state. */}
-      <header className="flex items-baseline gap-2 border-b border-line bg-paper px-4 py-2">
+      <header className="flex items-center gap-2 border-b border-line bg-paper px-4 py-2">
+        <PlatformMark platform={platform} size="sm" className="shrink-0" />
         <span className="t-label truncate">
           {label}
           {pillar ? ` · ${pillar}` : ""}

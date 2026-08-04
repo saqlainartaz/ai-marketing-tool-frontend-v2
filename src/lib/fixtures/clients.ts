@@ -32,6 +32,8 @@ export type FixtureDraft = {
   review?: { reviewer: string; stars: number; text: string };
   /** email: subject line. */
   subject?: string;
+  /** Day this is prepared for (ISO yyyy-mm-dd) — drives the calendar. */
+  scheduledFor?: string;
 };
 
 export type QuestionCardFixture = {
@@ -43,11 +45,27 @@ export type QuestionCardFixture = {
   produces: Omit<FixtureDraft, "id">;
 };
 
+export type ClientContact = {
+  fullName: string;
+  email: string;
+  phone?: string;
+  /** Photo URL when they have one; initials stand in until then. */
+  photoUrl?: string;
+};
+
+export type ClientSocial = {
+  platform: "facebook" | "linkedin" | "google_business" | "instagram" | "website";
+  handle: string;
+  connected: boolean;
+};
+
 export type FixtureClient = {
   id: "dave" | "amara";
   firstName: string;
   businessName: string;
   avatarInitial: string;
+  contact: ClientContact;
+  socials: ClientSocial[];
   workMode: WorkMode;
   checks: string[];
   profileLines: string[];
@@ -65,6 +83,17 @@ const dave: FixtureClient = {
   firstName: "Dave",
   businessName: "Meridian Roofing",
   avatarInitial: "M",
+  contact: {
+    fullName: "Dave Whitaker",
+    email: "dave@meridianroofing.com",
+    phone: "(512) 555-0148",
+  },
+  socials: [
+    { platform: "facebook", handle: "/meridianroofingatx", connected: true },
+    { platform: "google_business", handle: "Meridian Roofing · Austin", connected: true },
+    { platform: "website", handle: "meridianroofing.com", connected: true },
+    { platform: "instagram", handle: "not connected", connected: false },
+  ],
   workMode: "handle",
   checks: [
     "Found your website",
@@ -91,6 +120,7 @@ const dave: FixtureClient = {
       id: "dave-1",
       platform: "facebook",
       meta: "Facebook · ready for Tue 9 AM",
+      scheduledFor: "TUE",
       body: "Hail season's coming, Austin. Last month we caught three roofs their owners thought were fine. Here's the 10-minute check you can do from the ground — no ladder needed.",
       withImage: true,
       consequence: "pull it back anytime",
@@ -108,6 +138,7 @@ const dave: FixtureClient = {
       id: "dave-2",
       platform: "google_business",
       meta: "Google Business · ready for Thu 9 AM",
+      scheduledFor: "THU",
       body: "Before & after from Lakeway Ave — full replacement in two days, family in the house the whole time.",
       withImage: true,
       consequence: "pull it back anytime",
@@ -129,6 +160,7 @@ const dave: FixtureClient = {
       id: "dave-3",
       platform: "facebook",
       meta: "Facebook · ready for Sat 10 AM",
+      scheduledFor: "SAT",
       body: 'The #1 question we get every storm season: "Should I file a claim?" Here\'s how to know in five minutes — before you call anyone.',
       consequence: "pull it back anytime",
       pillar: "Questions customers ask",
@@ -138,6 +170,7 @@ const dave: FixtureClient = {
       kind: "review_reply",
       platform: "google_business",
       meta: "New Google review · reply drafted",
+      scheduledFor: "TODAY",
       review: {
         reviewer: "Karen L.",
         stars: 5,
@@ -202,6 +235,16 @@ const amara: FixtureClient = {
   firstName: "Amara",
   businessName: "Osei Family Law",
   avatarInitial: "A",
+  contact: {
+    fullName: "Amara Osei",
+    email: "amara@oseifamilylaw.com",
+    phone: "(312) 555-0113",
+  },
+  socials: [
+    { platform: "linkedin", handle: "/in/amara-osei", connected: true },
+    { platform: "website", handle: "oseifamilylaw.com", connected: true },
+    { platform: "google_business", handle: "Osei Family Law · Chicago", connected: false },
+  ],
   workMode: "prepare",
   checks: [
     "Found your website",
@@ -232,6 +275,7 @@ const amara: FixtureClient = {
       id: "amara-1",
       platform: "linkedin",
       meta: "LinkedIn · awaiting your review",
+      scheduledFor: "WED",
       body: "In fifteen years of family practice, the cases that end well usually start with a conversation months earlier — before positions harden. You don't need a crisis to book a consultation. You need twenty minutes and a list of what's keeping you up at night.",
       consequence: "nothing publishes without you · ever",
       pillar: "What to ask before a crisis",
@@ -251,6 +295,7 @@ const amara: FixtureClient = {
       id: "amara-2",
       platform: "linkedin",
       meta: "LinkedIn · awaiting your review",
+      scheduledFor: "MON",
       body: 'Mediation isn\'t about "giving in." In my experience it\'s where families keep the most control over their own outcome. Three myths I hear every week — and what actually happens in the room.',
       consequence: "nothing publishes without you · ever",
       pillar: "Mediation myths",
@@ -271,6 +316,7 @@ const amara: FixtureClient = {
       kind: "email",
       platform: "linkedin",
       meta: "Email · consultation follow-up · awaiting your review",
+      scheduledFor: "TODAY",
       subject: "What we covered — and your next step, when you're ready",
       body: "It was good to meet you this week. As promised, here's the short version of what we discussed, in plain language, plus the two documents worth gathering before anything else. No deadline on any of this — when you're ready, you know where I am.",
       consequence: "sent from your inbox after you approve · never automatic",

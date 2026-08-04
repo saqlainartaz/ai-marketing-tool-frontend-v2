@@ -74,55 +74,7 @@ export default function WorkspacePage() {
       <p className="t-label">Workspace</p>
       <h1 className="t-display mt-3">The door in the back.</h1>
 
-      <div className="mt-8">
-        <SectionLabel right={`${TOOLS.filter((t) => t.on).length} active`}>
-          What we can make for you
-        </SectionLabel>
-        <p className="t-sub mt-2 max-w-xl">
-          Your plan picks the tools that fit your business — whatever we make
-          arrives as a card on Today.
-        </p>
-        <div
-          className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-3"
-          data-testid="tool-gallery"
-        >
-          {TOOLS.map((tool) => {
-            const Icon = tool.icon;
-            return (
-              <div
-                key={tool.label}
-                className={
-                  tool.on
-                    ? "surface rounded-xl p-3.5"
-                    : "rounded-xl border border-dashed border-line p-3.5"
-                }
-              >
-                <span
-                  aria-hidden
-                  className={`mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg ${
-                    tool.on ? "bg-clay text-onact" : "bg-paper text-ink-3"
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                </span>
-                <p
-                  className={`text-[13.5px] font-semibold ${tool.on ? "" : "text-ink-2"}`}
-                >
-                  {tool.label}
-                </p>
-                <p className="t-meta mt-0.5">{tool.desc}</p>
-                {!tool.on ? (
-                  <p className="t-meta mt-1.5 text-ink-3">
-                    joins when your plan calls for it
-                  </p>
-                ) : null}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="mt-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
+      <div className="mt-8 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
         <div>
           <SectionLabel>Tell us what&apos;s happening</SectionLabel>
           <CardShell className="mt-3">
@@ -204,6 +156,54 @@ export default function WorkspacePage() {
           </CardShell>
         </div>
       </div>
+      <div className="mt-10 border-t border-line pt-8">
+        <SectionLabel right={`${TOOLS.filter((t) => t.on).length} active`}>
+          What we can make for you
+        </SectionLabel>
+        <p className="t-sub mt-2 max-w-xl">
+          Your plan picks the tools that fit your business — whatever we make
+          arrives as a card on Today.
+        </p>
+        <div
+          className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-3"
+          data-testid="tool-gallery"
+        >
+          {TOOLS.map((tool) => {
+            const Icon = tool.icon;
+            return (
+              <div
+                key={tool.label}
+                className={
+                  tool.on
+                    ? "surface rounded-xl p-3.5"
+                    : "rounded-xl border border-dashed border-line p-3.5"
+                }
+              >
+                <span
+                  aria-hidden
+                  className={`mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg ${
+                    tool.on ? "bg-clay text-onact" : "bg-paper text-ink-3"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                </span>
+                <p
+                  className={`text-[13.5px] font-semibold ${tool.on ? "" : "text-ink-2"}`}
+                >
+                  {tool.label}
+                </p>
+                <p className="t-meta mt-0.5">{tool.desc}</p>
+                {!tool.on ? (
+                  <p className="t-meta mt-1.5 text-ink-3">
+                    joins when your plan calls for it
+                  </p>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
     </div>
   );
 }

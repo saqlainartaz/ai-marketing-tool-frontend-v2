@@ -157,6 +157,9 @@ test("the complete product loop: create → library → handoff → plan → set
   // Library: three approved items; handoff marks one as posted.
   await page.getByRole("link", { name: /library/i }).click();
   await expect(page.getByText(/Published without your approval/)).toBeVisible();
+  // The week view answers "when"; the list answers "what" — switch to it.
+  await expect(page.getByTestId("week-calendar")).toBeVisible();
+  await page.getByRole("button", { name: /everything/i }).click();
   await page.getByText(/Hail season/).click();
   await expect(page.getByTestId("handoff-sheet")).toBeVisible();
   await page.getByRole("button", { name: /mark as posted/i }).click();

@@ -21,6 +21,8 @@ export type ContentItem = FixtureDraft & {
   postedAt?: string;
 };
 
+export type { ContentStatus as Status };
+
 type StoreState = Record<string, ContentItem[]>; // clientId → items
 
 let state: StoreState = {};
