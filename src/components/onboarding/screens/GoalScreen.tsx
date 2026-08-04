@@ -7,7 +7,7 @@ import { ScreenFrame } from "@/components/onboarding/ScreenFrame";
 import { useOnboarding } from "@/components/onboarding/OnboardingProvider";
 
 export const GOALS = [
-  "📞 More calls & booked jobs",
+  "More calls & booked jobs",
   "More clients or patients",
   "A bigger audience & authority",
   "Not sure — guide me",

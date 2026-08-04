@@ -8,6 +8,7 @@ import path from "node:path";
  * text or a transparent button in that theme only — this test catches it.
  */
 const TOKENS = [
+  "--canvas",
   "--paper",
   "--ink",
   "--ink-2",

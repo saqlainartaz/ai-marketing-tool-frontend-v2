@@ -91,7 +91,7 @@ const dave: FixtureClient = {
       id: "dave-1",
       platform: "facebook",
       meta: "Facebook · ready for Tue 9 AM",
-      body: "Hail season's coming, Austin. Last month we caught three roofs their owners thought were fine. Here's the 10-minute check you can do from the ground — no ladder needed. 👇",
+      body: "Hail season's coming, Austin. Last month we caught three roofs their owners thought were fine. Here's the 10-minute check you can do from the ground — no ladder needed.",
       withImage: true,
       consequence: "pull it back anytime",
       pillar: "Storm-season prep",

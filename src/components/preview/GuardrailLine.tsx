@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ChevronDown, ShieldCheck } from "lucide-react";
 import type { FixtureDraft } from "@/lib/fixtures/clients";
 
 /**
@@ -19,9 +20,14 @@ export function GuardrailLine({
         type="button"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="flex w-full cursor-pointer items-center gap-2 rounded-xl bg-honey-mist px-3 py-2 text-left text-[11.5px] text-honey"
+        className="flex w-full cursor-pointer items-center gap-2 rounded-xl bg-honey-mist px-3 py-2 text-left text-[11.5px] font-medium text-honey"
       >
-        🛡 {guardrail.note}
+        <ShieldCheck aria-hidden className="h-3.5 w-3.5 shrink-0" />
+        <span className="flex-1">{guardrail.note}</span>
+        <ChevronDown
+          aria-hidden
+          className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+        />
       </button>
       {open ? (
         <div

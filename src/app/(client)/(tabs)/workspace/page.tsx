@@ -2,6 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import {
+  Clapperboard,
+  FileText,
+  Mail,
+  MapPin,
+  PenLine,
+  Star,
+  type LucideIcon,
+} from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { CardShell } from "@/components/ui/card-shell";
 import { Chip } from "@/components/ui/chip";
@@ -10,14 +19,19 @@ import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import { addItem } from "@/lib/store/content";
 
-const TOOLS = [
-  { icon: "✍", label: "Posts", desc: "Facebook, LinkedIn, GBP", on: true },
-  { icon: "⭐", label: "Review replies", desc: "Google & Facebook", on: true },
-  { icon: "✉", label: "Emails", desc: "Follow-ups & updates", on: true },
-  { icon: "📍", label: "GBP updates", desc: "Offers & news", on: true },
-  { icon: "🎬", label: "Video scripts", desc: "From your episode", on: false },
-  { icon: "📄", label: "Landing pages", desc: "For campaigns", on: false },
-] as const;
+const TOOLS: {
+  icon: LucideIcon;
+  label: string;
+  desc: string;
+  on: boolean;
+}[] = [
+  { icon: PenLine, label: "Posts", desc: "Facebook, LinkedIn, GBP", on: true },
+  { icon: Star, label: "Review replies", desc: "Google & Facebook", on: true },
+  { icon: Mail, label: "Emails", desc: "Follow-ups & updates", on: true },
+  { icon: MapPin, label: "GBP updates", desc: "Offers & news", on: true },
+  { icon: Clapperboard, label: "Video scripts", desc: "From your episode", on: false },
+  { icon: FileText, label: "Landing pages", desc: "For campaigns", on: false },
+];
 
 /**
  * The Act-3 door. The tool gallery leads — what we can make for you,
@@ -74,25 +88,29 @@ export default function WorkspacePage() {
         className="mt-3 grid grid-cols-2 gap-2 lg:grid-cols-3"
         data-testid="tool-gallery"
       >
-        {TOOLS.map((tool) => (
-          <div
-            key={tool.label}
-            className={`rounded-xl border p-3 ${tool.on ? "border-line bg-card" : "border-dashed border-line opacity-60"}`}
-          >
-            <p className="text-sm font-semibold">
-              <span aria-hidden className="mr-1">
-                {tool.icon}
+        {TOOLS.map((tool) => {
+          const Icon = tool.icon;
+          return (
+            <div
+              key={tool.label}
+              className={`rounded-xl border p-3 ${tool.on ? "border-line bg-card shadow-[0_1px_2px_rgb(16_19_24/0.05)]" : "border-dashed border-line opacity-60"}`}
+            >
+              <span
+                aria-hidden
+                className={`mb-2 flex h-8 w-8 items-center justify-center rounded-lg ${tool.on ? "bg-clay-mist text-clay-deep" : "bg-paper text-ink-3"}`}
+              >
+                <Icon className="h-4 w-4" />
               </span>
-              {tool.label}
-            </p>
-            <p className="mt-0.5 text-[10.5px] text-ink-2">{tool.desc}</p>
-            {!tool.on ? (
-              <p className="mt-1 text-[9.5px] text-ink-3">
-                joins when your plan calls for it
-              </p>
-            ) : null}
-          </div>
-        ))}
+              <p className="text-sm font-semibold">{tool.label}</p>
+              <p className="mt-0.5 text-[11px] text-ink-2">{tool.desc}</p>
+              {!tool.on ? (
+                <p className="mt-1 text-[10px] text-ink-3">
+                  joins when your plan calls for it
+                </p>
+              ) : null}
+            </div>
+          );
+        })}
       </div>
 
       <div className="mt-8 lg:grid lg:grid-cols-2 lg:gap-10">
@@ -176,7 +194,7 @@ export default function WorkspacePage() {
               ))}
             </div>
             <p className="mt-3 text-[10.5px] text-ink-3">
-              Something here wrong? Tell us — corrections land in M2.
+              Something here wrong? Tell us — we'll fix it.
             </p>
           </CardShell>
         </div>

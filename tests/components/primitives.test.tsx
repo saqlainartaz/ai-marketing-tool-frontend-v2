@@ -91,7 +91,7 @@ describe("PostPreview", () => {
     expect(screen.getByText("Meridian Roofing")).toBeInTheDocument();
     expect(screen.getByText(/ready for Tue 9 AM/)).toBeInTheDocument();
     expect(screen.getByText(/Hail season/)).toBeInTheDocument();
-    expect(screen.getByText("👍 Like")).toBeInTheDocument();
+    expect(screen.getByText("Like")).toBeInTheDocument();
     expect(screen.getByTestId("image-slot")).toBeInTheDocument();
   });
 
@@ -106,7 +106,7 @@ describe("PostPreview", () => {
         Before and after from Lakeway Ave.
       </PostPreview>,
     );
-    expect(screen.getByText("📞 Call")).toBeInTheDocument();
-    expect(screen.getByText("📍 Directions")).toBeInTheDocument();
+    expect(screen.getByText("Call")).toBeInTheDocument();
+    expect(screen.getByText("Directions")).toBeInTheDocument();
   });
 });

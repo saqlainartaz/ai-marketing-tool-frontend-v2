@@ -3,13 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LibraryBig, Map, Menu, Sun } from "lucide-react";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { href: "/today", label: "Today", icon: "☀" },
-  { href: "/library", label: "Library", icon: "▤" },
-  { href: "/plan", label: "Plan", icon: "◎" },
+  { href: "/today", label: "Today", icon: Sun },
+  { href: "/library", label: "Library", icon: LibraryBig },
+  { href: "/plan", label: "Plan", icon: Map },
 ] as const;
 
 /**
@@ -73,19 +74,18 @@ export function BottomNav() {
         <div className="mx-auto flex max-w-md items-center justify-around py-2">
           {TABS.map((tab) => {
             const active = pathname.startsWith(tab.href);
+            const Icon = tab.icon;
             return (
               <Link
                 key={tab.href}
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-w-16 flex-col items-center gap-0.5 rounded-xl px-3 py-1.5 text-[11px]",
+                  "flex min-w-16 flex-col items-center gap-1 rounded-xl px-3 py-1.5 text-[11px]",
                   active ? "font-semibold text-clay-deep" : "text-ink-2",
                 )}
               >
-                <span aria-hidden className="text-base leading-none">
-                  {tab.icon}
-                </span>
+                <Icon aria-hidden className="h-5 w-5" strokeWidth={2} />
                 {tab.label}
               </Link>
             );
@@ -95,11 +95,9 @@ export function BottomNav() {
             aria-label="More"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex min-w-16 cursor-pointer flex-col items-center gap-0.5 rounded-xl px-3 py-1.5 text-[11px] text-ink-2"
+            className="flex min-w-16 cursor-pointer flex-col items-center gap-1 rounded-xl px-3 py-1.5 text-[11px] text-ink-2"
           >
-            <span aria-hidden className="text-base leading-none">
-              ☰
-            </span>
+            <Menu aria-hidden className="h-5 w-5" strokeWidth={2} />
             More
           </button>
         </div>

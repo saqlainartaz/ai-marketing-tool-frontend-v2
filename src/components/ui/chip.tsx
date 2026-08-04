@@ -1,5 +1,6 @@
 "use client";
 
+import { Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type ChipProps = {
@@ -27,7 +28,7 @@ export function Chip({
           className,
         )}
       >
-        <span aria-hidden>🔒</span>
+        <Lock aria-hidden className="h-3 w-3" />
         {children}
       </span>
     );

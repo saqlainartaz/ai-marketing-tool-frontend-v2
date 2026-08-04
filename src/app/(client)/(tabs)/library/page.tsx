@@ -1,6 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import {
+  CheckCheck,
+  Copy,
+  Download,
+  Link2,
+  ShieldCheck,
+} from "lucide-react";
 import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import {
@@ -84,12 +91,13 @@ export default function LibraryPage() {
       </h1>
       <p className="mt-1 text-xs text-ink-2">What went out, and when.</p>
 
-      <CardShell className="mt-4">
-        <p className="text-xs text-ink-2">
+      <div className="mt-4 flex items-center gap-2.5 rounded-2xl border border-moss/30 bg-moss-mist px-4 py-3">
+        <ShieldCheck aria-hidden className="h-4 w-4 shrink-0 text-moss" />
+        <p className="text-xs text-ink">
           Published without your approval, all time:{" "}
-          <b className="text-ink">{publishedWithoutApprovalCount()}</b>
+          <b>{publishedWithoutApprovalCount()}</b>
         </p>
-      </CardShell>
+      </div>
 
       <div className="mt-4 flex flex-wrap gap-1.5">
         {(["all", "ready", "approved", "posted", "skipped"] as const).map(
@@ -150,10 +158,17 @@ export default function LibraryPage() {
                   data-testid="handoff-sheet"
                 >
                   <div className="flex flex-wrap gap-1.5">
-                    <Chip onToggle={() => copyText(item)}>📋 Copy text</Chip>
-                    <Chip onToggle={() => download(item)}>⬇ Download</Chip>
+                    <Chip onToggle={() => copyText(item)}>
+                      <Copy aria-hidden className="mr-1 h-3 w-3" />
+                      Copy text
+                    </Chip>
+                    <Chip onToggle={() => download(item)}>
+                      <Download aria-hidden className="mr-1 h-3 w-3" />
+                      Download
+                    </Chip>
                     <Chip onToggle={() => shareLink(item)}>
-                      🔗 Share review link
+                      <Link2 aria-hidden className="mr-1 h-3 w-3" />
+                      Share review link
                     </Chip>
                     {item.status === "approved" ? (
                       <Chip
@@ -162,7 +177,8 @@ export default function LibraryPage() {
                           setNote("Marked as posted — it's in the record");
                         }}
                       >
-                        ✓ Mark as posted
+                        <CheckCheck aria-hidden className="mr-1 h-3 w-3" />
+                        Mark as posted
                       </Chip>
                     ) : null}
                   </div>

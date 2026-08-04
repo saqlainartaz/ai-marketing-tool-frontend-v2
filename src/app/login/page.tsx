@@ -68,8 +68,7 @@ export default async function LoginPage({
           ))}
         </div>
         <p className="text-xs text-ink-3">
-          Demo links for the fixture clients · real links are issued by the
-          team in M4
+          Demo links for the sample clients · your real link arrives by email
         </p>
       </section>
     </main>

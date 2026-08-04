@@ -10,6 +10,7 @@
  * bg-paper, text-ink-2, border-line, bg-clay, text-onact, font-display, …
  */
 @theme inline {
+  --color-canvas: var(--canvas);
   --color-paper: var(--paper);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
@@ -28,9 +29,13 @@
   --font-body: var(--font-inter), system-ui, sans-serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
+  --shadow-card:
+    0 1px 2px rgb(16 19 24 / 0.06),
+    0 4px 12px rgb(16 19 24 / 0.05);
+
   /* shadcn semantic vars → derived from OUR tokens, so vendored components
    * re-theme automatically across all four palettes. */
-  --color-background: var(--paper);
+  --color-background: var(--canvas);
   --color-foreground: var(--ink);
   --color-card-foreground: var(--ink);
   --color-popover: var(--card);
@@ -61,10 +66,15 @@
     border-color: var(--line);
   }
   body {
-    background: var(--paper);
+    background: var(--canvas);
     color: var(--ink);
     font-family: var(--font-inter), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+  }
+  :where(button, a, [role="radio"], [role="button"], textarea, input, select):focus-visible {
+    outline: 2px solid var(--clay);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 }
 

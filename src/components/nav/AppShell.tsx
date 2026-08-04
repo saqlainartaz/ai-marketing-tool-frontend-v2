@@ -2,6 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  CircleUser,
+  LibraryBig,
+  Map,
+  Settings,
+  Sparkles,
+  Sun,
+} from "lucide-react";
 import { BottomNav } from "@/components/nav/BottomNav";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { DialPill } from "@/components/ui/dial-pill";
@@ -11,12 +19,12 @@ import { useWorkMode } from "@/lib/store/settings";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/today", label: "Today", icon: "☀" },
-  { href: "/library", label: "Library", icon: "▤" },
-  { href: "/plan", label: "Plan", icon: "◎" },
-  { href: "/workspace", label: "Workspace", icon: "✳" },
-  { href: "/profile", label: "Profile", icon: "◉" },
-  { href: "/settings", label: "Settings", icon: "⚙" },
+  { href: "/today", label: "Today", icon: Sun },
+  { href: "/library", label: "Library", icon: LibraryBig },
+  { href: "/plan", label: "Plan", icon: Map },
+  { href: "/workspace", label: "Workspace", icon: Sparkles },
+  { href: "/profile", label: "Profile", icon: CircleUser },
+  { href: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
 /**
@@ -59,6 +67,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <nav className="mt-6 space-y-1">
           {NAV.map((item) => {
             const active = pathname.startsWith(item.href);
+            const Icon = item.icon;
             return (
               <Link
                 key={item.href}
@@ -71,9 +80,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     : "text-ink-2 hover:bg-paper hover:text-ink",
                 )}
               >
-                <span aria-hidden className="w-4 text-center">
-                  {item.icon}
-                </span>
+                <Icon aria-hidden className="h-4 w-4" strokeWidth={2} />
                 {item.label}
               </Link>
             );

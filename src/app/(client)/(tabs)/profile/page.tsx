@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { PenLine } from "lucide-react";
 import { CardShell } from "@/components/ui/card-shell";
 import { Chip } from "@/components/ui/chip";
 import { useClientId } from "@/components/auth/ClientSession";
@@ -61,12 +62,10 @@ export default function ProfilePage() {
                   className="flex items-start justify-between gap-3 border-b border-dashed border-line py-2 text-[12.5px] last:border-0"
                 >
                   <span>{line}</span>
-                  <span
-                    aria-label="Edit this (available soon)"
-                    className="text-xs text-ink-3"
-                  >
-                    ✎
-                  </span>
+                  <PenLine
+                    aria-label="Edit this (coming soon)"
+                    className="h-3.5 w-3.5 shrink-0 text-ink-3"
+                  />
                 </li>
               ))}
             </ul>

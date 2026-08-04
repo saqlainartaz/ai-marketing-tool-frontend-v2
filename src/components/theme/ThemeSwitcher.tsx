@@ -42,7 +42,7 @@ export function ThemeSwitcher() {
     <div
       role="radiogroup"
       aria-label="Appearance"
-      className="flex gap-1 rounded-full border border-line bg-card p-1"
+      className="grid w-full max-w-56 grid-cols-2 gap-1 rounded-xl border border-line bg-card p-1"
     >
       {THEMES.map((t) => (
         <button
@@ -50,8 +50,10 @@ export function ThemeSwitcher() {
           role="radio"
           aria-checked={theme === t}
           onClick={() => apply(t)}
-          className={`cursor-pointer rounded-full px-3 py-1 text-xs font-semibold capitalize transition-colors ${
-            theme === t ? "bg-clay text-onact" : "text-ink-2 hover:text-ink"
+          className={`cursor-pointer rounded-lg px-2 py-1.5 text-xs font-semibold capitalize transition-colors ${
+            theme === t
+              ? "bg-ink text-paper"
+              : "text-ink-2 hover:bg-paper hover:text-ink"
           }`}
         >
           {t}

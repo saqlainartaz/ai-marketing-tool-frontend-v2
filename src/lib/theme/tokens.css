@@ -1,68 +1,79 @@
 /*
  * Design tokens — the four switchable palettes.
- * Token names are the contract with the wireframes (AI Marketing Tool v2/wireframes/).
+ * Token names are the contract with the wireframes and the token test.
  * Default theme: cobalt (decision log 2026-08-03).
- * Semantic roles: clay = the one action per screen · moss = wins/good news ·
- * honey = protection (guardrails, never warnings) · paper/ink/card/line = surfaces.
+ *
+ * Surface model (design audit 2026-08-04): --canvas is the tinted page,
+ * --card is the white/raised content surface (the draft is the most
+ * contrasted thing on screen), --paper is the inset surface (inputs,
+ * media wells). ink-2/ink-3 meet WCAG AA at their usage sizes — enforced
+ * by tests/theme/contrast.test.ts.
+ * Semantic roles: clay = the one action per screen · moss = wins ·
+ * honey = protection (never warnings).
  */
 
 :root,
 :root[data-theme="cobalt"] {
-  --paper: #ffffff;
+  --canvas: #f3f5f9;
+  --paper: #eef1f6;
+  --card: #ffffff;
   --ink: #101318;
-  --ink-2: #5d6470;
-  --ink-3: #9aa2ad;
+  --ink-2: #4d5560;
+  --ink-3: #6b7280;
   --clay: #2f45e0;
   --clay-deep: #2333ad;
   --clay-mist: #e8ebfc;
-  --moss: #0c8a5f;
+  --moss: #0c7a54;
   --moss-mist: #e4f4ee;
-  --honey: #9a6d12;
+  --honey: #8a6110;
   --honey-mist: #f7f1e2;
-  --card: #f7f8fa;
-  --line: #e6e9ee;
+  --line: #dde2ea;
   --onact: #ffffff;
 }
 
 :root[data-theme="clay"] {
-  --paper: #faf7f2;
-  --ink: #201b15;
-  --ink-2: #6f6459;
-  --ink-3: #a99e91;
-  --clay: #e8613a;
-  --clay-deep: #c74e2c;
-  --clay-mist: #fbeae3;
-  --moss: #3d7a4f;
-  --moss-mist: #e9f2ec;
-  --honey: #a1651a;
-  --honey-mist: #faf3e6;
+  --canvas: #f4eee5;
+  --paper: #efe8dc;
   --card: #ffffff;
-  --line: #ece5db;
+  --ink: #201b15;
+  --ink-2: #5d544a;
+  --ink-3: #6f6557;
+  --clay: #d9532b;
+  --clay-deep: #b34322;
+  --clay-mist: #fbeae3;
+  --moss: #346944;
+  --moss-mist: #e9f2ec;
+  --honey: #8a5715;
+  --honey-mist: #faf3e6;
+  --line: #e2d9ca;
   --onact: #ffffff;
 }
 
 :root[data-theme="forest"] {
-  --paper: #f7f8f4;
+  --canvas: #edf1eb;
+  --paper: #e7ede5;
+  --card: #ffffff;
   --ink: #17251c;
-  --ink-2: #5c6b60;
-  --ink-3: #98a69b;
+  --ink-2: #4e5c52;
+  --ink-3: #5f6d62;
   --clay: #1e6b47;
   --clay-deep: #164f35;
   --clay-mist: #e3f0e8;
-  --moss: #b07c1a;
+  --moss: #8a6110;
   --moss-mist: #f6efdb;
-  --honey: #a1651a;
+  --honey: #8a5715;
   --honey-mist: #faf3e6;
-  --card: #ffffff;
-  --line: #e3e8df;
+  --line: #d6ded3;
   --onact: #ffffff;
 }
 
 :root[data-theme="night"] {
-  --paper: #15171d;
+  --canvas: #101216;
+  --paper: #171a20;
+  --card: #1d2026;
   --ink: #f2f1ee;
-  --ink-2: #a6a8ad;
-  --ink-3: #6c6f76;
+  --ink-2: #b3b6bd;
+  --ink-3: #a0a4ad;
   --clay: #d6f245;
   --clay-deep: #9db123;
   --clay-mist: #2b3020;
@@ -70,7 +81,6 @@
   --moss-mist: #22302a;
   --honey: #e0b05c;
   --honey-mist: #2f2718;
-  --card: #1f2229;
-  --line: #2e323b;
+  --line: #343945;
   --onact: #15171d;
 }

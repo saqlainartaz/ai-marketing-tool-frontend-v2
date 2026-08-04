@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { TrendingUp } from "lucide-react";
 import { CardStack } from "@/components/cards/CardStack";
 import { CardShell } from "@/components/ui/card-shell";
 import { DialPill } from "@/components/ui/dial-pill";
@@ -32,11 +33,11 @@ export default function TodayPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="flex items-center justify-between lg:hidden">
-        <span className="font-display text-[13px] font-semibold lowercase">
-          {client.businessName.split(" ")[0]} ⌂
+      <header className="flex items-center justify-between gap-3 lg:hidden">
+        <span className="font-display text-[13px] font-semibold">
+          {client.businessName}
         </span>
-        <DialPill mode={workMode} />
+        <DialPill mode={workMode} className="shrink" />
       </header>
 
       <div className="flex-1 lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-12">
@@ -47,8 +48,9 @@ export default function TodayPage() {
             <br />
             {readyCount > 0 ? `${readyCount} ready.` : "All clear."}
           </h1>
-          <p className="mt-2 text-[11.5px] text-moss lg:hidden">
-            📈 {client.winLine}
+          <p className="mt-2 flex items-center gap-1.5 text-[12px] text-ink-2 lg:hidden">
+            <TrendingUp aria-hidden className="h-3.5 w-3.5 shrink-0 text-moss" />
+            {client.winLine}
           </p>
           <div className="mt-5">
             <CardStack clientId={clientId} />
@@ -61,10 +63,11 @@ export default function TodayPage() {
           data-testid="context-rail"
         >
           <CardShell>
-            <p className="text-[10px] font-semibold tracking-widest text-moss uppercase">
+            <p className="flex items-center gap-1.5 text-[10px] font-semibold tracking-widest text-moss uppercase">
+              <TrendingUp aria-hidden className="h-3 w-3" />
               Last week
             </p>
-            <p className="mt-1 text-[13px]">📈 {client.winLine}</p>
+            <p className="mt-1 text-[13px]">{client.winLine}</p>
           </CardShell>
           <CardShell>
             <p className="text-[10px] font-semibold tracking-widest text-ink-3 uppercase">
