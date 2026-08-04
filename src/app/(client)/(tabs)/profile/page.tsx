@@ -7,6 +7,7 @@ import { CardShell } from "@/components/ui/card-shell";
 import { Chip } from "@/components/ui/chip";
 import { SectionLabel } from "@/components/ui/section-label";
 import { PlatformMark } from "@/components/preview/platform-mark";
+import { useStatus } from "@/components/system/StatusProvider";
 import { cn } from "@/lib/utils";
 import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
@@ -21,6 +22,7 @@ import type { OnboardingAnswers } from "@/components/onboarding/OnboardingProvid
 export default function ProfilePage() {
   const clientId = useClientId();
   const client = getFixtureClient(clientId);
+  const { announce } = useStatus();
   const [answers, setAnswers] = useState<Partial<OnboardingAnswers>>({});
 
   useEffect(() => {
@@ -29,14 +31,21 @@ export default function ProfilePage() {
 
   const channels = Object.entries(answers.channels ?? {});
 
+  /* Each unset row links with its own words. Three links all reading
+   * "Not set yet" are indistinguishable in a screen reader's link list,
+   * and they make the reader look back up at the label to know where
+   * they'd be going. */
   function Row({
     label,
     value,
     fixHref,
+    setLabel,
   }: {
     label: string;
     value?: string | null;
     fixHref: string;
+    /** Verb + the same noun as the row label, e.g. "Set your goal". */
+    setLabel: string;
   }) {
     return (
       <div className="border-b border-line py-2.5 last:border-0">
@@ -46,9 +55,9 @@ export default function ProfilePage() {
         ) : (
           <Link
             href={fixHref}
-            className="mt-0.5 inline-flex items-center gap-1 text-[13px] text-ink-2 underline underline-offset-4"
+            className="mt-0.5 inline-flex min-h-6 items-center gap-1 py-0.5 text-[13px] text-ink-2 underline underline-offset-4"
           >
-            Not set yet — takes 10 seconds
+            {setLabel}
             <ArrowRight aria-hidden className="h-3 w-3" />
           </Link>
         )}
@@ -68,10 +77,15 @@ export default function ProfilePage() {
       {/* Identity — who you are, how we reach you, where you show up */}
       <div className="surface mt-7 rounded-xl p-4 sm:p-5">
         <div className="flex items-center gap-4">
+          {/* Pressing a control and getting nothing back is worse than no
+           * control, so it says where it stands. */}
           <button
             type="button"
+            onClick={() =>
+              announce("Photo upload isn't ready yet", { tone: "problem" })
+            }
             className="group relative shrink-0 cursor-pointer"
-            aria-label="Add a photo (coming soon)"
+            aria-label="Add a photo"
           >
             <span
               aria-hidden
@@ -149,8 +163,11 @@ export default function ProfilePage() {
                     className="flex items-start justify-between gap-3 border-b border-line py-2.5 text-[13.5px] leading-snug last:border-0"
                   >
                     <span>{line}</span>
+                    {/* A hint that these lines are yours to change, not a
+                     * control — so it stays out of the tab order and out
+                     * of the screen reader's way. */}
                     <PenLine
-                      aria-label="Edit this (coming soon)"
+                      aria-hidden
                       className="mt-0.5 h-3.5 w-3.5 shrink-0 text-ink-3"
                     />
                   </li>
@@ -184,16 +201,19 @@ export default function ProfilePage() {
                 label="Your goal"
                 value={answers.goal}
                 fixHref="/onboarding/goal"
+                setLabel="Set your goal"
               />
               <Row
                 label="Who drives this"
                 value={answers.driver}
                 fixHref="/onboarding/goal"
+                setLabel="Say who drives this"
               />
               <Row
                 label="What's been in the way"
                 value={answers.obstacle ?? "You let us decide"}
                 fixHref="/onboarding/obstacle"
+                setLabel="Tell us what's in the way"
               />
             </CardShell>
           </div>
@@ -215,9 +235,9 @@ export default function ProfilePage() {
               ) : (
                 <Link
                   href="/onboarding/channels"
-                  className="inline-flex items-center gap-1 text-[13px] text-ink-2 underline underline-offset-4"
+                  className="inline-flex min-h-6 items-center gap-1 py-0.5 text-[13px] text-ink-2 underline underline-offset-4"
                 >
-                  Not set yet — takes 10 seconds
+                  Pick your channels
                   <ArrowRight aria-hidden className="h-3 w-3" />
                 </Link>
               )}
