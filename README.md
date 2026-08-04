@@ -20,13 +20,15 @@ moment, mock Today card pager.
 (no session → `/login`); components receive only the verified clientId.
 27 unit tests + 4-theme e2e through the real auth path, all keyless.
 
-**Complete client UI on fixtures** (2026-08-03): guided create C1→C3
-(chips → visible work → review), provenance-in-text, guardrail diffs,
-edit-in-preview, bottom nav, Library + handoff kit (copy/download/share/
-mark-as-posted), living Plan, Settings (interactive work-mode dial),
-Workspace (note → card + legible voice profile). Mock store shaped like
-`/api/me/content` — M2 swaps the implementation, not the UI.
-30 unit tests + 5 e2e (4 themes + the complete product loop).
+**Complete client UI on fixtures**, redesigned 2026-08-04 as **"Desk"**
+after a full screenshot audit: warm-paper canvas with raised white
+objects, three type voices (Bricolage display / Inter body / JetBrains
+mono metadata), labeled draft objects, a numbered work spine, the plan
+as a document, and one commitment per screen. Four themes ship
+switchable — paper (default) · cobalt · forest · night.
+70 unit tests (incl. 36 WCAG contrast gates) + 6 e2e (4 themes, desktop
+shell, and the complete product loop). Design report: the audit lives in
+the plan file; screenshots via `scratchpad/audit-shots.js`.
 
 **Deferred by decision** (2026-08-03): Supabase team auth + Vercel deploy —
 resume when accounts exist.

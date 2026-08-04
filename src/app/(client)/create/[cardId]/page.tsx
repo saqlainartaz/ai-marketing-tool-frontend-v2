@@ -76,7 +76,10 @@ export default function CreatePage({
           <span className="t-label truncate">{card.prompt}</span>
         </div>
 
-        <h1 className="t-display mt-8">{q.q}</h1>
+        {/* Question + answers sit in the optical middle; the commitment
+            stays at the thumb. No dead space between them. */}
+        <div className="flex flex-1 flex-col justify-center py-8 lg:flex-none lg:py-0">
+        <h1 className="t-display lg:mt-8">{q.q}</h1>
 
         <div className="mt-7 space-y-2">
           {q.chips.map((chip) => (
@@ -95,8 +98,9 @@ export default function CreatePage({
             </OptionCard>
           ))}
         </div>
+        </div>
 
-        <div className="mt-auto pt-8 lg:mt-10">
+        <div className="lg:mt-10">
           <ActionButton
             size="lg"
             disabled={!picks[phase.step]}
