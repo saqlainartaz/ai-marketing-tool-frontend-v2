@@ -1,59 +1,70 @@
 "use client";
 
-import { Lock } from "lucide-react";
+import { Check, X } from "lucide-react";
 import type { FixtureClient } from "@/lib/fixtures/clients";
 
 /**
  * What we know about how a client sounds.
  *
- * This is reference, not controls — so it stopped being two rows of pills.
- * Pills read as buttons: eight of them side by side gave the eye nowhere
- * to rest and implied things were clickable. Now the phrases are quoted
- * lines (they are, after all, quotations from the client) and the
- * forbidden words are one struck-through line under a single lock. Two
- * blocks to scan instead of eight objects to parse.
+ * This is a do/don't pair, so it is laid out as one: two columns, each a
+ * plain list under a labelled header. Pills were wrong (they read as
+ * controls); so was flat prose with strikethrough (nothing to scan, and
+ * struck small text is hard to read). A two-column comparison is the
+ * oldest, fastest way to show "this, not that".
  */
 export function VoiceCard({ client }: { client: FixtureClient }) {
   return (
-    <div className="surface rounded-xl p-4 sm:p-5">
-      <p className="text-[13.5px] leading-relaxed text-ink-2">
+    <div className="surface overflow-hidden rounded-xl">
+      <p className="border-b border-line px-4 py-3.5 text-[13.5px] leading-relaxed text-ink-2 sm:px-5">
         {client.voice.summary}
       </p>
 
-      <div className="mt-5">
-        <p className="t-label">Phrases that sound like you</p>
-        <ul className="mt-2.5 space-y-2 border-l-2 border-line pl-3.5">
-          {client.voice.sounds.map((phrase) => (
-            <li
-              key={phrase}
-              className="font-display text-[14px] leading-snug text-ink italic"
-            >
-              “{phrase}”
-            </li>
-          ))}
-        </ul>
+      <div className="grid sm:grid-cols-2">
+        {/* Do */}
+        <div className="border-b border-line px-4 py-3.5 sm:border-r sm:border-b-0 sm:px-5">
+          <p className="flex items-center gap-1.5">
+            <Check
+              aria-hidden
+              className="h-3.5 w-3.5 shrink-0 text-moss"
+              strokeWidth={3}
+            />
+            <span className="t-label">Sounds like you</span>
+          </p>
+          <ul className="mt-3 space-y-2.5">
+            {client.voice.sounds.map((phrase) => (
+              <li key={phrase} className="text-[13.5px] leading-snug">
+                “{phrase}”
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Don't */}
+        <div className="px-4 py-3.5 sm:px-5">
+          <p className="flex items-center gap-1.5">
+            <X
+              aria-hidden
+              className="h-3.5 w-3.5 shrink-0 text-ink-3"
+              strokeWidth={3}
+            />
+            <span className="t-label">We never use</span>
+          </p>
+          <ul className="mt-3 space-y-2.5">
+            {client.voice.avoids.map((word) => (
+              <li
+                key={word}
+                className="text-[13.5px] leading-snug text-ink-2"
+              >
+                {word}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
-      <div className="mt-5 border-t border-line pt-4">
-        <p className="t-label flex items-center gap-1.5">
-          <Lock aria-hidden className="h-3 w-3" />
-          Words we never use
-        </p>
-        <p className="mt-2 text-[13px] leading-relaxed text-ink-3">
-          {client.voice.avoids.map((word, i) => (
-            <span key={word}>
-              {i > 0 ? <span aria-hidden className="px-1.5">·</span> : null}
-              <span className="line-through decoration-ink-3/60">{word}</span>
-            </span>
-          ))}
-        </p>
-        <p className="t-meta mt-2">
-          Checked against every draft before you see it.
-        </p>
-      </div>
-
-      <p className="t-meta mt-5 border-t border-line pt-3">
-        Something here wrong? Tell us — we&apos;ll fix it.
+      <p className="t-meta border-t border-line bg-paper px-4 py-2.5 sm:px-5">
+        Checked against every draft before you see it · something wrong?
+        Tell us.
       </p>
     </div>
   );
