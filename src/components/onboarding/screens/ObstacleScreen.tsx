@@ -1,7 +1,8 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
-import { CardShell } from "@/components/ui/card-shell";
+import { OptionCard } from "@/components/ui/option-card";
 import { ScreenFrame } from "@/components/onboarding/ScreenFrame";
 import { useOnboarding } from "@/components/onboarding/OnboardingProvider";
 
@@ -26,38 +27,36 @@ export function ObstacleScreen({
       step="obstacle"
       eyebrow="Question 2 of 4"
       title="What's been in the way?"
+      sub="No wrong answer — it changes how much we hand you versus handle."
       onBack={onBack}
       footer={
         <>
-          <ActionButton onClick={onNext} disabled={!answers.obstacle}>
-            Next →
+          <ActionButton size="lg" onClick={onNext} disabled={!answers.obstacle}>
+            Next
+            <ArrowRight className="h-4 w-4" />
           </ActionButton>
-          <button
-            type="button"
+          <ActionButton
+            variant="quiet"
+            className="mt-2"
             onClick={() => {
               setAnswer("obstacle", null);
               onNext();
             }}
-            className="mt-2.5 w-full cursor-pointer text-center text-xs text-ink-2"
           >
             Not sure — you decide
-          </button>
+          </ActionButton>
         </>
       }
     >
-      <div className="space-y-2.5">
+      <div className="space-y-2">
         {OBSTACLES.map((o) => (
-          <button
+          <OptionCard
             key={o}
-            type="button"
-            className="block w-full cursor-pointer text-left"
-            onClick={() => setAnswer("obstacle", o)}
-            aria-pressed={answers.obstacle === o}
+            selected={answers.obstacle === o}
+            onSelect={() => setAnswer("obstacle", o)}
           >
-            <CardShell primary={answers.obstacle === o}>
-              <span className="text-sm font-semibold">{o}</span>
-            </CardShell>
-          </button>
+            {o}
+          </OptionCard>
         ))}
       </div>
     </ScreenFrame>

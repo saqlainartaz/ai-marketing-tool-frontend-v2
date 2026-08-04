@@ -29,7 +29,7 @@ describe("CardStack (store-driven)", () => {
     const user = userEvent.setup();
     renderStack();
     await user.click(screen.getByRole("button", { name: /good to go/i }));
-    expect(screen.getByTestId("stamp")).toHaveTextContent("ON ITS WAY");
+    expect(screen.getByTestId("stamp")).toHaveTextContent(/on its way/i);
     expect(
       await screen.findByText(/Lakeway Ave/, {}, { timeout: 2000 }),
     ).toBeInTheDocument();
@@ -103,8 +103,6 @@ describe("CardStack (store-driven)", () => {
     expect(
       screen.getByText(/Tell the story of a job you finished this week/),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /tell the story/i }),
-    ).toHaveAttribute("href", "/create/dave-q1");
+    expect(screen.getByRole("link")).toHaveAttribute("href", "/create/dave-q1");
   });
 });

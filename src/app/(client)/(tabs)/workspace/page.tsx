@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
+  ArrowRight,
   Clapperboard,
   FileText,
   Mail,
@@ -14,6 +15,7 @@ import {
 import { ActionButton } from "@/components/ui/action-button";
 import { CardShell } from "@/components/ui/card-shell";
 import { Chip } from "@/components/ui/chip";
+import { SectionLabel } from "@/components/ui/section-label";
 import { AssemblyMoment } from "@/components/motion/AssemblyMoment";
 import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
@@ -29,14 +31,19 @@ const TOOLS: {
   { icon: Star, label: "Review replies", desc: "Google & Facebook", on: true },
   { icon: Mail, label: "Emails", desc: "Follow-ups & updates", on: true },
   { icon: MapPin, label: "GBP updates", desc: "Offers & news", on: true },
-  { icon: Clapperboard, label: "Video scripts", desc: "From your episode", on: false },
+  {
+    icon: Clapperboard,
+    label: "Video scripts",
+    desc: "From your episode",
+    on: false,
+  },
   { icon: FileText, label: "Landing pages", desc: "For campaigns", on: false },
 ];
 
 /**
- * The Act-3 door. The tool gallery leads — what we can make for you,
- * plan-gated. Chat is a door, not a box: whatever you tell us becomes a
- * card in Today. Below: the legible voice profile.
+ * The door in the back. The tool gallery leads (what we can make, gated
+ * by the plan), then the one input whose reply is a card — never a
+ * transcript — and the voice profile every draft is checked against.
  */
 export default function WorkspacePage() {
   const clientId = useClientId();
@@ -56,88 +63,89 @@ export default function WorkspacePage() {
       meta: `${client.drafts[0]?.platform === "linkedin" ? "LinkedIn" : "Facebook"} · ready when you are`,
       body: `${input.trim()} — and here's why that matters to the people you serve. (Drafted from what you just told us, in your voice.)`,
       consequence: "review it on Today · your yes sends it",
-      pillar: "From your workspace note",
-      provenance: [
-        {
-          phrase: input.trim().slice(0, 40),
-          label: "your note, just now",
-        },
-      ],
+      pillar: "From your note",
+      provenance: [{ phrase: input.trim().slice(0, 40), label: "your note, just now" }],
     });
     setPhase("done");
   }
 
   return (
     <div className="w-full lg:max-w-4xl">
-      <Link href="/today" className="text-xs text-ink-2 lg:hidden">
-        ← Back to Today
-      </Link>
-      <h1 className="mt-3 font-display text-[26px] font-semibold tracking-tight lg:mt-0 lg:text-[32px]">
-        Workspace
-      </h1>
+      <p className="t-label">Workspace</p>
+      <h1 className="t-display mt-3">The door in the back.</h1>
 
-      {/* The tool gallery leads. */}
-      <h2 className="mt-5 font-display text-lg font-semibold">
-        What we can make for you
-      </h2>
-      <p className="mt-1 text-xs text-ink-2">
-        Your plan picks the tools that fit your business — outputs always
-        arrive as cards on Today.
-      </p>
-      <div
-        className="mt-3 grid grid-cols-2 gap-2 lg:grid-cols-3"
-        data-testid="tool-gallery"
-      >
-        {TOOLS.map((tool) => {
-          const Icon = tool.icon;
-          return (
-            <div
-              key={tool.label}
-              className={`rounded-xl border p-3 ${tool.on ? "border-line bg-card shadow-[0_1px_2px_rgb(16_19_24/0.05)]" : "border-dashed border-line opacity-60"}`}
-            >
-              <span
-                aria-hidden
-                className={`mb-2 flex h-8 w-8 items-center justify-center rounded-lg ${tool.on ? "bg-clay-mist text-clay-deep" : "bg-paper text-ink-3"}`}
+      <div className="mt-8">
+        <SectionLabel right={`${TOOLS.filter((t) => t.on).length} active`}>
+          What we can make for you
+        </SectionLabel>
+        <p className="t-sub mt-2 max-w-xl">
+          Your plan picks the tools that fit your business — whatever we make
+          arrives as a card on Today.
+        </p>
+        <div
+          className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-3"
+          data-testid="tool-gallery"
+        >
+          {TOOLS.map((tool) => {
+            const Icon = tool.icon;
+            return (
+              <div
+                key={tool.label}
+                className={
+                  tool.on
+                    ? "surface rounded-xl p-3.5"
+                    : "rounded-xl border border-dashed border-line p-3.5"
+                }
               >
-                <Icon className="h-4 w-4" />
-              </span>
-              <p className="text-sm font-semibold">{tool.label}</p>
-              <p className="mt-0.5 text-[11px] text-ink-2">{tool.desc}</p>
-              {!tool.on ? (
-                <p className="mt-1 text-[10px] text-ink-3">
-                  joins when your plan calls for it
+                <span
+                  aria-hidden
+                  className={`mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg ${
+                    tool.on ? "bg-clay text-onact" : "bg-paper text-ink-3"
+                  }`}
+                >
+                  <Icon className="h-4 w-4" />
+                </span>
+                <p
+                  className={`text-[13.5px] font-semibold ${tool.on ? "" : "text-ink-2"}`}
+                >
+                  {tool.label}
                 </p>
-              ) : null}
-            </div>
-          );
-        })}
+                <p className="t-meta mt-0.5">{tool.desc}</p>
+                {!tool.on ? (
+                  <p className="t-meta mt-1.5 text-ink-3">
+                    joins when your plan calls for it
+                  </p>
+                ) : null}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="mt-8 lg:grid lg:grid-cols-2 lg:gap-10">
+      <div className="mt-10 lg:grid lg:grid-cols-2 lg:items-start lg:gap-10">
         <div>
-          <h2 className="font-display text-lg font-semibold">
-            Tell us what&apos;s happening
-          </h2>
-          <p className="mt-1 text-xs text-ink-2">
-            It comes back as a card, not a conversation.
-          </p>
+          <SectionLabel>Tell us what&apos;s happening</SectionLabel>
           <CardShell className="mt-3">
             {phase === "idle" ? (
               <>
-                <label htmlFor="ws-input" className="text-sm font-semibold">
+                <label htmlFor="ws-input" className="text-[13.5px] font-semibold">
                   What&apos;s happening at the business this week?
                 </label>
+                <p className="t-meta mt-0.5">
+                  One sentence is enough. It comes back as a card.
+                </p>
                 <textarea
                   id="ws-input"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   rows={3}
-                  placeholder={`e.g. "We're running a spring gutter discount" or "Just finished a big job on Lakeway Ave"`}
-                  className="mt-2 w-full resize-none rounded-xl border border-line bg-paper p-3 text-[13px] outline-none focus:border-clay"
+                  placeholder={`e.g. "We're running a spring gutter discount"`}
+                  className="mt-3 w-full resize-none rounded-lg border border-line bg-paper p-3 text-[13.5px] outline-none focus:border-clay"
                 />
                 <div className="mt-3">
                   <ActionButton onClick={submit} disabled={!input.trim()}>
-                    Turn it into a post →
+                    Turn it into a post
+                    <ArrowRight className="h-4 w-4" />
                   </ActionButton>
                 </div>
               </>
@@ -148,53 +156,50 @@ export default function WorkspacePage() {
                   "Checking how you sound…",
                   "Drafting it.",
                 ]}
-                stepDelay={500}
+                stepDelay={520}
                 onDone={finish}
               />
             ) : (
-              <div className="py-2 text-center" data-testid="ws-done">
-                <p className="text-sm font-semibold">
+              <div className="py-3 text-center" data-testid="ws-done">
+                <p className="text-[13.5px] font-semibold">
                   Done — a new card is waiting on Today.
                 </p>
                 <Link
                   href="/today"
-                  className="mt-2 inline-block text-xs text-clay-deep underline"
+                  className="t-meta mt-1.5 inline-flex items-center gap-1 underline underline-offset-4"
                 >
-                  Review it now →
+                  Review it now
+                  <ArrowRight aria-hidden className="h-3 w-3" />
                 </Link>
               </div>
             )}
           </CardShell>
         </div>
 
-        <div>
-          <h2 className="mt-8 font-display text-lg font-semibold lg:mt-0">
-            How you sound
-          </h2>
-          <p className="mt-1 text-xs text-ink-2">
-            What we know about your voice — from your episode and your calls.
-            Every draft is checked against this.
-          </p>
+        <div className="mt-8 lg:mt-0">
+          <SectionLabel>How you sound</SectionLabel>
           <CardShell className="mt-3">
-            <p className="text-[12.5px] text-ink-2">{client.voice.summary}</p>
-            <p className="mt-3 text-xs font-semibold">Sounds like you</p>
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
+            <p className="text-[13px] leading-relaxed text-ink-2">
+              {client.voice.summary}
+            </p>
+            <p className="t-label mt-4 mb-2">Sounds like you</p>
+            <div className="flex flex-wrap gap-1.5">
               {client.voice.sounds.map((s) => (
                 <Chip key={s} selected>
                   “{s}”
                 </Chip>
               ))}
             </div>
-            <p className="mt-3 text-xs font-semibold">We never use</p>
-            <div className="mt-1.5 flex flex-wrap gap-1.5">
+            <p className="t-label mt-4 mb-2">We never use</p>
+            <div className="flex flex-wrap gap-1.5">
               {client.voice.avoids.map((s) => (
                 <Chip key={s} locked>
                   {s}
                 </Chip>
               ))}
             </div>
-            <p className="mt-3 text-[10.5px] text-ink-3">
-              Something here wrong? Tell us — we'll fix it.
+            <p className="t-meta mt-4">
+              Something here wrong? Tell us — we&apos;ll fix it.
             </p>
           </CardShell>
         </div>

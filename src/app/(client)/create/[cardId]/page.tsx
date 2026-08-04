@@ -2,10 +2,11 @@
 
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowRight, Check } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
-import { CardShell } from "@/components/ui/card-shell";
-import { Chip } from "@/components/ui/chip";
-import { PostPreview } from "@/components/preview/post-preview";
+import { OptionCard } from "@/components/ui/option-card";
+import { SectionLabel } from "@/components/ui/section-label";
+import { ContentPreview } from "@/components/preview/ContentPreview";
 import { SourcedBody } from "@/components/preview/SourcedBody";
 import { AssemblyMoment } from "@/components/motion/AssemblyMoment";
 import { useClientId } from "@/components/auth/ClientSession";
@@ -15,10 +16,9 @@ import { addItem, decideItem } from "@/lib/store/content";
 type Phase = { step: number } | "generating" | "review";
 
 /**
- * Guided create — C1 (a couple of plain questions, chips first, typing
- * optional) → C2 (visible work) → C3 (review the real thing). Mock
- * generation in M1: the fixture's `produces` draft, personalized lightly
- * by the chosen chips.
+ * Guided create — C1 (a couple of plain questions, chips first) → C2
+ * (visible work) → C3 (review the real thing). The client's answers are
+ * the material; we do the writing.
  */
 export default function CreatePage({
   params,
@@ -43,10 +43,6 @@ export default function CreatePage({
   const produced = { ...card.produces, id: `${card.id}-out` };
   const currentBody = body ?? produced.body;
 
-  function finishQuestions() {
-    setPhase("generating");
-  }
-
   function approve() {
     addItem(clientId, { ...produced, body: currentBody });
     decideItem(clientId, produced.id, "approved");
@@ -58,24 +54,36 @@ export default function CreatePage({
     router.push("/today");
   }
 
-  // --- C1: questions, one at a time ---
+  // C1 — questions, one at a time
   if (typeof phase === "object") {
     const q = card.questions[phase.step];
     const isLast = phase.step === card.questions.length - 1;
     return (
-      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 pb-5 lg:max-w-xl lg:justify-center lg:pb-24">
-        <p className="text-[10.5px] tracking-[0.12em] text-ink-3 uppercase">
-          {card.prompt} · {phase.step + 1} of {card.questions.length}
-        </p>
-        <h1 className="mt-3 font-display text-[26px] leading-tight font-semibold tracking-tight lg:text-[36px]">
-          {q.q}
-        </h1>
-        <div className="mt-5 flex flex-wrap gap-2">
+      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-7 pb-6 lg:max-w-xl lg:justify-center lg:pb-24">
+        <div className="flex items-center gap-2">
+          <span className="t-meta shrink-0">
+            {String(phase.step + 1).padStart(2, "0")}/
+            {String(card.questions.length).padStart(2, "0")}
+          </span>
+          <span className="flex flex-1 gap-1">
+            {card.questions.map((_, i) => (
+              <span
+                key={i}
+                className={`h-0.5 flex-1 rounded-full ${i <= phase.step ? "bg-clay" : "bg-line"}`}
+              />
+            ))}
+          </span>
+          <span className="t-label truncate">{card.prompt}</span>
+        </div>
+
+        <h1 className="t-display mt-8">{q.q}</h1>
+
+        <div className="mt-7 space-y-2">
           {q.chips.map((chip) => (
-            <Chip
+            <OptionCard
               key={chip}
               selected={picks[phase.step] === chip}
-              onToggle={() =>
+              onSelect={() =>
                 setPicks((p) => {
                   const next = [...p];
                   next[phase.step] = chip;
@@ -84,41 +92,40 @@ export default function CreatePage({
               }
             >
               {chip}
-            </Chip>
+            </OptionCard>
           ))}
         </div>
-        <div className="mt-auto lg:mt-10">
+
+        <div className="mt-auto pt-8 lg:mt-10">
           <ActionButton
+            size="lg"
             disabled={!picks[phase.step]}
             onClick={() =>
-              isLast ? finishQuestions() : setPhase({ step: phase.step + 1 })
+              isLast ? setPhase("generating") : setPhase({ step: phase.step + 1 })
             }
           >
-            {isLast ? "Write it for me →" : "Next →"}
+            {isLast ? "Write it for me" : "Next"}
+            <ArrowRight className="h-4 w-4" />
           </ActionButton>
-          <button
-            type="button"
+          <ActionButton
+            variant="quiet"
+            className="mt-2"
             onClick={() => router.push("/today")}
-            className="mt-2.5 w-full cursor-pointer text-center text-xs text-ink-2"
           >
             Back to Today
-          </button>
+          </ActionButton>
         </div>
       </main>
     );
   }
 
-  // --- C2: visible work ---
+  // C2 — visible work
   if (phase === "generating") {
     return (
-      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 lg:max-w-xl lg:justify-center">
-        <p className="text-[10.5px] tracking-[0.12em] text-ink-3 uppercase">
-          Writing your post
-        </p>
-        <h1 className="mt-3 font-display text-[26px] font-semibold lg:text-[36px]">
-          One moment —
-        </h1>
-        <div className="mt-4">
+      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center px-5 lg:max-w-xl">
+        <p className="t-label">Writing it</p>
+        <h1 className="t-display mt-3">One moment —</h1>
+        <div className="mt-6">
           <AssemblyMoment
             steps={[
               "Reading your answers…",
@@ -126,7 +133,7 @@ export default function CreatePage({
               "Matching your never-do list…",
               "Drafting it.",
             ]}
-            stepDelay={550}
+            stepDelay={540}
             onDone={() => setPhase("review")}
           />
         </div>
@@ -134,51 +141,71 @@ export default function CreatePage({
     );
   }
 
-  // --- C3: review the real thing ---
+  // C3 — review the real thing
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-6 pb-5 lg:max-w-3xl lg:justify-center lg:pb-24">
-      <p className="text-[10.5px] tracking-[0.12em] text-ink-3 uppercase">
-        Here it is — your words, our writing
-      </p>
-      <div className="flex flex-1 flex-col lg:mt-6 lg:grid lg:flex-none lg:grid-cols-[minmax(0,1fr)_240px] lg:items-start lg:gap-10">
-        <div className="mt-4 lg:mt-0">
-          <PostPreview
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-7 pb-6 lg:max-w-3xl lg:justify-center lg:pb-20">
+      <p className="t-label">Your words, our writing</p>
+      <h1 className="t-display mt-3 lg:text-[34px]">Ready when you are.</h1>
+
+      <div className="mt-7 lg:grid lg:grid-cols-[minmax(0,1fr)_236px] lg:items-start lg:gap-10">
+        <div>
+          <ContentPreview
+            kind="post"
             platform={produced.platform}
             businessName={client.businessName}
             avatarInitial={client.avatarInitial}
             meta={produced.meta}
             withImage={produced.withImage}
+            pillar={produced.pillar}
+            status="draft"
           >
             <SourcedBody body={currentBody} provenance={produced.provenance} />
-          </PostPreview>
-          <div className="mt-3 flex flex-wrap justify-center gap-1.5 lg:justify-start">
-            <Chip
-              onToggle={() => {
-                const sentences = currentBody.split(". ");
-                if (sentences.length > 2)
-                  setBody(sentences.slice(0, 2).join(". ") + ".");
-              }}
-            >
-              Make it shorter
-            </Chip>
-            <Chip onToggle={() => setBody(produced.body)}>Start over</Chip>
+          </ContentPreview>
+
+          <div className="mt-3">
+            <SectionLabel rule={false}>Not quite?</SectionLabel>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => {
+                  const sentences = currentBody.split(". ");
+                  if (sentences.length > 2)
+                    setBody(sentences.slice(0, 2).join(". ") + ".");
+                }}
+                className="cursor-pointer rounded-full border border-line bg-card px-3 py-1.5 text-xs text-ink-2 hover:border-ink-3 hover:text-ink"
+              >
+                Make it shorter
+              </button>
+              <button
+                type="button"
+                onClick={() => setBody(produced.body)}
+                className="cursor-pointer rounded-full border border-line bg-card px-3 py-1.5 text-xs text-ink-2 hover:border-ink-3 hover:text-ink"
+              >
+                Start over
+              </button>
+            </div>
           </div>
         </div>
-        <div className="mt-auto lg:mt-0">
-          <ActionButton onClick={approve} consequence={produced.consequence}>
+
+        <div className="mt-7 lg:mt-0">
+          <ActionButton
+            size="lg"
+            onClick={approve}
+            consequence={produced.consequence}
+          >
             Good to go
+            <Check className="h-4 w-4" strokeWidth={2.5} />
           </ActionButton>
-          <div className="mt-2.5 flex justify-center gap-6 text-xs text-ink-2 lg:flex-col lg:items-center lg:gap-2">
-            <button type="button" className="cursor-pointer" onClick={keepForLater}>
+          <div className="mt-2 grid grid-cols-2 gap-2 lg:grid-cols-1">
+            <ActionButton variant="ghost" onClick={keepForLater}>
               Keep for later
-            </button>
-            <button
-              type="button"
-              className="cursor-pointer"
+            </ActionButton>
+            <ActionButton
+              variant="ghost"
               onClick={() => router.push("/today")}
             >
               Toss it
-            </button>
+            </ActionButton>
           </div>
         </div>
       </div>

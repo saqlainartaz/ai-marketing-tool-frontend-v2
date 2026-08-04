@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
-import { CardShell } from "@/components/ui/card-shell";
 import { ScreenFrame } from "@/components/onboarding/ScreenFrame";
 import { useOnboarding } from "@/components/onboarding/OnboardingProvider";
 import { AssemblyMoment } from "@/components/motion/AssemblyMoment";
+import { PlanDocument } from "@/components/plan/PlanDocument";
 
 export function PlanScreen({ onNext }: { onNext: () => void }) {
   const { client } = useOnboarding();
@@ -14,26 +15,25 @@ export function PlanScreen({ onNext }: { onNext: () => void }) {
   return (
     <ScreenFrame
       step="plan"
-      eyebrow="Your marketing plan"
+      eyebrow={revealed ? "Your marketing plan" : "Building your plan"}
       title={
-        revealed ? (
-          <>Here&apos;s your plan, {client.firstName}.</>
-        ) : (
-          <>One moment —</>
-        )
+        revealed ? `Here's your plan, ${client.firstName}.` : "One moment —"
+      }
+      sub={
+        revealed
+          ? "Three things decide everything we prepare from now on. You can change any of them later."
+          : undefined
       }
       footer={
         revealed ? (
           <>
-            <ActionButton onClick={onNext}>
-              Start with this week&apos;s actions →
+            <ActionButton size="lg" onClick={onNext}>
+              Start with this week&apos;s actions
+              <ArrowRight className="h-4 w-4" />
             </ActionButton>
-            <button
-              type="button"
-              className="mt-2.5 w-full cursor-pointer text-center text-xs text-ink-2"
-            >
+            <ActionButton variant="quiet" className="mt-2">
               Adjust the plan
-            </button>
+            </ActionButton>
           </>
         ) : (
           <span aria-hidden className="block h-12" />
@@ -51,22 +51,8 @@ export function PlanScreen({ onNext }: { onNext: () => void }) {
           onDone={() => setRevealed(true)}
         />
       ) : (
-        <div className="space-y-2.5" data-testid="plan-reveal">
-          <CardShell>
-            <p className="text-sm font-semibold">Where to show up</p>
-            <p className="mt-1 text-[12.5px] text-ink-2">{client.plan.where}</p>
-          </CardShell>
-          <CardShell>
-            <p className="text-sm font-semibold">What to talk about</p>
-            <p className="mt-1 text-[12.5px] text-ink-2">{client.plan.what}</p>
-          </CardShell>
-          <CardShell>
-            <p className="text-sm font-semibold">Your rhythm</p>
-            <p className="mt-1 text-[12.5px] text-ink-2">{client.plan.rhythm}</p>
-          </CardShell>
-          <p className="pt-1 text-center text-[11px] text-ink-3">
-            Built from your episode and your answers — nothing generic.
-          </p>
+        <div data-testid="plan-reveal">
+          <PlanDocument client={client} animate hideWhy />
         </div>
       )}
     </ScreenFrame>

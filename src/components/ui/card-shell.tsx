@@ -1,26 +1,36 @@
 import { cn } from "@/lib/utils";
 
-type CardShellProps = {
+type CardShellProps = React.HTMLAttributes<HTMLDivElement> & {
   children: React.ReactNode;
-  /** Primary = the one highlighted card ("start here" / selected). */
+  /** The one highlighted card ("start here" / selected). */
   primary?: boolean;
+  /** Inset variant — sits in the page rather than on it (rails, wells). */
+  quiet?: boolean;
   className?: string;
 };
 
 /**
- * The universal content container: white card on the tinted canvas —
- * content is always the most contrasted thing on screen. Selection is an
- * accent border, never a second accent fill (the accent is a budget).
+ * The prepared object. White, raised, on the tinted desk — content is
+ * always the most contrasted thing on screen. Selection is a ring, never
+ * a second accent fill (the accent is a budget).
  */
-export function CardShell({ children, primary, className }: CardShellProps) {
+export function CardShell({
+  children,
+  primary,
+  quiet,
+  className,
+  ...rest
+}: CardShellProps) {
   return (
     <div
+      {...rest}
       data-primary={primary ? "true" : undefined}
       className={cn(
-        "rounded-2xl bg-card p-4 shadow-[0_1px_2px_rgb(16_19_24/0.06),0_4px_12px_rgb(16_19_24/0.05)]",
-        primary
-          ? "border-2 border-clay"
-          : "border border-line",
+        "rounded-xl p-4",
+        quiet
+          ? "border border-line bg-paper"
+          : "surface",
+        primary && "ring-2 ring-clay ring-offset-2 ring-offset-canvas",
         className,
       )}
     >

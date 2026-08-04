@@ -3,7 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LibraryBig, Map, Menu, Sun } from "lucide-react";
+import {
+  CircleUser,
+  LibraryBig,
+  Map,
+  Menu,
+  Settings,
+  Sparkles,
+  Sun,
+} from "lucide-react";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { cn } from "@/lib/utils";
 
@@ -13,10 +21,28 @@ const TABS = [
   { href: "/plan", label: "Plan", icon: Map },
 ] as const;
 
-/**
- * Three sections, one quiet menu. The Workspace door and Settings live
- * behind ☰ — present, never in the beginner's path.
- */
+const MORE = [
+  {
+    href: "/workspace",
+    label: "Workspace",
+    desc: "Tell us what's happening · what we can make",
+    icon: Sparkles,
+  },
+  {
+    href: "/profile",
+    label: "Your profile",
+    desc: "Everything we know about you",
+    icon: CircleUser,
+  },
+  {
+    href: "/settings",
+    label: "Settings",
+    desc: "Never-do list, how much we handle",
+    icon: Settings,
+  },
+] as const;
+
+/** Three sections, one quiet sheet. The workspace door is present, never in the path. */
 export function BottomNav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -25,53 +51,45 @@ export function BottomNav() {
     <>
       {menuOpen ? (
         <div
-          className="fixed inset-0 z-40 bg-ink/40"
+          className="fixed inset-0 z-40 bg-ink/30 backdrop-blur-[2px]"
           onClick={() => setMenuOpen(false)}
         >
           <div
-            className="absolute right-4 bottom-20 left-4 mx-auto max-w-md rounded-2xl border border-line bg-card p-4 shadow-xl"
+            className="absolute right-3 bottom-[76px] left-3 mx-auto max-w-md overflow-hidden rounded-2xl border border-line bg-card shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <Link
-              href="/workspace"
-              className="block rounded-xl px-3 py-3 text-sm font-semibold hover:bg-clay-mist"
-              onClick={() => setMenuOpen(false)}
-            >
-              Open workspace
-              <span className="block text-xs font-normal text-ink-2">
-                Chat, and what we know about how you sound
-              </span>
-            </Link>
-            <Link
-              href="/profile"
-              className="block rounded-xl px-3 py-3 text-sm font-semibold hover:bg-clay-mist"
-              onClick={() => setMenuOpen(false)}
-            >
-              Your profile
-              <span className="block text-xs font-normal text-ink-2">
-                Everything we know about you — every line correctable
-              </span>
-            </Link>
-            <Link
-              href="/settings"
-              className="block rounded-xl px-3 py-3 text-sm font-semibold hover:bg-clay-mist"
-              onClick={() => setMenuOpen(false)}
-            >
-              Settings
-              <span className="block text-xs font-normal text-ink-2">
-                Your never-do list, how much we handle
-              </span>
-            </Link>
-            <div className="mt-2 flex items-center justify-between border-t border-line px-3 pt-3">
-              <span className="text-xs text-ink-2">Appearance</span>
+            {MORE.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-start gap-3 border-b border-line px-4 py-3 last:border-0 active:bg-paper"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <Icon
+                    aria-hidden
+                    className="mt-0.5 h-4 w-4 shrink-0 text-ink-3"
+                  />
+                  <span>
+                    <span className="block text-[13.5px] font-semibold">
+                      {item.label}
+                    </span>
+                    <span className="t-meta block">{item.desc}</span>
+                  </span>
+                </Link>
+              );
+            })}
+            <div className="bg-paper px-4 py-3">
+              <p className="t-label mb-2">Appearance</p>
               <ThemeSwitcher />
             </div>
           </div>
         </div>
       ) : null}
 
-      <nav className="sticky bottom-0 z-30 mt-6 border-t border-line bg-paper/95 backdrop-blur">
-        <div className="mx-auto flex max-w-md items-center justify-around py-2">
+      <nav className="sticky bottom-0 z-30 mt-6 border-t border-line bg-canvas/95 backdrop-blur">
+        <div className="mx-auto flex max-w-md items-stretch justify-around">
           {TABS.map((tab) => {
             const active = pathname.startsWith(tab.href);
             const Icon = tab.icon;
@@ -81,11 +99,21 @@ export function BottomNav() {
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-w-16 flex-col items-center gap-1 rounded-xl px-3 py-1.5 text-[11px]",
-                  active ? "font-semibold text-clay-deep" : "text-ink-2",
+                  "relative flex min-w-16 flex-col items-center gap-1 px-3 pt-3 pb-2.5 text-[11px]",
+                  active ? "font-semibold text-ink" : "text-ink-2",
                 )}
               >
-                <Icon aria-hidden className="h-5 w-5" strokeWidth={2} />
+                {active ? (
+                  <span
+                    aria-hidden
+                    className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-clay"
+                  />
+                ) : null}
+                <Icon
+                  aria-hidden
+                  className={cn("h-5 w-5", active ? "text-clay" : "text-ink-3")}
+                  strokeWidth={2}
+                />
                 {tab.label}
               </Link>
             );
@@ -95,9 +123,9 @@ export function BottomNav() {
             aria-label="More"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex min-w-16 cursor-pointer flex-col items-center gap-1 rounded-xl px-3 py-1.5 text-[11px] text-ink-2"
+            className="flex min-w-16 cursor-pointer flex-col items-center gap-1 px-3 pt-3 pb-2.5 text-[11px] text-ink-2"
           >
-            <Menu aria-hidden className="h-5 w-5" strokeWidth={2} />
+            <Menu aria-hidden className="h-5 w-5 text-ink-3" strokeWidth={2} />
             More
           </button>
         </div>

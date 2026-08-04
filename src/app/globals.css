@@ -5,10 +5,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Bridge OUR tokens into Tailwind v4 utilities:
- * bg-paper, text-ink-2, border-line, bg-clay, text-onact, font-display, …
- */
 @theme inline {
   --color-canvas: var(--canvas);
   --color-paper: var(--paper);
@@ -25,16 +21,14 @@
   --color-card: var(--card);
   --color-line: var(--line);
   --color-onact: var(--onact);
+
   --font-display: var(--font-bricolage), Georgia, serif;
   --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
   --font-sans: var(--font-inter), system-ui, sans-serif;
 
-  --shadow-card:
-    0 1px 2px rgb(16 19 24 / 0.06),
-    0 4px 12px rgb(16 19 24 / 0.05);
-
-  /* shadcn semantic vars → derived from OUR tokens, so vendored components
-   * re-theme automatically across all four palettes. */
+  /* shadcn semantic vars → derived from OUR tokens so vendored
+   * components re-theme across all four palettes. */
   --color-background: var(--canvas);
   --color-foreground: var(--ink);
   --color-card-foreground: var(--ink);
@@ -48,12 +42,12 @@
   --color-muted-foreground: var(--ink-2);
   --color-accent: var(--clay-mist);
   --color-accent-foreground: var(--clay-deep);
-  --color-destructive: #dc2626;
+  --color-destructive: #b3261e;
   --color-border: var(--line);
   --color-input: var(--line);
   --color-ring: var(--clay);
 
-  --radius: 1rem;
+  --radius: 0.875rem;
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -70,11 +64,77 @@
     color: var(--ink);
     font-family: var(--font-inter), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
-  :where(button, a, [role="radio"], [role="button"], textarea, input, select):focus-visible {
+  :where(
+      button,
+      a,
+      [role="radio"],
+      [role="button"],
+      textarea,
+      input,
+      select
+    ):focus-visible {
     outline: 2px solid var(--clay);
     outline-offset: 2px;
     border-radius: 4px;
+  }
+}
+
+/* ── Type system ───────────────────────────────────────────────────────
+ * Three voices: display (moments), body (content), mono (metadata).
+ * Metadata in mono is the craft signal that separates a product from a
+ * template — it says "this data is real."
+ */
+@layer components {
+  .t-display {
+    font-family: var(--font-bricolage), Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 2.75rem);
+  }
+  .t-title {
+    font-family: var(--font-bricolage), Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    font-size: 1.25rem;
+  }
+  .t-label {
+    font-family: var(--font-jetbrains), ui-monospace, monospace;
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .t-meta {
+    font-family: var(--font-jetbrains), ui-monospace, monospace;
+    font-size: 0.6875rem;
+    letter-spacing: 0.01em;
+    color: var(--ink-3);
+  }
+  .t-body {
+    font-size: 0.9375rem;
+    line-height: 1.62;
+  }
+  .t-sub {
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+
+  /* The raised prepared object. */
+  .surface {
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow:
+      0 1px 1px color-mix(in srgb, var(--ink) 4%, transparent),
+      0 10px 24px -14px color-mix(in srgb, var(--ink) 22%, transparent);
+  }
+  .rule {
+    border-top: 1px solid var(--line);
   }
 }
 

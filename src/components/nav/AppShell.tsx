@@ -15,6 +15,7 @@ import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { DialPill } from "@/components/ui/dial-pill";
 import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
+import { useContentItems } from "@/lib/store/content";
 import { useWorkMode } from "@/lib/store/settings";
 import { cn } from "@/lib/utils";
 
@@ -22,79 +23,111 @@ const NAV = [
   { href: "/today", label: "Today", icon: Sun },
   { href: "/library", label: "Library", icon: LibraryBig },
   { href: "/plan", label: "Plan", icon: Map },
+] as const;
+
+const NAV_QUIET = [
   { href: "/workspace", label: "Workspace", icon: Sparkles },
   { href: "/profile", label: "Profile", icon: CircleUser },
   { href: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
 /**
- * The client app shell: a real sidebar on desktop (the Professional's
- * device), the bottom nav on phones (the Operator's). Same product,
- * same routes — density adapts, structure doesn't fork.
+ * The desk: a persistent rail on desktop (identity, work, quiet tools),
+ * the bottom bar on phones. Same product, native furniture per device.
  */
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const clientId = useClientId();
   const client = getFixtureClient(clientId);
   const workMode = useWorkMode(clientId);
+  const items = useContentItems(clientId);
+  const pendingQuestions = client.questionCards.filter(
+    (qc) => !items.some((i) => i.id === `${qc.id}-out`),
+  ).length;
+  const todayCount =
+    items.filter((i) => i.status === "ready").length + pendingQuestions;
+
+  function navLink(
+    item: { href: string; label: string; icon: typeof Sun },
+    count?: number,
+  ) {
+    const active = pathname.startsWith(item.href);
+    const Icon = item.icon;
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        aria-current={active ? "page" : undefined}
+        className={cn(
+          "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] transition-colors",
+          active
+            ? "bg-card font-semibold text-ink shadow-[inset_0_0_0_1px_var(--line)]"
+            : "text-ink-2 hover:bg-card/60 hover:text-ink",
+        )}
+      >
+        <Icon
+          aria-hidden
+          className={cn("h-4 w-4", active ? "text-clay" : "text-ink-3")}
+          strokeWidth={2}
+        />
+        {item.label}
+        {count ? (
+          <span className="t-meta ml-auto rounded-full bg-paper px-1.5 py-px">
+            {count}
+          </span>
+        ) : null}
+      </Link>
+    );
+  }
 
   return (
     <div className="flex min-h-dvh">
-      {/* Desktop sidebar */}
       <aside
         data-testid="sidebar"
-        className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-line bg-card px-4 py-6 lg:flex"
+        className="sticky top-0 hidden h-dvh w-[248px] shrink-0 flex-col border-r border-line bg-canvas px-3 py-5 lg:flex"
       >
         <Link
           href="/profile"
-          className="flex items-center gap-2.5 rounded-xl px-2 py-1.5 transition-colors hover:bg-paper"
+          className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 transition-colors hover:bg-card/60"
         >
           <span
             aria-hidden
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-clay-mist font-display text-sm font-bold text-clay-deep"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-clay font-display text-sm font-bold text-onact"
           >
             {client.avatarInitial}
           </span>
-          <span>
-            <span className="block font-display text-[14px] leading-tight font-semibold">
+          <span className="min-w-0">
+            <span className="block truncate text-[13.5px] leading-tight font-semibold">
               {client.businessName}
             </span>
-            <span className="mt-0.5 block text-[10.5px] text-ink-3">
-              {client.firstName} · your profile →
-            </span>
+            <span className="t-meta block truncate">{client.firstName}</span>
           </span>
         </Link>
-        <nav className="mt-6 space-y-1">
-          {NAV.map((item) => {
-            const active = pathname.startsWith(item.href);
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] transition-colors",
-                  active
-                    ? "bg-clay-mist font-semibold text-clay-deep"
-                    : "text-ink-2 hover:bg-paper hover:text-ink",
-                )}
-              >
-                <Icon aria-hidden className="h-4 w-4" strokeWidth={2} />
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-        <div className="mt-auto space-y-3 px-2">
-          <DialPill mode={workMode} />
-          <ThemeSwitcher />
+
+        <div className="mt-6 space-y-0.5">
+          {navLink(NAV[0], todayCount)}
+          {navLink(NAV[1])}
+          {navLink(NAV[2])}
+        </div>
+
+        <div className="mt-6 space-y-0.5 border-t border-line pt-4">
+          {NAV_QUIET.map((item) => navLink(item))}
+        </div>
+
+        <div className="mt-auto space-y-3 px-1">
+          <div>
+            <p className="t-label mb-1.5">Right now</p>
+            <DialPill mode={workMode} />
+          </div>
+          <div>
+            <p className="t-label mb-1.5">Appearance</p>
+            <ThemeSwitcher />
+          </div>
         </div>
       </aside>
 
-      {/* Content */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 pt-6 pb-3 lg:max-w-5xl lg:px-10 lg:pt-10">
+        <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 pt-6 pb-4 lg:max-w-[980px] lg:px-12 lg:pt-10">
           {children}
         </main>
         <div className="lg:hidden">

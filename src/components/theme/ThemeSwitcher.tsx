@@ -1,12 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
-export const THEMES = ["cobalt", "clay", "forest", "night"] as const;
+export const THEMES = ["paper", "cobalt", "forest", "night"] as const;
 export type Theme = (typeof THEMES)[number];
 
+/** Swatch previews so the choice is visual, not a word-guess. */
+const SWATCH: Record<Theme, { bg: string; dot: string }> = {
+  paper: { bg: "#f6f3ee", dot: "#201d18" },
+  cobalt: { bg: "#f4f6f9", dot: "#1f37c7" },
+  forest: { bg: "#f1f4ef", dot: "#1c5c3d" },
+  night: { bg: "#0e1013", dot: "#d8f34a" },
+};
+
 const STORAGE_KEY = "v2theme";
-const DEFAULT_THEME: Theme = "cobalt";
+const DEFAULT_THEME: Theme = "paper";
 
 function readTheme(): Theme {
   if (typeof window === "undefined") return DEFAULT_THEME;
@@ -21,7 +30,7 @@ function readTheme(): Theme {
   return DEFAULT_THEME;
 }
 
-export function ThemeSwitcher() {
+export function ThemeSwitcher({ className }: { className?: string }) {
   const [theme, setTheme] = useState<Theme>(DEFAULT_THEME);
 
   useEffect(() => {
@@ -34,7 +43,7 @@ export function ThemeSwitcher() {
     try {
       window.localStorage.setItem(STORAGE_KEY, next);
     } catch {
-      /* storage unavailable — theme still applies for this visit */
+      /* theme still applies for this visit */
     }
   }
 
@@ -42,7 +51,7 @@ export function ThemeSwitcher() {
     <div
       role="radiogroup"
       aria-label="Appearance"
-      className="grid w-full max-w-56 grid-cols-2 gap-1 rounded-xl border border-line bg-card p-1"
+      className={cn("grid grid-cols-2 gap-1.5", className)}
     >
       {THEMES.map((t) => (
         <button
@@ -50,12 +59,23 @@ export function ThemeSwitcher() {
           role="radio"
           aria-checked={theme === t}
           onClick={() => apply(t)}
-          className={`cursor-pointer rounded-lg px-2 py-1.5 text-xs font-semibold capitalize transition-colors ${
+          className={cn(
+            "flex cursor-pointer items-center gap-1.5 rounded-lg border px-2 py-1.5 text-[11px] capitalize transition-colors",
             theme === t
-              ? "bg-ink text-paper"
-              : "text-ink-2 hover:bg-paper hover:text-ink"
-          }`}
+              ? "border-clay font-semibold text-ink shadow-[inset_0_0_0_1px_var(--clay)]"
+              : "border-line text-ink-2 hover:border-ink-3 hover:text-ink",
+          )}
         >
+          <span
+            aria-hidden
+            className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border border-line"
+            style={{ background: SWATCH[t].bg }}
+          >
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ background: SWATCH[t].dot }}
+            />
+          </span>
           {t}
         </button>
       ))}

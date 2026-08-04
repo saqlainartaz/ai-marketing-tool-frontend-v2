@@ -1,6 +1,17 @@
-import { PostPreview, type Platform } from "@/components/preview/post-preview";
+import { Mail, MessageSquareQuote, Star } from "lucide-react";
+import {
+  PostPreview,
+  PLATFORM_NAME,
+  type Platform,
+} from "@/components/preview/post-preview";
 
 export type ContentKind = "post" | "review_reply" | "email";
+
+const KIND_NAME: Record<ContentKind, string> = {
+  post: "post",
+  review_reply: "review reply",
+  email: "email",
+};
 
 type ContentPreviewProps = {
   kind?: ContentKind;
@@ -10,16 +21,19 @@ type ContentPreviewProps = {
   meta: string;
   children: React.ReactNode;
   withImage?: boolean;
-  /** review_reply: the customer review being answered. */
   review?: { reviewer: string; stars: number; text: string };
-  /** email: subject line. */
   subject?: string;
+  /** The pillar/topic this came from — shown in the object header. */
+  pillar?: string;
+  /** Right-hand status word in the header ("ready", "approved"…). */
+  status?: string;
 };
 
 /**
- * One preview component, many marketing tools. The card system is
- * content-type agnostic: a new tool ships as a new kind here + a card
- * from the server — never a new screen.
+ * The prepared object: a labeled deliverable, not a floating post.
+ * One header strip states what this is and where it came from; inside
+ * sits the platform-accurate render. One component, many marketing
+ * tools — a new tool is a new kind here, never a new screen.
  */
 export function ContentPreview({
   kind = "post",
@@ -31,64 +45,85 @@ export function ContentPreview({
   withImage,
   review,
   subject,
+  pillar,
+  status,
 }: ContentPreviewProps) {
-  if (kind === "review_reply" && review) {
-    return (
-      <div
-        data-kind="review_reply"
-        className="overflow-hidden rounded-2xl border border-line bg-card shadow-sm"
-      >
-        <div className="border-b border-line bg-paper px-3.5 py-3">
-          <p className="text-[10.5px] text-ink-3">{meta}</p>
-          <p className="mt-1 text-xs font-semibold">
-            {review.reviewer}{" "}
-            <span aria-label={`${review.stars} stars`} className="text-honey">
-              {"★".repeat(review.stars)}
-            </span>
-          </p>
-          <p className="mt-0.5 text-[12.5px] text-ink-2 italic">
-            “{review.text}”
-          </p>
-        </div>
-        <div className="px-3.5 py-3">
-          <p className="text-[10px] font-semibold tracking-widest text-ink-3 uppercase">
-            Your reply · as {businessName}
-          </p>
-          <div className="mt-1.5 text-[13px] leading-relaxed">{children}</div>
-        </div>
-      </div>
-    );
-  }
-
-  if (kind === "email") {
-    return (
-      <div
-        data-kind="email"
-        className="overflow-hidden rounded-2xl border border-line bg-card shadow-sm"
-      >
-        <div className="border-b border-line px-3.5 py-2.5">
-          <p className="text-[10.5px] text-ink-3">{meta}</p>
-          <p className="mt-1 text-[11px] text-ink-2">
-            From: <b className="text-ink">{businessName}</b>
-          </p>
-          <p className="text-[12.5px] font-semibold">{subject}</p>
-        </div>
-        <div className="px-3.5 py-3 text-[13px] leading-relaxed">
-          {children}
-        </div>
-      </div>
-    );
-  }
+  const label =
+    kind === "post"
+      ? `${PLATFORM_NAME[platform]} ${KIND_NAME[kind]}`
+      : kind === "review_reply"
+        ? "Google review reply"
+        : "Email";
 
   return (
-    <PostPreview
-      platform={platform}
-      businessName={businessName}
-      avatarInitial={avatarInitial}
-      meta={meta}
-      withImage={withImage}
-    >
-      {children}
-    </PostPreview>
+    <article className="surface overflow-hidden rounded-xl">
+      {/* Object header — what this is, where it came from, its state. */}
+      <header className="flex items-baseline gap-2 border-b border-line bg-paper px-4 py-2">
+        <span className="t-label truncate">
+          {label}
+          {pillar ? ` · ${pillar}` : ""}
+        </span>
+        {status ? (
+          <span className="t-label ml-auto shrink-0 text-ink-2">{status}</span>
+        ) : null}
+      </header>
+
+      {kind === "review_reply" && review ? (
+        <div>
+          <div className="border-b border-line px-4 py-3">
+            <div className="flex items-center gap-2">
+              <MessageSquareQuote
+                aria-hidden
+                className="h-3.5 w-3.5 text-ink-3"
+              />
+              <span className="text-[13px] font-semibold">
+                {review.reviewer}
+              </span>
+              <span
+                aria-label={`${review.stars} stars`}
+                className="flex gap-0.5"
+              >
+                {Array.from({ length: review.stars }).map((_, i) => (
+                  <Star
+                    key={i}
+                    aria-hidden
+                    className="h-3 w-3 fill-honey text-honey"
+                  />
+                ))}
+              </span>
+            </div>
+            <p className="mt-1 text-[13px] leading-relaxed text-ink-2 italic">
+              “{review.text}”
+            </p>
+          </div>
+          <div className="px-4 py-3">
+            <p className="t-label mb-1.5">Your reply · as {businessName}</p>
+            <div className="t-body">{children}</div>
+          </div>
+        </div>
+      ) : kind === "email" ? (
+        <div>
+          <div className="flex items-center gap-2 border-b border-line px-4 py-2.5">
+            <Mail aria-hidden className="h-3.5 w-3.5 shrink-0 text-ink-3" />
+            <div className="min-w-0">
+              <p className="t-meta truncate">{meta}</p>
+              <p className="truncate text-[13px] font-semibold">{subject}</p>
+            </div>
+          </div>
+          <div className="t-body px-4 py-3">{children}</div>
+        </div>
+      ) : (
+        <PostPreview
+          bare
+          platform={platform}
+          businessName={businessName}
+          avatarInitial={avatarInitial}
+          meta={meta}
+          withImage={withImage}
+        >
+          {children}
+        </PostPreview>
+      )}
+    </article>
   );
 }

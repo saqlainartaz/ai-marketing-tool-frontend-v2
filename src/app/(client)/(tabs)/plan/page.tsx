@@ -1,52 +1,61 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { PlanDocument } from "@/components/plan/PlanDocument";
+import { SectionLabel } from "@/components/ui/section-label";
 import { CardShell } from "@/components/ui/card-shell";
 import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 
-/** The living plan — S6's reveal as a permanent page. Always answers "why". */
+/** The living plan — the same document the client was handed on day one. */
 export default function PlanPage() {
   const clientId = useClientId();
   const client = getFixtureClient(clientId);
 
   return (
-    <>
-      <div className="w-full lg:max-w-3xl">
-      <h1 className="font-display text-[26px] font-semibold tracking-tight lg:text-[32px]">
-        Your plan
-      </h1>
-      <p className="mt-1 text-xs text-ink-2">
-        Built from your episode and your answers — nothing generic.
-      </p>
+    <div className="w-full lg:max-w-3xl">
+      <p className="t-label">Your plan</p>
+      <h1 className="t-display mt-3">What we&apos;re doing, and why.</h1>
 
-      <div className="mt-4 space-y-2.5 lg:grid lg:grid-cols-2 lg:gap-3 lg:space-y-0">
-        <CardShell>
-          <p className="text-sm font-semibold">Where to show up</p>
-          <p className="mt-1 text-[12.5px] text-ink-2">{client.plan.where}</p>
-        </CardShell>
-        <CardShell>
-          <p className="text-sm font-semibold">What to talk about</p>
-          <p className="mt-1 text-[12.5px] text-ink-2">{client.plan.what}</p>
-        </CardShell>
-        <CardShell>
-          <p className="text-sm font-semibold">Your rhythm</p>
-          <p className="mt-1 text-[12.5px] text-ink-2">{client.plan.rhythm}</p>
-        </CardShell>
-        <CardShell>
-          <p className="text-sm font-semibold">Why this plan</p>
-          <p className="mt-1 text-[12.5px] text-ink-2">{client.plan.why}</p>
-        </CardShell>
-      </div>
+      <div className="mt-7 lg:grid lg:grid-cols-[minmax(0,1fr)_240px] lg:items-start lg:gap-8">
+        <PlanDocument client={client} />
 
-      <p className="mt-4 text-center text-[11px] text-ink-3">
-        Your goal changes? The plan re-adjusts —{" "}
-        <Link href="/settings" className="underline">
-          change it in Settings
-        </Link>
-        .
-      </p>
+        <aside className="mt-6 space-y-5 lg:mt-0">
+          <div>
+            <SectionLabel>Changing course</SectionLabel>
+            <CardShell quiet className="mt-3">
+              <p className="text-[12.5px] leading-relaxed text-ink-2">
+                Your goal changes, the plan re-adjusts — and we tell you what
+                changed and why.
+              </p>
+              <Link
+                href="/settings"
+                className="t-meta mt-2 inline-flex items-center gap-1 underline underline-offset-4"
+              >
+                Change it in Settings
+                <ArrowRight aria-hidden className="h-3 w-3" />
+              </Link>
+            </CardShell>
+          </div>
+          <div>
+            <SectionLabel>This week</SectionLabel>
+            <CardShell quiet className="mt-3">
+              <p className="text-[12.5px] leading-relaxed text-ink-2">
+                The plan turns into cards on Today. Nothing here needs
+                managing.
+              </p>
+              <Link
+                href="/today"
+                className="t-meta mt-2 inline-flex items-center gap-1 underline underline-offset-4"
+              >
+                Go to Today
+                <ArrowRight aria-hidden className="h-3 w-3" />
+              </Link>
+            </CardShell>
+          </div>
+        </aside>
       </div>
-    </>
+    </div>
   );
 }

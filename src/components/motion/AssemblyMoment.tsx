@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { Check, Loader2 } from "lucide-react";
 
 gsap.registerPlugin(useGSAP);
 
@@ -14,19 +15,15 @@ type AssemblyMomentProps = {
 };
 
 /**
- * The plan-assembly beat: the client's own work streams in, step by step,
- * then the plan reveals. We genuinely do this work — showing it is the
- * TurboTax/Perplexity trust pattern.
- *
- * Sequencing is timer-driven (deterministic, testable); GSAP handles only
- * the presentational entrance — each fact drifts in and settles with a
- * spring, and the set pulses together before the reveal. Reduced motion
- * skips straight to the finished state.
+ * We genuinely do this work; showing it is what converts waiting into
+ * trust (TurboTax's labor illusion, Perplexity's visible plan). Steps
+ * complete one by one with the current one live — never a spinner alone.
+ * Reduced motion skips straight to the finished state.
  */
 export function AssemblyMoment({
   steps,
   onDone,
-  stepDelay = 650,
+  stepDelay = 620,
 }: AssemblyMomentProps) {
   const [visible, setVisible] = useState(0);
   const done = useRef(false);
@@ -52,7 +49,7 @@ export function AssemblyMoment({
           done.current = true;
           onDone();
         }
-      }, 800);
+      }, 700);
       return () => clearTimeout(t);
     }
     const t = setTimeout(() => setVisible((v) => v + 1), stepDelay);
@@ -62,41 +59,51 @@ export function AssemblyMoment({
   useGSAP(
     () => {
       if (visible === 0) return;
-      // Newest fact drifts in and clicks into place.
       gsap.from(`[data-step="${visible - 1}"]`, {
         opacity: 0,
-        y: 14,
-        scale: 0.97,
-        duration: 0.42,
-        ease: "back.out(1.6)",
+        x: -8,
+        duration: 0.38,
+        ease: "power2.out",
       });
-      // All facts assembled: one quiet pulse together before the reveal.
-      if (visible === steps.length) {
-        gsap.to("[data-step]", {
-          scale: 1.02,
-          duration: 0.18,
-          yoyo: true,
-          repeat: 1,
-          ease: "power1.inOut",
-          stagger: 0.03,
-          delay: 0.25,
-        });
-      }
     },
     { dependencies: [visible], scope: container },
   );
 
   return (
-    <div ref={container} aria-live="polite" data-testid="assembly">
-      {steps.slice(0, visible).map((step, i) => (
-        <p
-          key={step}
-          className="py-1 text-[13px] text-ink-2"
-          data-step={i}
-        >
-          <span className="font-bold text-moss">✓</span> {step}
-        </p>
-      ))}
+    <div
+      ref={container}
+      aria-live="polite"
+      data-testid="assembly"
+      className="surface rounded-xl px-4 py-4"
+    >
+      <ol className="space-y-2.5">
+        {steps.map((step, i) => {
+          const complete = i < visible - 1 || visible >= steps.length;
+          const live = i === visible - 1 && visible < steps.length;
+          if (i >= visible) return null;
+          return (
+            <li
+              key={step}
+              data-step={i}
+              className="flex items-center gap-2.5 text-[13px]"
+            >
+              <span
+                aria-hidden
+                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full ${
+                  complete ? "bg-moss-mist text-moss" : "text-ink-3"
+                }`}
+              >
+                {complete ? (
+                  <Check className="h-2.5 w-2.5" strokeWidth={3.5} />
+                ) : (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                )}
+              </span>
+              <span className={live ? "text-ink" : "text-ink-2"}>{step}</span>
+            </li>
+          );
+        })}
+      </ol>
     </div>
   );
 }

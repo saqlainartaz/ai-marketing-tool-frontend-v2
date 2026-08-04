@@ -35,3 +35,14 @@ Append-only. Every dependency gets a ledger row at install time.
 | Bricolage Grotesque, Inter (next/font) | — | SIL OFL 1.1 | Google Fonts | self-hosted at build |
 | gsap / @gsap/react | 3.15.0 | GSAP Standard "no charge" license (gsap.com/standard-license) — free incl. commercial use since Webflow acquisition | package.json license field + gsap.com | NOT OSI; permitted for our commercial SaaS use |
 | @playwright/test | latest | Apache-2.0 | npm | e2e; chromium only |
+| @jetbrains mono (next/font) | — | SIL OFL 1.1 | Google Fonts | metadata voice; self-hosted at build |
+
+### Design direction — "Desk" (2026-08-04)
+
+Full rehaul after the design audit. Concept: prepared work laid out on
+warm paper. Three type voices (Bricolage display / Inter body / JetBrains
+mono metadata); tinted canvas + raised white cards; the accent spent on
+one commitment per screen (near-black in the default Paper theme); every
+draft is a labeled object with a header strip; the plan is a numbered
+document; progress is a named work spine, never anonymous dots.
+Themes renamed: paper (default) · cobalt · forest · night.

@@ -1,16 +1,18 @@
 "use client";
 
+import { ArrowRight } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
-import { CardShell } from "@/components/ui/card-shell";
 import { Chip } from "@/components/ui/chip";
+import { OptionCard } from "@/components/ui/option-card";
+import { SectionLabel } from "@/components/ui/section-label";
 import { ScreenFrame } from "@/components/onboarding/ScreenFrame";
 import { useOnboarding } from "@/components/onboarding/OnboardingProvider";
 
 export const GOALS = [
-  "More calls & booked jobs",
-  "More clients or patients",
-  "A bigger audience & authority",
-  "Not sure — guide me",
+  { label: "More calls & booked jobs", hint: "the phone rings more often" },
+  { label: "More clients or patients", hint: "a fuller book, steadier work" },
+  { label: "A bigger audience & authority", hint: "known for what you know" },
+  { label: "Not sure — guide me", hint: "we'll pick, you can change it" },
 ] as const;
 
 export const DRIVERS = ["Do it for me", "Me", "Someone on my team"] as const;
@@ -29,31 +31,30 @@ export function GoalScreen({
       step="goal"
       eyebrow="Question 1 of 4"
       title="What do you want more of right now?"
+      sub="Everything we prepare from here on serves this one answer."
       onBack={onBack}
       footer={
-        <ActionButton onClick={onNext} disabled={!answers.goal}>
-          Next →
+        <ActionButton size="lg" onClick={onNext} disabled={!answers.goal}>
+          Next
+          <ArrowRight className="h-4 w-4" />
         </ActionButton>
       }
     >
-      <div className="space-y-2.5">
+      <div className="space-y-2">
         {GOALS.map((goal) => (
-          <button
-            key={goal}
-            type="button"
-            className="block w-full cursor-pointer text-left"
-            onClick={() => setAnswer("goal", goal)}
-            aria-pressed={answers.goal === goal}
+          <OptionCard
+            key={goal.label}
+            hint={goal.hint}
+            selected={answers.goal === goal.label}
+            onSelect={() => setAnswer("goal", goal.label)}
           >
-            <CardShell primary={answers.goal === goal}>
-              <span className="text-sm font-semibold">{goal}</span>
-            </CardShell>
-          </button>
+            {goal.label}
+          </OptionCard>
         ))}
       </div>
-      <div className="mt-4">
-        <p className="text-xs text-ink-2">Who will drive this?</p>
-        <div className="mt-1.5 flex flex-wrap gap-1.5">
+      <div className="mt-6">
+        <SectionLabel>Who will drive this</SectionLabel>
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
           {DRIVERS.map((d) => (
             <Chip
               key={d}

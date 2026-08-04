@@ -13,12 +13,12 @@ const css = readFileSync(
   "utf8",
 );
 
-const THEMES = ["cobalt", "clay", "forest", "night"] as const;
+const THEMES = ["paper", "cobalt", "forest", "night"] as const;
 
 function blockFor(theme: string): string {
   const selector =
-    theme === "cobalt"
-      ? String.raw`:root,\s*\n?:root\[data-theme="cobalt"\]`
+    theme === "paper"
+      ? String.raw`:root,\s*\n?:root\[data-theme="paper"\]`
       : String.raw`:root\[data-theme="${theme}"\]`;
   const match = css.match(new RegExp(selector + String.raw`\s*\{([^}]+)\}`));
   if (!match) throw new Error(`theme block not found: ${theme}`);

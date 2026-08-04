@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { CardShell } from "@/components/ui/card-shell";
 import { Chip } from "@/components/ui/chip";
 import { DialPill } from "@/components/ui/dial-pill";
+import { SectionLabel } from "@/components/ui/section-label";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
@@ -16,60 +18,61 @@ export default function SettingsPage() {
 
   return (
     <div className="w-full lg:max-w-2xl">
-      <Link href="/today" className="text-xs text-ink-2 lg:hidden">
-        ← Back to Today
-      </Link>
-      <h1 className="mt-3 font-display text-[26px] font-semibold tracking-tight lg:mt-0 lg:text-[32px]">
-        Settings
-      </h1>
+      <p className="t-label">Settings</p>
+      <h1 className="t-display mt-3">How we work together.</h1>
 
-      <div className="mt-4 space-y-3">
-        <CardShell>
-          <p className="text-sm font-semibold">How much should we handle?</p>
-          <p className="mt-1 mb-2 text-xs text-ink-2">
+      <div className="mt-8 space-y-8">
+        <div>
+          <SectionLabel>How much should we handle?</SectionLabel>
+          <p className="t-sub mt-2">
             Change it anytime. Whatever you pick, nothing goes public without
             your yes.
           </p>
-          <DialPill
-            mode={workMode}
-            onChange={(m) => setWorkMode(clientId, m)}
-          />
-        </CardShell>
-
-        <CardShell>
-          <p className="text-sm font-semibold">Your business</p>
-          <p className="mt-1 text-[12.5px] text-ink-2">
-            Everything we know about you lives on your profile — one page,
-            every line correctable.
-          </p>
-          <Link
-            href="/profile"
-            className="mt-2 inline-block text-[11px] text-clay-deep underline"
-          >
-            See what we know about you →
-          </Link>
-        </CardShell>
-
-        <CardShell>
-          <p className="text-sm font-semibold">Never do</p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {client.lockedNeverChips.map((chip) => (
-              <Chip key={chip} locked>
-                {chip}
-              </Chip>
-            ))}
+          <div className="mt-3">
+            <DialPill mode={workMode} onChange={(m) => setWorkMode(clientId, m)} />
           </div>
-          <p className="mt-2 text-[10.5px] text-ink-3">
-            {client.lockedReason} these stay on to protect you.
-          </p>
-        </CardShell>
+        </div>
 
-        <CardShell>
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold">Appearance</p>
+        <div>
+          <SectionLabel>Your business</SectionLabel>
+          <CardShell className="mt-3">
+            <p className="text-[13px] leading-relaxed text-ink-2">
+              Everything we know about you lives on your profile — one page,
+              every line correctable.
+            </p>
+            <Link
+              href="/profile"
+              className="t-meta mt-2.5 inline-flex items-center gap-1 underline underline-offset-4"
+            >
+              See what we know about you
+              <ArrowRight aria-hidden className="h-3 w-3" />
+            </Link>
+          </CardShell>
+        </div>
+
+        <div>
+          <SectionLabel>Never do</SectionLabel>
+          <CardShell className="mt-3">
+            <div className="flex flex-wrap gap-1.5">
+              {client.lockedNeverChips.map((chip) => (
+                <Chip key={chip} locked>
+                  {chip}
+                </Chip>
+              ))}
+            </div>
+            <p className="t-meta mt-3 flex items-center gap-1.5">
+              <ShieldCheck aria-hidden className="h-3.5 w-3.5 text-honey" />
+              {client.lockedReason} these stay on to protect you.
+            </p>
+          </CardShell>
+        </div>
+
+        <div>
+          <SectionLabel>Appearance</SectionLabel>
+          <div className="mt-3 max-w-xs">
             <ThemeSwitcher />
           </div>
-        </CardShell>
+        </div>
       </div>
     </div>
   );

@@ -2,23 +2,19 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { PenLine, ShieldCheck } from "lucide-react";
+import { ArrowRight, Check, PenLine, ShieldCheck, X } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { CardShell } from "@/components/ui/card-shell";
 import { ContentPreview } from "@/components/preview/ContentPreview";
 import { SourcedBody } from "@/components/preview/SourcedBody";
 import { GuardrailLine } from "@/components/preview/GuardrailLine";
 import { getFixtureClient } from "@/lib/fixtures/clients";
-import {
-  useContentItems,
-  decideItem,
-  editItemBody,
-} from "@/lib/store/content";
+import { useContentItems, decideItem, editItemBody } from "@/lib/store/content";
 
 /**
- * The heart of Home: one decision at a time. Ready drafts first
- * (approve / edit-in-preview / skip), then MAKE cards (question cards →
- * guided create), then done. His yes queues it; nothing publishes on silence.
+ * The decision surface: one prepared object at a time, its consequence
+ * on the commit, its sources one tap inside the text. Ready drafts
+ * first, then the client's own turn, then a designed done-state.
  */
 export function CardStack({ clientId }: { clientId: string }) {
   const client = getFixtureClient(clientId);
@@ -33,20 +29,19 @@ export function CardStack({ clientId }: { clientId: string }) {
   const pendingQuestions = client.questionCards.filter(
     (qc) => !items.some((i) => i.id === `${qc.id}-out`),
   );
-  const total = items.length + pendingQuestions.length;
-  const decidedCount = items.length - ready.length;
 
   function approve(id: string) {
     setStamped(id);
     setTimeout(() => {
       setStamped(null);
       decideItem(clientId, id, "approved");
-    }, 650);
+    }, 700);
   }
 
   if (current) {
     const body = current.editedBody ?? current.body;
     const isEditing = editing === current.id;
+
     return (
       <div data-testid="card-stack">
         <div className="relative">
@@ -59,6 +54,8 @@ export function CardStack({ clientId }: { clientId: string }) {
             withImage={current.withImage}
             review={current.review}
             subject={current.subject}
+            pillar={current.pillar}
+            status={isEditing ? "editing" : "ready"}
           >
             {isEditing ? (
               <textarea
@@ -66,18 +63,22 @@ export function CardStack({ clientId }: { clientId: string }) {
                 value={draftText}
                 onChange={(e) => setDraftText(e.target.value)}
                 rows={5}
-                className="w-full resize-none rounded-lg border border-clay bg-paper p-2 text-[13px] leading-relaxed outline-none"
+                className="t-body w-full resize-none rounded-lg border border-clay bg-paper p-2.5 outline-none"
               />
             ) : (
               <SourcedBody body={body} provenance={current.provenance} />
             )}
           </ContentPreview>
+
           {stamped === current.id ? (
             <div
               data-testid="stamp"
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-6 rounded-2xl border-4 border-moss bg-moss-mist/95 px-6 py-2 font-display text-2xl font-bold text-moss"
+              className="pointer-events-none absolute inset-0 flex items-center justify-center"
             >
-              ON ITS WAY ✓
+              <span className="flex items-center gap-2 rounded-full border border-moss bg-card px-4 py-2 font-display text-sm font-semibold text-moss shadow-lg">
+                <Check className="h-4 w-4" strokeWidth={3} />
+                On its way
+              </span>
             </div>
           ) : null}
         </div>
@@ -86,83 +87,62 @@ export function CardStack({ clientId }: { clientId: string }) {
           <GuardrailLine guardrail={current.guardrail} />
         ) : null}
         {justChecked === current.id && !isEditing ? (
-          <p className="mt-2 flex items-center gap-2 rounded-xl bg-honey-mist px-3 py-2 text-[11.5px] font-medium text-honey">
+          <p className="mt-2 flex items-center gap-2 rounded-lg bg-honey-mist px-3 py-2 text-[12px] font-medium text-honey">
             <ShieldCheck aria-hidden className="h-3.5 w-3.5 shrink-0" />
             Still safe after your edit — checked just now
           </p>
         ) : null}
 
-        <div className="mt-4">
+        <div className="mt-4 space-y-2">
           {isEditing ? (
-            <ActionButton
-              onClick={() => {
-                editItemBody(clientId, current.id, draftText);
-                setEditing(null);
-                setJustChecked(current.id);
-              }}
-              consequence="your words, verified"
-            >
-              Save
-            </ActionButton>
+            <>
+              <ActionButton
+                size="lg"
+                onClick={() => {
+                  editItemBody(clientId, current.id, draftText);
+                  setEditing(null);
+                  setJustChecked(current.id);
+                }}
+                consequence="your words, checked again"
+              >
+                Save
+              </ActionButton>
+              <ActionButton variant="ghost" onClick={() => setEditing(null)}>
+                Cancel
+              </ActionButton>
+            </>
           ) : (
-            <ActionButton
-              onClick={() => approve(current.id)}
-              consequence={current.consequence}
-              disabled={stamped !== null}
-            >
-              Good to go
-            </ActionButton>
-          )}
-          <div className="mt-2.5 flex justify-center gap-6 text-xs text-ink-2">
-            {!isEditing ? (
-              <>
-                <button
-                  type="button"
-                  className="inline-flex cursor-pointer items-center gap-1 px-2 py-2"
+            <>
+              <ActionButton
+                size="lg"
+                onClick={() => approve(current.id)}
+                consequence={current.consequence}
+                disabled={stamped !== null}
+              >
+                Good to go
+                <Check className="h-4 w-4" strokeWidth={2.5} />
+              </ActionButton>
+              <div className="grid grid-cols-2 gap-2">
+                <ActionButton
+                  variant="ghost"
                   onClick={() => {
                     setDraftText(body);
                     setEditing(current.id);
                   }}
                 >
-                  <PenLine aria-hidden className="h-3 w-3" />
+                  <PenLine className="h-3.5 w-3.5" />
                   Edit
-                </button>
-                <button
-                  type="button"
-                  className="cursor-pointer px-2 py-2"
+                </ActionButton>
+                <ActionButton
+                  variant="ghost"
                   onClick={() => decideItem(clientId, current.id, "skipped")}
                 >
+                  <X className="h-3.5 w-3.5" />
                   Not this one
-                </button>
-              </>
-            ) : (
-              <button
-                type="button"
-                className="cursor-pointer"
-                onClick={() => setEditing(null)}
-              >
-                Cancel
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div
-          className="mt-4 flex justify-center gap-1.5"
-          aria-label={`${decidedCount} of ${total} done`}
-        >
-          {Array.from({ length: total }).map((_, i) => (
-            <span
-              key={i}
-              className={`h-1.5 rounded-full transition-all ${
-                i < decidedCount
-                  ? "w-1.5 bg-moss"
-                  : i === decidedCount
-                    ? "w-5 bg-clay"
-                    : "w-1.5 bg-line"
-              }`}
-            />
-          ))}
+                </ActionButton>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );
@@ -172,20 +152,26 @@ export function CardStack({ clientId }: { clientId: string }) {
   if (nextQuestion) {
     return (
       <div data-testid="card-stack">
-        <Link href={`/create/${nextQuestion.id}`} className="block">
-          <CardShell primary>
-            <span className="text-[10px] font-semibold tracking-widest text-clay-deep uppercase">
-              Your turn
-            </span>
-            <p className="mt-1 text-[15px] font-semibold">
-              {nextQuestion.prompt}
-            </p>
-            <p className="mt-1 text-xs text-ink-2">
-              {nextQuestion.questions.length} quick questions · we write it,
-              you approve · {nextQuestion.timeCost}
-            </p>
-          </CardShell>
-        </Link>
+        <CardShell primary className="text-center">
+          <span
+            aria-hidden
+            className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-clay text-onact"
+          >
+            <PenLine className="h-5 w-5" />
+          </span>
+          <p className="t-label">Your turn</p>
+          <p className="t-title mt-1.5">{nextQuestion.prompt}</p>
+          <p className="t-meta mt-2">
+            {nextQuestion.questions.length} quick questions · we write it ·{" "}
+            {nextQuestion.timeCost}
+          </p>
+          <Link href={`/create/${nextQuestion.id}`} className="mt-4 block">
+            <ActionButton size="lg">
+              Answer {nextQuestion.questions.length} questions
+              <ArrowRight className="h-4 w-4" />
+            </ActionButton>
+          </Link>
+        </CardShell>
       </div>
     );
   }
@@ -194,14 +180,24 @@ export function CardStack({ clientId }: { clientId: string }) {
     (i) => i.status === "approved" || i.status === "posted",
   ).length;
   return (
-    <div className="py-10 text-center" data-testid="all-done">
-      <p className="font-display text-2xl font-semibold">
-        That&apos;s everything.
-      </p>
-      <p className="mt-2 text-sm text-ink-2">
+    <CardShell className="py-10 text-center" data-testid="all-done">
+      <span
+        aria-hidden
+        className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-moss-mist text-moss"
+      >
+        <Check className="h-5 w-5" strokeWidth={2.5} />
+      </span>
+      <p className="t-title">That&apos;s everything.</p>
+      <p className="t-sub mx-auto mt-2 max-w-xs">
         {approved} on their way — we&apos;ll take it from here. Nothing else
         needed today.
       </p>
-    </div>
+      <Link
+        href="/workspace"
+        className="t-meta mt-4 inline-block underline underline-offset-4"
+      >
+        Something happening this week? Tell us →
+      </Link>
+    </CardShell>
   );
 }

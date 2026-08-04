@@ -61,7 +61,7 @@ describe("DialPill", () => {
   it("display-only pill shows the short label", () => {
     render(<DialPill mode="handle" />);
     expect(
-      screen.getByText(/Prepared for you · your yes sends it/),
+      screen.getByText(/Prepared for you/),
     ).toBeInTheDocument();
   });
 

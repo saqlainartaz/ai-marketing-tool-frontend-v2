@@ -1,7 +1,7 @@
 "use client";
 
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
-import { CardShell } from "@/components/ui/card-shell";
 import { Chip } from "@/components/ui/chip";
 import { ScreenFrame } from "@/components/onboarding/ScreenFrame";
 import { useOnboarding } from "@/components/onboarding/OnboardingProvider";
@@ -37,18 +37,17 @@ export function NeverScreen({
       step="never"
       eyebrow="Question 4 of 4"
       title="What should we never do?"
-      sub="Most owners know what they don't want. Tap anything that applies."
+      sub="Most owners know what they don't want long before they know what they do. Every draft is checked against this list."
       onBack={onBack}
       footer={
         <>
-          <ActionButton onClick={onNext}>Build my plan →</ActionButton>
-          <button
-            type="button"
-            onClick={onNext}
-            className="mt-2.5 w-full cursor-pointer text-center text-xs text-ink-2"
-          >
+          <ActionButton size="lg" onClick={onNext}>
+            Build my plan
+            <ArrowRight className="h-4 w-4" />
+          </ActionButton>
+          <ActionButton variant="quiet" className="mt-2" onClick={onNext}>
             Not sure? We&apos;ll use safe defaults
-          </button>
+          </ActionButton>
         </>
       }
     >
@@ -63,19 +62,23 @@ export function NeverScreen({
           </Chip>
         ))}
       </div>
-      <CardShell className="mt-4">
-        <p className="text-xs text-ink-2">{client.lockedReason}</p>
-        <div className="mt-1.5 flex flex-wrap gap-1.5">
+
+      <div className="mt-5 rounded-xl border border-honey/40 bg-honey-mist p-4">
+        <p className="flex items-center gap-2 text-[12px] font-semibold text-honey">
+          <ShieldCheck aria-hidden className="h-3.5 w-3.5 shrink-0" />
+          {client.lockedReason}
+        </p>
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
           {client.lockedNeverChips.map((chip) => (
             <Chip key={chip} locked>
               {chip}
             </Chip>
           ))}
         </div>
-        <p className="mt-2 text-xs text-ink-2">
-          These stay on to protect you.
+        <p className="mt-2.5 text-[11.5px] text-honey">
+          These stay on to protect you — they can&apos;t be switched off.
         </p>
-      </CardShell>
+      </div>
     </ScreenFrame>
   );
 }

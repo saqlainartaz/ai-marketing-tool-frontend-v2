@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRight, Check, Plus } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { ScreenFrame } from "@/components/onboarding/ScreenFrame";
 import {
@@ -49,18 +50,17 @@ export function ChannelsScreen({
       step="channels"
       eyebrow="Question 3 of 4"
       title="Where does your business show up today?"
-      sub="Tap once for using now, twice for want to try."
+      sub="Tap once for where you are. Tap again for where you'd like to be."
       onBack={onBack}
       footer={
         <>
-          <ActionButton onClick={onNext}>Next →</ActionButton>
-          <button
-            type="button"
-            onClick={onNext}
-            className="mt-2.5 w-full cursor-pointer text-center text-xs text-ink-2"
-          >
+          <ActionButton size="lg" onClick={onNext}>
+            Next
+            <ArrowRight className="h-4 w-4" />
+          </ActionButton>
+          <ActionButton variant="quiet" className="mt-2" onClick={onNext}>
             Not sure — you decide
-          </button>
+          </ActionButton>
         </>
       }
     >
@@ -74,16 +74,22 @@ export function ChannelsScreen({
               onClick={() => toggle(channel)}
               data-state={state ?? "off"}
               className={cn(
-                "cursor-pointer rounded-full border px-3.5 py-2 text-xs transition-colors",
-                !state && "border-line bg-card text-ink-2",
-                state === "now" && "border-clay bg-clay-mist font-semibold text-ink",
-                state === "want" &&
-                  "border-dashed border-clay bg-transparent font-semibold text-clay-deep",
+                "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border bg-card px-3 py-2 text-[13px] transition-colors",
+                !state && "border-line text-ink-2 hover:border-ink-3 hover:text-ink",
+                state === "now" &&
+                  "border-clay font-semibold text-ink shadow-[inset_0_0_0_1px_var(--clay)]",
+                state === "want" && "border-dashed border-clay font-medium text-ink",
               )}
             >
+              {state === "now" ? (
+                <Check aria-hidden className="h-3 w-3 text-clay" strokeWidth={3} />
+              ) : state === "want" ? (
+                <Plus aria-hidden className="h-3 w-3 text-clay" strokeWidth={3} />
+              ) : null}
               {channel}
-              {state === "now" && " · using"}
-              {state === "want" && " · want to try"}
+              {state === "want" ? (
+                <span className="t-meta">want to try</span>
+              ) : null}
             </button>
           );
         })}

@@ -25,7 +25,7 @@ const TOKENS = [
   "--onact",
 ] as const;
 
-const THEMES = ["cobalt", "clay", "forest", "night"] as const;
+const THEMES = ["paper", "cobalt", "forest", "night"] as const;
 
 const css = readFileSync(
   path.resolve(__dirname, "../../src/lib/theme/tokens.css"),
@@ -34,8 +34,8 @@ const css = readFileSync(
 
 function blockFor(theme: string): string {
   const selector =
-    theme === "cobalt"
-      ? String.raw`:root,\s*\n?:root\[data-theme="cobalt"\]`
+    theme === "paper"
+      ? String.raw`:root,\s*\n?:root\[data-theme="paper"\]`
       : String.raw`:root\[data-theme="${theme}"\]`;
   const match = css.match(new RegExp(selector + String.raw`\s*\{([^}]+)\}`));
   if (!match) throw new Error(`theme block not found: ${theme}`);
@@ -55,7 +55,7 @@ describe("theme tokens", () => {
     });
   }
 
-  it("cobalt is the default (:root) theme", () => {
-    expect(css).toMatch(/:root,\s*\n?:root\[data-theme="cobalt"\]/);
+  it("paper is the default (:root) theme", () => {
+    expect(css).toMatch(/:root,\s*\n?:root\[data-theme="paper"\]/);
   });
 });

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Inter } from "next/font/google";
+import { Bricolage_Grotesque, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -10,6 +10,12 @@ const bricolage = Bricolage_Grotesque({
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+});
+
+const jetbrains = JetBrains_Mono({
+  variable: "--font-jetbrains",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -25,12 +31,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="cobalt" suppressHydrationWarning>
+    <html lang="en" data-theme="paper" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
       <body
-        className={`${bricolage.variable} ${inter.variable} min-h-full antialiased`}
+        className={`${bricolage.variable} ${inter.variable} ${jetbrains.variable} min-h-full antialiased`}
       >
         {children}
       </body>

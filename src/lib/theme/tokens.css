@@ -1,86 +1,85 @@
 /*
- * Design tokens — the four switchable palettes.
- * Token names are the contract with the wireframes and the token test.
- * Default theme: cobalt (decision log 2026-08-03).
+ * Design tokens — "Desk": prepared work laid out on warm paper.
  *
- * Surface model (design audit 2026-08-04): --canvas is the tinted page,
- * --card is the white/raised content surface (the draft is the most
- * contrasted thing on screen), --paper is the inset surface (inputs,
- * media wells). ink-2/ink-3 meet WCAG AA at their usage sizes — enforced
- * by tests/theme/contrast.test.ts.
- * Semantic roles: clay = the one action per screen · moss = wins ·
- * honey = protection (never warnings).
+ * Surface model: --canvas is the desk (tinted), --card is the prepared
+ * object (raised, white), --paper is an inset well (inputs, media, rails).
+ * Role model: --clay = the one action per screen · --moss = wins ·
+ * --honey = protection/care. Every pair is contrast-tested per theme
+ * (tests/theme/contrast.test.ts).
+ *
+ * Default: paper (warm paper + near-black actions — the accent is spent
+ * on structure and type, not on filled blobs).
  */
 
 :root,
-:root[data-theme="cobalt"] {
-  --canvas: #f3f5f9;
-  --paper: #eef1f6;
+:root[data-theme="paper"] {
+  --canvas: #f6f3ee;
+  --paper: #edeae3;
   --card: #ffffff;
-  --ink: #101318;
-  --ink-2: #4d5560;
-  --ink-3: #6b7280;
-  --clay: #2f45e0;
-  --clay-deep: #2333ad;
-  --clay-mist: #e8ebfc;
-  --moss: #0c7a54;
-  --moss-mist: #e4f4ee;
-  --honey: #8a6110;
-  --honey-mist: #f7f1e2;
-  --line: #dde2ea;
+  --ink: #191713;
+  --ink-2: #55504a;
+  --ink-3: #6b665e;
+  --clay: #201d18;
+  --clay-deep: #000000;
+  --clay-mist: #ebe7df;
+  --moss: #2f6b46;
+  --moss-mist: #e7f0e9;
+  --honey: #8a5a12;
+  --honey-mist: #f6eddc;
+  --line: #e2ddd3;
   --onact: #ffffff;
 }
 
-:root[data-theme="clay"] {
-  --canvas: #f4eee5;
-  --paper: #efe8dc;
+:root[data-theme="cobalt"] {
+  --canvas: #f4f6f9;
+  --paper: #eaeef4;
   --card: #ffffff;
-  --ink: #201b15;
-  --ink-2: #5d544a;
-  --ink-3: #6f6557;
-  --clay: #d9532b;
-  --clay-deep: #b34322;
-  --clay-mist: #fbeae3;
-  --moss: #346944;
-  --moss-mist: #e9f2ec;
-  --honey: #8a5715;
-  --honey-mist: #faf3e6;
-  --line: #e2d9ca;
+  --ink: #12151b;
+  --ink-2: #4e5560;
+  --ink-3: #666d78;
+  --clay: #1f37c7;
+  --clay-deep: #16289a;
+  --clay-mist: #e7eafb;
+  --moss: #0b7a52;
+  --moss-mist: #e3f3ec;
+  --honey: #8a6110;
+  --honey-mist: #f7f1e2;
+  --line: #dee3ec;
   --onact: #ffffff;
 }
 
 :root[data-theme="forest"] {
-  --canvas: #edf1eb;
-  --paper: #e7ede5;
+  --canvas: #f1f4ef;
+  --paper: #e8ede5;
   --card: #ffffff;
-  --ink: #17251c;
-  --ink-2: #4e5c52;
-  --ink-3: #5f6d62;
-  --clay: #1e6b47;
-  --clay-deep: #164f35;
-  --clay-mist: #e3f0e8;
-  --moss: #8a6110;
-  --moss-mist: #f6efdb;
-  --honey: #8a5715;
-  --honey-mist: #faf3e6;
-  --line: #d6ded3;
+  --ink: #14201a;
+  --ink-2: #4b574e;
+  --ink-3: #616d63;
+  --clay: #1c5c3d;
+  --clay-deep: #133f2a;
+  --clay-mist: #e3eee7;
+  --moss: #8a5a12;
+  --moss-mist: #f6eddc;
+  --honey: #2c5170;
+  --honey-mist: #e6eef5;
+  --line: #d8e0d5;
   --onact: #ffffff;
 }
 
 :root[data-theme="night"] {
-  --canvas: #101216;
-  --paper: #171a20;
-  --card: #1d2026;
-  --ink: #f2f1ee;
-  --ink-2: #b3b6bd;
-  --ink-3: #a0a4ad;
-  --clay: #d6f245;
-  --clay-deep: #9db123;
-  --clay-mist: #2b3020;
-  --moss: #7fd6a8;
-  --moss-mist: #22302a;
-  --honey: #e0b05c;
-  --honey-mist: #2f2718;
-  --line: #343945;
-  --onact: #15171d;
+  --canvas: #0e1013;
+  --paper: #15181d;
+  --card: #1a1e24;
+  --ink: #f4f3f0;
+  --ink-2: #b6bac1;
+  --ink-3: #9ba0a8;
+  --clay: #d8f34a;
+  --clay-deep: #a8bf2f;
+  --clay-mist: #23281a;
+  --moss: #74d3a4;
+  --moss-mist: #16241d;
+  --honey: #e2b463;
+  --honey-mist: #2a2318;
+  --line: #2b313a;
+  --onact: #14171b;
 }

@@ -6,7 +6,7 @@ import { test, expect } from "@playwright/test";
  * the first card. Runs once per theme — a token missing in any palette
  * shows up here as an invisible control.
  */
-const THEMES = ["cobalt", "clay", "forest", "night"] as const;
+const THEMES = ["paper", "cobalt", "forest", "night"] as const;
 
 for (const theme of THEMES) {
   test(`Dave's journey in ${theme}`, async ({ page }) => {
@@ -74,11 +74,11 @@ for (const theme of THEMES) {
     // Today — approve card 1
     await expect(page).toHaveURL(/\/today/);
     await expect(
-      page.getByRole("heading", { name: /\d+ ready/i }),
+      page.getByRole("heading", { name: /things to look at|thing to look at|all clear/i }),
     ).toBeVisible();
     await expect(page.getByText(/412 neighbors/).first()).toBeVisible();
     await page.getByRole("button", { name: /good to go/i }).click();
-    await expect(page.getByTestId("stamp")).toHaveText(/ON ITS WAY/);
+    await expect(page.getByTestId("stamp")).toHaveText(/on its way/i);
   });
 }
 
@@ -88,7 +88,7 @@ test("desktop is a real app: sidebar, two-column Today, context rail", async ({
   await page.setViewportSize({ width: 1366, height: 850 });
   await page.goto("/login");
   // Desktop login shows the brand panel.
-  await expect(page.getByText(/Every claim in every draft/)).toBeVisible();
+  await expect(page.getByText(/Every claim traces back to your own words/)).toBeVisible();
   await page.getByRole("link", { name: /amara · osei family law/i }).click();
   await page.goto("/today");
   // Sidebar with full nav, no bottom tab bar duplication in view.
@@ -141,7 +141,7 @@ test("the complete product loop: create → library → handoff → plan → set
   await page.getByRole("button", { name: /good to go/i }).click();
 
   // The MAKE card appears → guided create.
-  await page.getByRole("link", { name: /tell the story/i }).click();
+  await page.getByRole("link", { name: /answer \d+ questions/i }).click();
   await page.getByRole("button", { name: /full replacement/i }).click();
   await page.getByRole("button", { name: /next/i }).click();
   await page.getByRole("button", { name: /explained everything/i }).click();

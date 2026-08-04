@@ -24,7 +24,7 @@ describe("ConfirmScreen (S1)", () => {
   it("shows endowed-progress checks and the client's profile", () => {
     wrap(<ConfirmScreen onNext={() => {}} />);
     expect(screen.getByText(/Read your ISTV episode/)).toBeInTheDocument();
-    expect(screen.getByText(/Meridian Roofing/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Meridian Roofing/).length).toBeGreaterThan(0);
     expect(
       screen.getByRole("button", { name: /that's me/i }),
     ).toBeInTheDocument();
