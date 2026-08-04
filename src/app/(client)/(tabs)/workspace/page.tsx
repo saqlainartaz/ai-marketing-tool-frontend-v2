@@ -14,9 +14,9 @@ import {
 } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { CardShell } from "@/components/ui/card-shell";
-import { Chip } from "@/components/ui/chip";
 import { SectionLabel } from "@/components/ui/section-label";
 import { AssemblyMoment } from "@/components/motion/AssemblyMoment";
+import { VoiceCard } from "@/components/voice/VoiceCard";
 import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import { addItem } from "@/lib/store/content";
@@ -130,30 +130,13 @@ export default function WorkspacePage() {
 
         <div className="mt-8 lg:mt-0">
           <SectionLabel>How you sound</SectionLabel>
-          <CardShell className="mt-3">
-            <p className="text-[13px] leading-relaxed text-ink-2">
-              {client.voice.summary}
-            </p>
-            <p className="t-label mt-4 mb-2">Sounds like you</p>
-            <div className="flex flex-wrap gap-1.5">
-              {client.voice.sounds.map((s) => (
-                <Chip key={s} selected>
-                  “{s}”
-                </Chip>
-              ))}
-            </div>
-            <p className="t-label mt-4 mb-2">We never use</p>
-            <div className="flex flex-wrap gap-1.5">
-              {client.voice.avoids.map((s) => (
-                <Chip key={s} locked>
-                  {s}
-                </Chip>
-              ))}
-            </div>
-            <p className="t-meta mt-4">
-              Something here wrong? Tell us — we&apos;ll fix it.
-            </p>
-          </CardShell>
+          <p className="t-sub mt-2">
+            From your episode and your calls. Every draft is checked
+            against this.
+          </p>
+          <div className="mt-3">
+            <VoiceCard client={client} />
+          </div>
         </div>
       </div>
       <div className="mt-10 border-t border-line pt-8">
