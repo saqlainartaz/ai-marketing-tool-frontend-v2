@@ -108,7 +108,7 @@ export default function CreatePage({
               isLast ? setPhase("generating") : setPhase({ step: phase.step + 1 })
             }
           >
-            {isLast ? "Write it for me" : "Next"}
+            {isLast ? "Write it for me" : "Continue"}
             <ArrowRight className="h-4 w-4" />
           </ActionButton>
           <ActionButton
@@ -197,7 +197,7 @@ export default function CreatePage({
             onClick={approve}
             consequence={produced.consequence}
           >
-            Good to go
+            Approve post
             <Check className="h-4 w-4" strokeWidth={2.5} />
           </ActionButton>
           <div className="mt-2 grid grid-cols-2 gap-2 lg:grid-cols-1">
@@ -208,7 +208,7 @@ export default function CreatePage({
               variant="ghost"
               onClick={() => router.push("/today")}
             >
-              Toss it
+              Discard draft
             </ActionButton>
           </div>
         </div>

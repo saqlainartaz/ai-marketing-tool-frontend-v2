@@ -35,7 +35,7 @@ export function GoalScreen({
       onBack={onBack}
       footer={
         <ActionButton size="lg" onClick={onNext} disabled={!answers.goal}>
-          Next
+          Continue
           <ArrowRight className="h-4 w-4" />
         </ActionButton>
       }

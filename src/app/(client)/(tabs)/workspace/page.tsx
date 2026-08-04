@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -10,6 +10,7 @@ import {
   MapPin,
   PenLine,
   Star,
+  TriangleAlert,
   type LucideIcon,
 } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
@@ -51,9 +52,20 @@ export default function WorkspacePage() {
   const client = getFixtureClient(clientId);
   const [input, setInput] = useState("");
   const [phase, setPhase] = useState<"idle" | "working" | "done">("idle");
+  const [error, setError] = useState<string | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  /* Validate on submit, not on keystroke, and never pre-disable the
+   * button: a greyed-out control states no reason, so the user is left
+   * guessing what it wants (NN/g). An enabled button that explains the
+   * problem in place is the cheaper interaction. */
   function submit() {
-    if (!input.trim()) return;
+    if (input.trim().length < 3) {
+      setError("Tell us what happened, in a few words");
+      inputRef.current?.focus();
+      return;
+    }
+    setError(null);
     setPhase("working");
   }
 
@@ -84,20 +96,38 @@ export default function WorkspacePage() {
                 <label htmlFor="ws-input" className="text-[13.5px] font-semibold">
                   What&apos;s happening at the business this week?
                 </label>
-                <p className="t-meta mt-0.5">
-                  One sentence is enough. It comes back as a card.
+                {/* The example lives in the hint, not the placeholder — a
+                 * placeholder disappears the moment you type, isn't
+                 * reliably announced, and rarely passes contrast. */}
+                <p id="ws-hint" className="t-meta mt-0.5">
+                  One sentence is enough — for example, we&apos;re running a
+                  spring gutter discount
                 </p>
+                {error ? (
+                  <p
+                    id="ws-error"
+                    role="alert"
+                    className="mt-2 flex items-center gap-1.5 text-[12.5px] font-medium text-honey"
+                  >
+                    <TriangleAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />
+                    {error}
+                  </p>
+                ) : null}
                 <textarea
                   id="ws-input"
+                  ref={inputRef}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   rows={3}
-                  placeholder={`e.g. "We're running a spring gutter discount"`}
-                  className="mt-3 w-full resize-none rounded-lg border border-line bg-paper p-3 text-[13.5px] outline-none focus:border-clay"
+                  aria-describedby={error ? "ws-hint ws-error" : "ws-hint"}
+                  aria-invalid={error ? true : undefined}
+                  className={`mt-3 w-full resize-none rounded-lg border bg-paper p-3 text-[13.5px] outline-none focus:border-clay ${
+                    error ? "border-honey" : "border-line"
+                  }`}
                 />
                 <div className="mt-3">
-                  <ActionButton onClick={submit} disabled={!input.trim()}>
-                    Turn it into a post
+                  <ActionButton onClick={submit}>
+                    Write my post
                     <ArrowRight className="h-4 w-4" />
                   </ActionButton>
                 </div>
@@ -115,13 +145,16 @@ export default function WorkspacePage() {
             ) : (
               <div className="py-3 text-center" data-testid="ws-done">
                 <p className="text-[13.5px] font-semibold">
-                  Done — a new card is waiting on Today.
+                  Your post is drafted.
+                </p>
+                <p className="t-meta mt-1">
+                  It&apos;s waiting on Today. Nothing goes out until you say so.
                 </p>
                 <Link
                   href="/today"
-                  className="t-meta mt-1.5 inline-flex items-center gap-1 underline underline-offset-4"
+                  className="t-meta mt-2 inline-flex items-center gap-1 py-1 underline underline-offset-4"
                 >
-                  Review it now
+                  Review post
                   <ArrowRight aria-hidden className="h-3 w-3" />
                 </Link>
               </div>

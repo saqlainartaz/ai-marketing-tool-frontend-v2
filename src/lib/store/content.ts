@@ -83,6 +83,22 @@ export function decideItem(
   emit();
 }
 
+/**
+ * Every decision on this screen is reversible, so we act and offer undo
+ * rather than interrupting with "are you sure?" (NN/g). Nothing here can
+ * publish, so there is no irreversible action to guard.
+ */
+export function undecideItem(clientId: string, id: string) {
+  const items = ensureClient(clientId);
+  state = {
+    ...state,
+    [clientId]: items.map((i) =>
+      i.id === id ? { ...i, status: "ready" as const } : i,
+    ),
+  };
+  emit();
+}
+
 export function markPosted(clientId: string, id: string) {
   const items = ensureClient(clientId);
   state = {
@@ -90,6 +106,20 @@ export function markPosted(clientId: string, id: string) {
     [clientId]: items.map((i) =>
       i.id === id && i.status === "approved"
         ? { ...i, status: "posted" as const, postedAt: new Date().toLocaleDateString() }
+        : i,
+    ),
+  };
+  emit();
+}
+
+/** Marking as posted is a record the client keeps, so they can correct it. */
+export function unmarkPosted(clientId: string, id: string) {
+  const items = ensureClient(clientId);
+  state = {
+    ...state,
+    [clientId]: items.map((i) =>
+      i.id === id && i.status === "posted"
+        ? { ...i, status: "approved" as const, postedAt: undefined }
         : i,
     ),
   };

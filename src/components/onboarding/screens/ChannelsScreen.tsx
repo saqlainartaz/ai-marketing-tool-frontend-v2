@@ -55,7 +55,7 @@ export function ChannelsScreen({
       footer={
         <>
           <ActionButton size="lg" onClick={onNext}>
-            Next
+            Continue
             <ArrowRight className="h-4 w-4" />
           </ActionButton>
           <ActionButton variant="quiet" className="mt-2" onClick={onNext}>

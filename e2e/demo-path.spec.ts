@@ -32,7 +32,7 @@ for (const theme of THEMES) {
     await expect(
       page.getByRole("heading", { name: /what do you want more of/i }),
     ).toBeVisible();
-    const next = page.getByRole("button", { name: /next/i });
+    const next = page.getByRole("button", { name: /continue/i });
     await expect(next).toBeDisabled();
     await page
       .getByRole("button", { name: /more calls & booked jobs/i })
@@ -51,7 +51,7 @@ for (const theme of THEMES) {
       page.getByRole("heading", { name: /where does your business show up/i }),
     ).toBeVisible();
     await page.getByRole("button", { name: /^Facebook$/ }).click();
-    await page.getByRole("button", { name: /next/i }).click();
+    await page.getByRole("button", { name: /continue/i }).click();
 
     // S5 — never-do (locked chips visible)
     await expect(
@@ -79,7 +79,7 @@ for (const theme of THEMES) {
       page.getByRole("heading", { name: /things to look at|thing to look at|all clear/i }),
     ).toBeVisible();
     await expect(page.getByText(/neighbours reached/).first()).toBeVisible();
-    await page.getByRole("button", { name: /good to go/i }).click();
+    await page.getByRole("button", { name: /approve (post|reply|email)/i }).click();
     await expect(page.getByTestId("stamp")).toHaveText(/on its way/i);
   });
 }
@@ -134,18 +134,18 @@ test("the complete product loop: create → library → handoff → plan → set
 
   // Clear the prepared items: two posts, skip one, then the review reply —
   // a different marketing tool arriving through the same card system.
-  await page.getByRole("button", { name: /good to go/i }).click();
+  await page.getByRole("button", { name: /approve (post|reply|email)/i }).click();
   await expect(page.getByText(/Lakeway Ave/)).toBeVisible({ timeout: 5000 });
-  await page.getByRole("button", { name: /good to go/i }).click();
+  await page.getByRole("button", { name: /approve (post|reply|email)/i }).click();
   await expect(page.getByText(/#1 question/)).toBeVisible({ timeout: 5000 });
-  await page.getByRole("button", { name: /not this one/i }).click();
+  await page.getByRole("button", { name: /^skip (post|reply|email)$/i }).click();
   await expect(page.getByText(/Karen L\./)).toBeVisible({ timeout: 5000 });
-  await page.getByRole("button", { name: /good to go/i }).click();
+  await page.getByRole("button", { name: /approve (post|reply|email)/i }).click();
 
   // The MAKE card appears → guided create.
   await page.getByRole("link", { name: /answer \d+ questions/i }).click();
   await page.getByRole("button", { name: /full replacement/i }).click();
-  await page.getByRole("button", { name: /next/i }).click();
+  await page.getByRole("button", { name: /continue/i }).click();
   await page.getByRole("button", { name: /explained everything/i }).click();
   await page.getByRole("button", { name: /write it for me/i }).click();
   // C2 shows its work, then C3 review.
@@ -153,7 +153,7 @@ test("the complete product loop: create → library → handoff → plan → set
   await expect(page.getByText(/no surprises up there/i)).toBeVisible({
     timeout: 15_000,
   });
-  await page.getByRole("button", { name: /good to go/i }).click();
+  await page.getByRole("button", { name: /approve (post|reply|email)/i }).click();
   await expect(page).toHaveURL(/\/today/);
 
   // Library: three approved items; handoff marks one as posted.
@@ -165,7 +165,9 @@ test("the complete product loop: create → library → handoff → plan → set
   await page.getByText(/Hail season/).click();
   await expect(page.getByTestId("handoff-sheet")).toBeVisible();
   await page.getByRole("button", { name: /mark as posted/i }).click();
-  await expect(page.getByText(/Marked as posted/)).toBeVisible();
+  await expect(page.getByTestId("status-toast")).toContainText(
+    /Marked as posted/,
+  );
 
   // Plan answers "why".
   await page.getByRole("link", { name: /^plan/i }).click();
@@ -182,9 +184,9 @@ test("the complete product loop: create → library → handoff → plan → set
   await page
     .getByLabel(/what's happening at the business/i)
     .fill("We're running a spring gutter discount");
-  await page.getByRole("button", { name: /turn it into a post/i }).click();
+  await page.getByRole("button", { name: /write my post/i }).click();
   await expect(page.getByTestId("ws-done")).toBeVisible({ timeout: 15_000 });
-  await page.getByRole("link", { name: /review it now/i }).click();
+  await page.getByRole("link", { name: /review post/i }).click();
   // The dial was switched to "show me ideas" a moment ago, so Today now
   // leads with ideas — the new note is waiting in the prepared list.
   await expect(page.getByTestId("idea-card")).toBeVisible();

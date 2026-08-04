@@ -32,7 +32,7 @@ export function ObstacleScreen({
       footer={
         <>
           <ActionButton size="lg" onClick={onNext} disabled={!answers.obstacle}>
-            Next
+            Continue
             <ArrowRight className="h-4 w-4" />
           </ActionButton>
           <ActionButton

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -41,6 +42,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const client = getFixtureClient(clientId);
   const workMode = useWorkMode(clientId);
   const items = useContentItems(clientId);
+  const main = useRef<HTMLElement>(null);
+  const firstRender = useRef(true);
+
+  /* A client-side route change replaces the page without telling a screen
+   * reader anything happened, and leaves keyboard focus wherever the old
+   * link was. Moving focus to the new main region restores both, which is
+   * the behaviour users get for free on a server-rendered site. */
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    main.current?.focus();
+  }, [pathname]);
+
   const pendingQuestions = client.questionCards.filter(
     (qc) => !items.some((i) => i.id === `${qc.id}-out`),
   ).length;
@@ -82,6 +98,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-dvh">
+      {/* First stop for a keyboard user: jump past the rail to the work. */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2.5 focus:text-[13px] focus:font-semibold focus:text-paper"
+      >
+        Skip to main content
+      </a>
       <aside
         data-testid="sidebar"
         className="sticky top-0 hidden h-dvh w-[248px] shrink-0 flex-col border-r border-line bg-canvas px-3 py-5 lg:flex"
@@ -104,15 +127,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </span>
         </Link>
 
-        <div className="mt-6 space-y-0.5">
+        <nav aria-label="Main" className="mt-6 space-y-0.5">
           {navLink(NAV[0], todayCount)}
           {navLink(NAV[1])}
           {navLink(NAV[2])}
-        </div>
+        </nav>
 
-        <div className="mt-6 space-y-0.5 border-t border-line pt-4">
+        <nav
+          aria-label="Account"
+          className="mt-6 space-y-0.5 border-t border-line pt-4"
+        >
           {NAV_QUIET.map((item) => navLink(item))}
-        </div>
+        </nav>
 
         <div className="mt-auto space-y-3 px-1">
           <div>
@@ -127,7 +153,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 pt-6 pb-4 lg:max-w-[980px] lg:px-12 lg:pt-10">
+        <main
+          id="main"
+          ref={main}
+          tabIndex={-1}
+          className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 pt-6 pb-4 outline-none lg:max-w-[980px] lg:px-12 lg:pt-10"
+        >
           {children}
         </main>
         <div className="lg:hidden">

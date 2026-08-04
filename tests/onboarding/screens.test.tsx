@@ -32,10 +32,10 @@ describe("ConfirmScreen (S1)", () => {
 });
 
 describe("GoalScreen (S2)", () => {
-  it("Next stays disabled until a goal is chosen", async () => {
+  it("Continue stays disabled until a goal is chosen", async () => {
     const onNext = vi.fn();
     wrap(<GoalScreen onNext={onNext} onBack={() => {}} />);
-    const next = screen.getByRole("button", { name: /next/i });
+    const next = screen.getByRole("button", { name: /continue/i });
     expect(next).toBeDisabled();
     await userEvent.click(
       screen.getByRole("button", { name: /More calls & booked jobs/i }),

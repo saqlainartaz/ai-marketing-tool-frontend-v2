@@ -169,9 +169,9 @@ export default function TodayPage() {
             </div>
             <Link
               href="/plan"
-              className="t-meta mt-2.5 inline-flex items-center gap-1 underline underline-offset-4"
+              className="t-meta mt-1.5 inline-flex min-h-6 items-center gap-1 py-1 underline underline-offset-4"
             >
-              The whole plan
+              See the whole plan
               <ArrowRight aria-hidden className="h-3 w-3" />
             </Link>
           </div>

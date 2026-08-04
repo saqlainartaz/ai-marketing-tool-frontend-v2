@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   CalendarDays,
   CalendarRange,
@@ -19,12 +20,14 @@ import { getFixtureClient } from "@/lib/fixtures/clients";
 import {
   useContentItems,
   markPosted,
+  unmarkPosted,
   publishedWithoutApprovalCount,
   type ContentItem,
   type ContentStatus,
 } from "@/lib/store/content";
 import { PLATFORM_NAME } from "@/components/preview/post-preview";
 import { PlatformMark } from "@/components/preview/platform-mark";
+import { useStatus } from "@/components/system/StatusProvider";
 import { WeekCalendar } from "@/components/library/WeekCalendar";
 import { MonthCalendar } from "@/components/library/MonthCalendar";
 import { Chip } from "@/components/ui/chip";
@@ -69,7 +72,7 @@ export default function LibraryPage() {
   const items = useContentItems(clientId);
   const [view, setView] = useState<"week" | "month" | "list">("week");
   const [openId, setOpenId] = useState<string | null>(null);
-  const [note, setNote] = useState<string | null>(null);
+  const { announce } = useStatus();
 
   const weekItems = items.filter(
     (i) => i.scheduledFor && i.status !== "skipped",
@@ -78,9 +81,9 @@ export default function LibraryPage() {
   async function copyText(item: ContentItem) {
     try {
       await navigator.clipboard.writeText(item.editedBody ?? item.body);
-      setNote("Copied — paste it anywhere");
+      announce("Copied");
     } catch {
-      setNote("Couldn't reach your clipboard — select the text instead");
+      announce("Couldn't copy — select the text instead", { tone: "problem" });
     }
   }
 
@@ -94,7 +97,7 @@ export default function LibraryPage() {
     a.download = `${client.businessName.replaceAll(" ", "-")}-${item.id}.txt`;
     a.click();
     URL.revokeObjectURL(url);
-    setNote("Downloaded as text");
+    announce("Downloaded");
   }
 
   async function shareLink(item: ContentItem) {
@@ -102,9 +105,9 @@ export default function LibraryPage() {
       await navigator.clipboard.writeText(
         `${window.location.origin}/review/${item.id} (no login needed)`,
       );
-      setNote("Review link copied — anyone can read it, nobody can publish it");
+      announce("Review link copied");
     } catch {
-      setNote("Couldn't reach your clipboard");
+      announce("Couldn't copy the link — try again", { tone: "problem" });
     }
   }
 
@@ -133,7 +136,9 @@ export default function LibraryPage() {
             <Chip
               onToggle={() => {
                 markPosted(clientId, item.id);
-                setNote("Marked as posted — it's in the record");
+                announce("Marked as posted", {
+                  undo: () => unmarkPosted(clientId, item.id),
+                });
               }}
             >
               <CheckCheck aria-hidden className="h-3 w-3" />
@@ -234,13 +239,6 @@ export default function LibraryPage() {
         ))}
       </div>
 
-      {note ? (
-        <p className="mt-3 flex items-center gap-2 rounded-lg bg-moss-mist px-3 py-2 text-[12px] text-moss">
-          <CheckCheck aria-hidden className="h-3.5 w-3.5 shrink-0" />
-          {note}
-        </p>
-      ) : null}
-
       {view === "week" ? (
         <div className="mt-5">
           <WeekCalendar
@@ -253,11 +251,35 @@ export default function LibraryPage() {
             <SectionLabel right={`${weekItems.length}`}>
               Prepared for this week
             </SectionLabel>
-            <ul className="surface mt-3 overflow-hidden rounded-xl">
-              {weekItems.map((item, i) => (
-                <Row key={item.id} item={item} last={i === weekItems.length - 1} />
-              ))}
-            </ul>
+            {weekItems.length > 0 ? (
+              <ul className="surface mt-3 overflow-hidden rounded-xl">
+                {weekItems.map((item, i) => (
+                  <Row
+                    key={item.id}
+                    item={item}
+                    last={i === weekItems.length - 1}
+                  />
+                ))}
+              </ul>
+            ) : (
+              /* A quiet week is not the same as an empty account, so it
+                 says which one this is and points at the one action that
+                 changes it. */
+              <div className="surface mt-3 rounded-xl px-4 py-8 text-center">
+                <p className="text-[13.5px] font-semibold">
+                  Nothing scheduled this week.
+                </p>
+                <p className="t-sub mx-auto mt-1 max-w-xs">
+                  Approve a draft on Today and it takes a slot here.
+                </p>
+                <Link
+                  href="/today"
+                  className="t-meta mt-3 inline-block py-1 underline underline-offset-4"
+                >
+                  Go to Today
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       ) : view === "month" ? (
@@ -303,11 +325,19 @@ export default function LibraryPage() {
           })}
           {items.length === 0 ? (
             <div className="surface rounded-xl py-10 text-center">
-              <p className="text-[13.5px] font-semibold">Nothing here yet</p>
-              <p className="t-sub mx-auto mt-1 max-w-xs">
-                Approve something on Today and it lands here — with its sources
-                and its history.
+              <p className="text-[13.5px] font-semibold">
+                Nothing in the record yet.
               </p>
+              <p className="t-sub mx-auto mt-1 max-w-xs">
+                Approve a draft and it lands here, with its sources and its
+                history.
+              </p>
+              <Link
+                href="/today"
+                className="t-meta mt-3 inline-block py-1 underline underline-offset-4"
+              >
+                Go to Today
+              </Link>
             </div>
           ) : null}
         </div>

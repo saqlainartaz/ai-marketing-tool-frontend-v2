@@ -11,9 +11,26 @@ import { ContentPreview } from "@/components/preview/ContentPreview";
 import { SourcedBody } from "@/components/preview/SourcedBody";
 import { GuardrailLine } from "@/components/preview/GuardrailLine";
 import { getFixtureClient } from "@/lib/fixtures/clients";
-import { useContentItems, decideItem, editItemBody } from "@/lib/store/content";
+import {
+  useContentItems,
+  decideItem,
+  undecideItem,
+  editItemBody,
+} from "@/lib/store/content";
 import { useWorkMode } from "@/lib/store/settings";
 import { IdeaCard } from "@/components/cards/IdeaCard";
+import { useStatus } from "@/components/system/StatusProvider";
+
+/**
+ * Action labels name the object they act on, so the button answers
+ * "approve what?" without reading the card again (Stripe's call-and-
+ * response rule; Carbon's verb + noun formula).
+ */
+function objectNoun(kind: string | undefined): string {
+  if (kind === "review_reply") return "reply";
+  if (kind === "email") return "email";
+  return "post";
+}
 
 /**
  * The decision surface: one prepared object at a time, its consequence
@@ -29,6 +46,7 @@ export function CardStack({ clientId }: { clientId: string }) {
   const [draftText, setDraftText] = useState("");
   const [justChecked, setJustChecked] = useState<string | null>(null);
   const root = useRef<HTMLDivElement>(null);
+  const { announce } = useStatus();
 
   const ready = items.filter((i) => i.status === "ready");
   const current = ready[0];
@@ -63,7 +81,13 @@ export function CardStack({ clientId }: { clientId: string }) {
     setTimeout(() => {
       setStamped(null);
       decideItem(clientId, id, "approved");
+      announce("Approved", { undo: () => undecideItem(clientId, id) });
     }, 700);
+  }
+
+  function skip(id: string) {
+    decideItem(clientId, id, "skipped");
+    announce("Skipped", { undo: () => undecideItem(clientId, id) });
   }
 
   /* The dial decides what leads. "Show me ideas" means exactly that:
@@ -90,9 +114,9 @@ export function CardStack({ clientId }: { clientId: string }) {
                   <button
                     type="button"
                     onClick={() => approve(item.id)}
-                    className="t-meta ml-auto shrink-0 cursor-pointer underline underline-offset-4"
+                    className="t-meta ml-auto shrink-0 cursor-pointer py-1 underline underline-offset-4"
                   >
-                    Approve
+                    Approve {objectNoun(item.kind)}
                   </button>
                 </div>
               ))}
@@ -170,7 +194,7 @@ export function CardStack({ clientId }: { clientId: string }) {
                 }}
                 consequence="your words, checked again"
               >
-                Save
+                Save changes
               </ActionButton>
               <ActionButton variant="ghost" onClick={() => setEditing(null)}>
                 Cancel
@@ -184,7 +208,7 @@ export function CardStack({ clientId }: { clientId: string }) {
                 consequence={current.consequence}
                 disabled={stamped !== null}
               >
-                Good to go
+                Approve {objectNoun(current.kind)}
                 <Check className="h-4 w-4" strokeWidth={2.5} />
               </ActionButton>
               <div className="grid grid-cols-2 gap-2">
@@ -196,14 +220,14 @@ export function CardStack({ clientId }: { clientId: string }) {
                   }}
                 >
                   <PenLine className="h-3.5 w-3.5" />
-                  Edit
+                  Edit {objectNoun(current.kind)}
                 </ActionButton>
                 <ActionButton
                   variant="ghost"
-                  onClick={() => decideItem(clientId, current.id, "skipped")}
+                  onClick={() => skip(current.id)}
                 >
                   <X className="h-3.5 w-3.5" />
-                  Not this one
+                  Skip {objectNoun(current.kind)}
                 </ActionButton>
               </div>
             </>

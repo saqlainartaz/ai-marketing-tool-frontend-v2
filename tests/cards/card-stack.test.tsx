@@ -28,7 +28,7 @@ describe("CardStack (store-driven)", () => {
   it("approve stamps, then advances to the next draft", async () => {
     const user = userEvent.setup();
     renderStack();
-    await user.click(screen.getByRole("button", { name: /good to go/i }));
+    await user.click(screen.getByRole("button", { name: /approve post/i }));
     expect(screen.getByTestId("stamp")).toHaveTextContent(/on its way/i);
     expect(
       await screen.findByText(/Lakeway Ave/, {}, { timeout: 2000 }),
@@ -38,11 +38,11 @@ describe("CardStack (store-driven)", () => {
   it("edit-in-preview saves the client's words and confirms the re-check", async () => {
     const user = userEvent.setup();
     renderStack();
-    await user.click(screen.getByRole("button", { name: /edit/i }));
+    await user.click(screen.getByRole("button", { name: /^edit post$/i }));
     const box = screen.getByLabelText(/edit post text/i);
     await user.clear(box);
     await user.type(box, "My own words about hail season.");
-    await user.click(screen.getByRole("button", { name: /save/i }));
+    await user.click(screen.getByRole("button", { name: /save changes/i }));
     expect(
       screen.getByText(/Still safe after your edit/),
     ).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe("CardStack (store-driven)", () => {
     const user = userEvent.setup();
     renderStack();
     // Skip to Dave's second draft, which carries the softened claim.
-    await user.click(screen.getByRole("button", { name: /not this one/i }));
+    await user.click(screen.getByRole("button", { name: /^skip (post|reply|email)$/i }));
     await user.click(
       await screen.findByRole("button", { name: /one claim softened/i }),
     );
@@ -82,7 +82,7 @@ describe("CardStack (store-driven)", () => {
     renderStack();
     for (let i = 0; i < 3; i++) {
       await user.click(
-        await screen.findByRole("button", { name: /not this one/i }),
+        await screen.findByRole("button", { name: /^skip (post|reply|email)$/i }),
       );
     }
     expect(screen.getByText(/Karen L\./)).toBeInTheDocument();
@@ -97,7 +97,7 @@ describe("CardStack (store-driven)", () => {
     renderStack();
     for (let i = 0; i < 4; i++) {
       await user.click(
-        await screen.findByRole("button", { name: /not this one/i }),
+        await screen.findByRole("button", { name: /^skip (post|reply|email)$/i }),
       );
     }
     expect(

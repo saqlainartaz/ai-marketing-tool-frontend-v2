@@ -93,7 +93,7 @@ export function WeekCalendar({
               {placed[i].map((item) => (
                 <span
                   key={item.id}
-                  title={item.pillar}
+                  aria-hidden
                   className={cn(
                     "h-1.5 w-1.5 rounded-full",
                     item.status === "posted" || item.status === "approved"
@@ -102,6 +102,19 @@ export function WeekCalendar({
                   )}
                 />
               ))}
+            </span>
+            {/* The dots differ only by colour, which carries no meaning to
+                anyone who can't compare them. The same fact, in words. */}
+            <span className="sr-only">
+              {day}: {placed[i].length === 0 ? "nothing prepared" : null}
+              {placed[i].length > 0
+                ? `${placed[i].length} prepared, ${
+                    placed[i].filter(
+                      (it) =>
+                        it.status === "posted" || it.status === "approved",
+                    ).length
+                  } approved`
+                : null}
             </span>
           </div>
         ))}

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getClientId } from "@/lib/auth/session";
 import { ClientSessionProvider } from "@/components/auth/ClientSession";
+import { StatusProvider } from "@/components/system/StatusProvider";
 
 /**
  * The client-app gate: every route in this group requires a verified
@@ -16,7 +17,7 @@ export default async function ClientLayout({
   if (!clientId) redirect("/login");
   return (
     <ClientSessionProvider clientId={clientId}>
-      {children}
+      <StatusProvider>{children}</StatusProvider>
     </ClientSessionProvider>
   );
 }

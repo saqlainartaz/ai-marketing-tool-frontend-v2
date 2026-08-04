@@ -123,9 +123,13 @@ export function MonthCalendar({
                     key={item.id}
                     type="button"
                     onClick={() => onSelect(item.id)}
+                    /* A tooltip is a description, not a name, and never
+                     * appears on touch — so the name is spelled out and the
+                     * target meets the 24px minimum. */
+                    aria-label={`${item.pillar ?? "Draft"} — ${day.getDate()}`}
                     title={item.pillar ?? item.body.slice(0, 60)}
                     className={cn(
-                      "flex h-5 w-5 cursor-pointer items-center justify-center rounded border transition-colors hover:border-ink-3",
+                      "flex h-6 w-6 cursor-pointer items-center justify-center rounded border transition-colors hover:border-ink-3",
                       item.status === "posted" || item.status === "approved"
                         ? "border-moss/40 bg-moss-mist"
                         : "border-dashed border-line bg-card",
