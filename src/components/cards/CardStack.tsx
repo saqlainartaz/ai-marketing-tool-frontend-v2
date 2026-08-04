@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import { ArrowRight, Check, PenLine, ShieldCheck, X } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { CardShell } from "@/components/ui/card-shell";
@@ -23,11 +25,34 @@ export function CardStack({ clientId }: { clientId: string }) {
   const [editing, setEditing] = useState<string | null>(null);
   const [draftText, setDraftText] = useState("");
   const [justChecked, setJustChecked] = useState<string | null>(null);
+  const root = useRef<HTMLDivElement>(null);
 
   const ready = items.filter((i) => i.status === "ready");
   const current = ready[0];
   const pendingQuestions = client.questionCards.filter(
     (qc) => !items.some((i) => i.id === `${qc.id}-out`),
+  );
+
+  /* Each decision hands over to the next: the incoming object rises into
+   * place, its actions follow. Motion confirms the handover — it is the
+   * only animation on this screen. */
+  useGSAP(
+    () => {
+      gsap.from("[data-card-object]", {
+        opacity: 0,
+        y: 16,
+        duration: 0.38,
+        ease: "power3.out",
+      });
+      gsap.from("[data-card-actions]", {
+        opacity: 0,
+        y: 8,
+        duration: 0.3,
+        delay: 0.08,
+        ease: "power2.out",
+      });
+    },
+    { scope: root, dependencies: [current?.id ?? "none"] },
   );
 
   function approve(id: string) {
@@ -43,8 +68,8 @@ export function CardStack({ clientId }: { clientId: string }) {
     const isEditing = editing === current.id;
 
     return (
-      <div data-testid="card-stack">
-        <div className="relative">
+      <div data-testid="card-stack" ref={root}>
+        <div className="relative" data-card-object>
           <ContentPreview
             kind={current.kind}
             platform={current.platform}
@@ -75,7 +100,7 @@ export function CardStack({ clientId }: { clientId: string }) {
               data-testid="stamp"
               className="pointer-events-none absolute inset-0 flex items-center justify-center"
             >
-              <span className="flex items-center gap-2 rounded-full border border-moss bg-card px-4 py-2 font-display text-sm font-semibold text-moss shadow-lg">
+              <span className="animate-in fade-in zoom-in-95 flex items-center gap-2 rounded-full border border-moss bg-card px-4 py-2 font-display text-sm font-semibold text-moss shadow-lg duration-200">
                 <Check className="h-4 w-4" strokeWidth={3} />
                 On its way
               </span>
@@ -93,7 +118,7 @@ export function CardStack({ clientId }: { clientId: string }) {
           </p>
         ) : null}
 
-        <div className="mt-4 space-y-2">
+        <div className="mt-4 space-y-2" data-card-actions>
           {isEditing ? (
             <>
               <ActionButton
@@ -189,8 +214,7 @@ export function CardStack({ clientId }: { clientId: string }) {
       </span>
       <p className="t-title">That&apos;s everything.</p>
       <p className="t-sub mx-auto mt-2 max-w-xs">
-        {approved} on their way — we&apos;ll take it from here. Nothing else
-        needed today.
+        {`${approved} on their way — we'll take it from here. Nothing else needed today.`}
       </p>
       <Link
         href="/workspace"

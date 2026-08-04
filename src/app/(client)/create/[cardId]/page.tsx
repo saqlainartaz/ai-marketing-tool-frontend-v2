@@ -147,7 +147,7 @@ export default function CreatePage({
       <p className="t-label">Your words, our writing</p>
       <h1 className="t-display mt-3 lg:text-[34px]">Ready when you are.</h1>
 
-      <div className="mt-7 lg:grid lg:grid-cols-[minmax(0,1fr)_236px] lg:items-start lg:gap-10">
+      <div className="mt-7 flex flex-1 flex-col lg:grid lg:flex-none lg:grid-cols-[minmax(0,1fr)_236px] lg:items-start lg:gap-10">
         <div>
           <ContentPreview
             kind="post"
@@ -187,7 +187,7 @@ export default function CreatePage({
           </div>
         </div>
 
-        <div className="mt-7 lg:mt-0">
+        <div className="mt-auto pt-7 lg:mt-0 lg:pt-0">
           <ActionButton
             size="lg"
             onClick={approve}

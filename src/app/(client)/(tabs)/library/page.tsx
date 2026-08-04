@@ -164,7 +164,9 @@ export default function LibraryPage() {
                             : PLATFORM_NAME[item.platform]}
                         {item.pillar ? ` · ${item.pillar}` : ""}
                       </span>
-                      <span className="mt-1 line-clamp-2 block text-[13.5px] leading-snug">
+                      {/* line-clamp sets display:-webkit-box — never pair it
+                          with `block`, which silently wins and un-clamps. */}
+                      <span className="mt-1 line-clamp-2 text-[13.5px] leading-snug">
                         {item.editedBody ?? item.body}
                       </span>
                     </span>
