@@ -69,6 +69,10 @@ export default function LibraryPage() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [note, setNote] = useState<string | null>(null);
 
+  const weekItems = items.filter(
+    (i) => i.scheduledFor && i.status !== "skipped",
+  );
+
   async function copyText(item: ContentItem) {
     try {
       await navigator.clipboard.writeText(item.editedBody ?? item.body);
@@ -231,10 +235,22 @@ export default function LibraryPage() {
 
       {view === "week" ? (
         <div className="mt-5">
-          <WeekCalendar items={items} onSelect={(id) => {
-            setView("list");
-            setOpenId(id);
-          }} />
+          <WeekCalendar
+            items={items}
+            onSelect={(id) => setOpenId(openId === id ? null : id)}
+          />
+          {/* The grid answers "when"; the week's items answer "what" —
+              together they fill the page honestly, even on a light week. */}
+          <div className="mt-8">
+            <SectionLabel right={`${weekItems.length}`}>
+              Prepared for this week
+            </SectionLabel>
+            <ul className="surface mt-3 overflow-hidden rounded-xl">
+              {weekItems.map((item, i) => (
+                <Row key={item.id} item={item} last={i === weekItems.length - 1} />
+              ))}
+            </ul>
+          </div>
         </div>
       ) : (
         <div className="mt-5 space-y-7">

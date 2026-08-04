@@ -69,7 +69,45 @@ export function WeekCalendar({
           <span className="t-meta shrink-0 text-moss">all handled</span>
         )}
       </div>
-      <div className="grid grid-cols-7 gap-1.5">
+      {/* Phone: a legible ribbon — day letter + one dot per prepared item.
+          Seven columns of truncated text is unreadable at 44px, and the
+          list below already carries the words. */}
+      <div className="grid grid-cols-7 gap-1 sm:hidden">
+        {DAYS.map((day, i) => (
+          <div
+            key={day}
+            className={cn(
+              "flex flex-col items-center gap-1.5 rounded-lg border py-2",
+              i === today ? "border-clay bg-card" : "border-line bg-paper/60",
+            )}
+          >
+            <span
+              className={cn(
+                "font-mono text-[10px] tracking-wider",
+                i === today ? "text-ink" : "text-ink-3",
+              )}
+            >
+              {day.slice(0, 1)}
+            </span>
+            <span className="flex min-h-3 flex-wrap justify-center gap-0.5">
+              {placed[i].map((item) => (
+                <span
+                  key={item.id}
+                  title={item.pillar}
+                  className={cn(
+                    "h-1.5 w-1.5 rounded-full",
+                    item.status === "posted" || item.status === "approved"
+                      ? "bg-moss"
+                      : "bg-clay",
+                  )}
+                />
+              ))}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div className="hidden grid-cols-7 gap-1.5 sm:grid">
         {DAYS.map((day, i) => (
           <div key={day} className="min-w-0">
             <div
@@ -82,7 +120,7 @@ export function WeekCalendar({
             </div>
             <div
               className={cn(
-                "min-h-28 space-y-1 rounded-lg border p-1 lg:min-h-[13rem]",
+                "min-h-24 space-y-1 rounded-lg border p-1 lg:min-h-28",
                 i === today
                   ? "border-clay bg-card"
                   : "border-line bg-paper/60",
@@ -126,7 +164,7 @@ export function WeekCalendar({
         ))}
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1">
+      <div className="mt-4 hidden flex-wrap items-center gap-x-4 gap-y-1 sm:flex">
         <span className="t-meta flex items-center gap-1.5">
           <span className="h-2.5 w-2.5 rounded-sm border border-moss/40 bg-moss-mist" />
           posted
