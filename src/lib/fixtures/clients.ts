@@ -116,6 +116,12 @@ export type FixtureClient = {
   /** Things worth saying, mined from the client's own material. */
   ideas: IdeaFixture[];
   voice: { summary: string; sounds: string[]; avoids: string[] };
+  /**
+   * Starting points for the one free-text box in the product. A blank box
+   * is the single hardest thing to face for the persona who doesn't know
+   * where to begin — so it never ships blank.
+   */
+  promptSuggestions: string[];
 };
 
 export type IdeaFixture = {
@@ -423,6 +429,11 @@ const dave: FixtureClient = {
       },
     },
   ],
+  promptSuggestions: [
+    "We finished a full replacement on Lakeway Ave this week",
+    "Storm coming Thursday — we're booking emergency inspections",
+    "A customer asked whether insurance covers hail damage",
+  ],
   voice: {
     summary:
       "Plain-spoken and practical. Talks like a neighbor who happens to know roofs — short sentences, real jobs, zero sales pitch.",
@@ -701,6 +712,11 @@ const amara: FixtureClient = {
         ],
       },
     },
+  ],
+  promptSuggestions: [
+    "I'm offering free 20-minute consultations this month",
+    "A client asked what mediation actually costs",
+    "I spoke at a family-law seminar last week",
   ],
   voice: {
     summary:

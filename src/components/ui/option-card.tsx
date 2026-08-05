@@ -16,12 +16,15 @@ export function OptionCard({
   children,
   hint,
   selected,
+  recommended,
   onSelect,
   className,
 }: {
   children: React.ReactNode;
   hint?: string;
   selected?: boolean;
+  /** Pre-chosen for them, and said out loud rather than defaulted silently. */
+  recommended?: boolean;
   onSelect: () => void;
   className?: string;
 }) {
@@ -47,10 +50,15 @@ export function OptionCard({
       >
         {selected ? <Check className="h-3 w-3" strokeWidth={3} /> : null}
       </span>
-      <span className="min-w-0">
+      <span className="min-w-0 flex-1">
         <span className="t-ui block">{children}</span>
         {hint ? <span className="t-meta mt-0.5 block">{hint}</span> : null}
       </span>
+      {recommended ? (
+        <span className="t-meta shrink-0 rounded-full bg-clay-mist px-2 py-1 text-clay-deep">
+          our pick
+        </span>
+      ) : null}
     </button>
   );
 }

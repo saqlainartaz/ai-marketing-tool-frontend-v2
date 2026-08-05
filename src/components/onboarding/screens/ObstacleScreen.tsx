@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { OptionCard } from "@/components/ui/option-card";
@@ -13,6 +14,8 @@ export const OBSTACLES = [
   "Just getting started",
 ] as const;
 
+const RECOMMENDED_OBSTACLE = OBSTACLES[0];
+
 export function ObstacleScreen({
   onNext,
   onBack,
@@ -21,6 +24,11 @@ export function ObstacleScreen({
   onBack: () => void;
 }) {
   const { answers, setAnswer } = useOnboarding();
+
+  /* Never a blank choice — see GoalScreen. */
+  useEffect(() => {
+    if (!answers.obstacle) setAnswer("obstacle", RECOMMENDED_OBSTACLE);
+  }, [answers.obstacle, setAnswer]);
 
   return (
     <ScreenFrame
@@ -31,7 +39,7 @@ export function ObstacleScreen({
       onBack={onBack}
       footer={
         <>
-          <ActionButton size="lg" onClick={onNext} disabled={!answers.obstacle}>
+          <ActionButton size="lg" onClick={onNext}>
             Continue
             <ArrowRight className="h-4 w-4" />
           </ActionButton>
@@ -53,6 +61,7 @@ export function ObstacleScreen({
           <OptionCard
             key={o}
             selected={answers.obstacle === o}
+            recommended={o === RECOMMENDED_OBSTACLE}
             onSelect={() => setAnswer("obstacle", o)}
           >
             {o}

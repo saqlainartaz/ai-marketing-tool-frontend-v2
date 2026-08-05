@@ -107,9 +107,32 @@ export default function WorkspacePage() {
                  * placeholder disappears the moment you type, isn't
                  * reliably announced, and rarely passes contrast. */}
                 <p id="ws-hint" className="t-sub mt-1">
-                  One sentence is enough — for example, we&apos;re running a
-                  spring gutter discount
+                  One sentence is enough
                 </p>
+
+                {/* This is the only free-text box in the product, and a
+                 * blank box is the hardest thing to face for someone who
+                 * doesn't know where to start. It never ships empty:
+                 * these are real things this business might say, and
+                 * tapping one fills the box so it can be edited rather
+                 * than composed. */}
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {client.promptSuggestions.map((s) => (
+                    <li key={s}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setInput(s);
+                          setError(null);
+                          inputRef.current?.focus();
+                        }}
+                        className="pressable t-sub inline-flex min-h-11 items-center rounded-full border border-line bg-card px-3.5 text-left text-ink-2 hover:border-clay hover:text-ink"
+                      >
+                        {s}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
                 {error ? (
                   <p
                     id="ws-error"

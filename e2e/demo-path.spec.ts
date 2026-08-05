@@ -33,15 +33,11 @@ for (const theme of THEMES) {
       page.getByRole("heading", { name: /what do you want more of/i }),
     ).toBeVisible();
     const next = page.getByRole("button", { name: /continue/i });
-    // Pressing Continue with nothing chosen explains itself rather than
-    // sitting there greyed out.
-    await next.click();
-    await expect(page.locator("main").getByRole("alert")).toContainText(
-      /pick one/i,
-    );
-    await page
-      .getByRole("button", { name: /more calls & booked jobs/i })
-      .click();
+    // Never a blank choice: our recommendation arrives already selected and
+    // labelled, so the fastest path through onboarding is a single tap.
+    await expect(
+      page.getByRole("button", { name: /more calls & booked jobs/i }),
+    ).toHaveAttribute("aria-pressed", "true");
     await page.getByRole("button", { name: "Do it for me" }).click();
     await next.click();
 

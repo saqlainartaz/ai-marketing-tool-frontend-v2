@@ -32,22 +32,27 @@ describe("ConfirmScreen (S1)", () => {
 });
 
 describe("GoalScreen (S2)", () => {
-  it("Continue explains what it needs instead of going dead", async () => {
+  it("arrives with our recommendation already chosen, and says it's ours", async () => {
     const onNext = vi.fn();
     wrap(<GoalScreen onNext={onNext} onBack={() => {}} />);
-    const next = screen.getByRole("button", { name: /continue/i });
 
-    // A disabled button states no reason, so this one stays live and says
-    // what's missing when it's pressed.
-    expect(next).toBeEnabled();
-    await userEvent.click(next);
-    expect(onNext).not.toHaveBeenCalled();
-    expect(screen.getByRole("alert")).toHaveTextContent(/pick one/i);
+    // Never a blank choice. The person who doesn't know where to start is
+    // never asked to guess, and the fastest path through is one tap.
+    const recommended = await screen.findByRole("button", {
+      name: /More calls & booked jobs/i,
+    });
+    expect(recommended).toHaveAttribute("aria-pressed", "true");
+    expect(recommended).toHaveTextContent(/our pick/i);
 
+    // And it's a recommendation, not a decision made for them.
     await userEvent.click(
-      screen.getByRole("button", { name: /More calls & booked jobs/i }),
+      screen.getByRole("button", { name: /A bigger audience/i }),
     );
-    await userEvent.click(next);
+    expect(
+      screen.getByRole("button", { name: /A bigger audience/i }),
+    ).toHaveAttribute("aria-pressed", "true");
+
+    await userEvent.click(screen.getByRole("button", { name: /continue/i }));
     expect(onNext).toHaveBeenCalledOnce();
   });
 });

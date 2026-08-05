@@ -83,9 +83,11 @@ export function IdeaCard({
               That&apos;s every idea we had this week.
             </p>
             <p className="t-sub mx-auto mt-1 max-w-xs">
-              More arrive as we read new material — or tell us what&apos;s
-              happening and we&apos;ll make one.
+              More arrive as we read new material.
             </p>
+            <QuietLink href="/workspace" className="mt-3">
+              Tell us what&apos;s happening instead
+            </QuietLink>
           </div>
         ) : (
           <ul className="divide-y divide-line">

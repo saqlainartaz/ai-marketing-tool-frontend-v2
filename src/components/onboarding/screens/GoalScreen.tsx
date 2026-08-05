@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, TriangleAlert } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { Chip } from "@/components/ui/chip";
@@ -18,6 +18,9 @@ export const GOALS = [
 
 export const DRIVERS = ["Do it for me", "Me", "Someone on my team"] as const;
 
+/** What we'd choose if they said nothing. Pre-selected, and labelled. */
+const RECOMMENDED_GOAL = GOALS[0].label;
+
 export function GoalScreen({
   onNext,
   onBack,
@@ -27,6 +30,13 @@ export function GoalScreen({
 }) {
   const { answers, setAnswer } = useOnboarding();
   const [error, setError] = useState(false);
+
+  /* Never a blank choice. Arriving with our recommendation already
+   * selected means the fastest path is one tap, and the person who
+   * doesn't know where to start is never asked to guess. */
+  useEffect(() => {
+    if (!answers.goal) setAnswer("goal", RECOMMENDED_GOAL);
+  }, [answers.goal, setAnswer]);
 
   /* A greyed-out Continue tells the user they're stuck without telling
    * them why. The button stays live and answers the question when asked. */
@@ -67,6 +77,7 @@ export function GoalScreen({
             key={goal.label}
             hint={goal.hint}
             selected={answers.goal === goal.label}
+            recommended={goal.label === RECOMMENDED_GOAL}
             onSelect={() => setAnswer("goal", goal.label)}
           >
             {goal.label}

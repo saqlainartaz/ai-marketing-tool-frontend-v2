@@ -326,9 +326,14 @@ export default function LibraryPage() {
               </ul>
             </div>
           ) : (
-            <p className="t-meta mt-4">
-              Tap any mark to read what&apos;s prepared for that day.
-            </p>
+            <div className="mt-4">
+              <p className="t-sub">
+                Pick any mark to read what&apos;s prepared for that day.
+              </p>
+              <QuietLink href="/today" className="mt-1">
+                Or go to this week&apos;s work
+              </QuietLink>
+            </div>
           )}
         </div>
       ) : (
