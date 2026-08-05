@@ -13,7 +13,7 @@ const css = readFileSync(
   "utf8",
 );
 
-const THEMES = ["paper", "cobalt", "forest", "night"] as const;
+const THEMES = ["studio", "paper", "cobalt", "forest"] as const;
 
 function blockFor(theme: string): string {
   // Each block's selector list also carries [data-theme-preview="…"], so

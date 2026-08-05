@@ -17,6 +17,11 @@
  *   3. Type comes from a t-* role, never an inline font-size.
  *   4. Elevation is one of three levels, never a raw Tailwind shadow.
  *   5. Motion is one of two durations, and always has an easing.
+ *   6. **Colour always means something. Decoration gets none.** This
+ *      replaced "one accent-filled element per screen", which is what made
+ *      the app read as restrained office software. Colour may now appear
+ *      on the action, live states, wins, protection, channel identity and
+ *      progress — anywhere it carries information. Never for mood.
  * tests/design/scale.test.ts enforces 1–3 so this can't drift back.
  * ══════════════════════════════════════════════════════════════════════ */
 

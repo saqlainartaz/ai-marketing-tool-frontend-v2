@@ -35,6 +35,13 @@ type ContentPreviewProps = {
  * One header strip states what this is and where it came from; inside
  * sits the platform-accurate render. One component, many marketing
  * tools — a new tool is a new kind here, never a new screen.
+ *
+ * **The lit object.** This is the one element that does not follow the
+ * ambient theme. `data-theme-preview="paper"` scopes the light palette to
+ * it, so the post renders in the colours it will actually have on Facebook
+ * or LinkedIn — white, dark text. Against the dark studio that makes it
+ * literally the only lit thing on screen, which is both the accurate
+ * rendering and the whole visual idea: the work under a lamp.
  */
 export function ContentPreview({
   kind = "post",
@@ -57,7 +64,15 @@ export function ContentPreview({
         : "Email";
 
   return (
-    <article className="surface overflow-hidden rounded-xl">
+    <article
+      data-theme-preview="paper"
+      /* text-ink is not redundant. `body` sets `color: var(--ink)`, which
+       * computes once against :root — descendants inherit that resolved
+       * colour, not the variable. Re-scoping the tokens here does nothing
+       * to it, so the element has to re-assert its own colour or the post
+       * renders light-on-light. */
+      className="surface overflow-hidden rounded-xl text-ink"
+    >
       {/* Object header — what this is, where it came from, its state. */}
       <header className="flex items-center gap-2 border-b border-line bg-paper px-4 py-2">
         <PlatformMark platform={platform} size="sm" className="shrink-0" />

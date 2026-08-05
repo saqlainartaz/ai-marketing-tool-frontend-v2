@@ -6,7 +6,7 @@ import { test, expect } from "@playwright/test";
  * the first card. Runs once per theme — a token missing in any palette
  * shows up here as an invisible control.
  */
-const THEMES = ["paper", "cobalt", "forest", "night"] as const;
+const THEMES = ["studio", "paper", "cobalt", "forest"] as const;
 
 for (const theme of THEMES) {
   test(`Dave's journey in ${theme}`, async ({ page }) => {

@@ -25,7 +25,7 @@ const TOKENS = [
   "--onact",
 ] as const;
 
-const THEMES = ["paper", "cobalt", "forest", "night"] as const;
+const THEMES = ["studio", "paper", "cobalt", "forest"] as const;
 
 const css = readFileSync(
   path.resolve(__dirname, "../../src/lib/theme/tokens.css"),
@@ -54,7 +54,9 @@ describe("theme tokens", () => {
     });
   }
 
-  it("paper is the default (:root) theme", () => {
-    expect(css).toMatch(/:root,\s*\n?:root\[data-theme="paper"\]/);
+  it("studio is the default (:root) theme", () => {
+    // Dark by default is the product's identity, not a user preference —
+    // the light themes are alternatives offered from the switcher.
+    expect(css).toMatch(/:root,\s*\n?:root\[data-theme="studio"\]/);
   });
 });

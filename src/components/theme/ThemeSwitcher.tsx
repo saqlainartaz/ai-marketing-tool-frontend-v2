@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-export const THEMES = ["paper", "cobalt", "forest", "night"] as const;
+export const THEMES = ["studio", "paper", "cobalt", "forest"] as const;
 export type Theme = (typeof THEMES)[number];
 
 const STORAGE_KEY = "v2theme";
-const DEFAULT_THEME: Theme = "paper";
+const DEFAULT_THEME: Theme = "studio";
 
 function readTheme(): Theme {
   if (typeof window === "undefined") return DEFAULT_THEME;

@@ -1,42 +1,92 @@
 /*
- * Design tokens — "Desk": prepared work laid out on warm paper.
+ * Design tokens — "Studio": the work is lit, the room is dark.
  *
- * Surface model: --canvas is the desk (tinted), --card is the prepared
- * object (raised, white), --paper is an inset well (inputs, media, rails).
- * Role model: --clay = the one action per screen · --moss = wins ·
- * --honey = protection/care. Every pair is contrast-tested per theme
- * (tests/theme/contrast.test.ts).
+ * The default is a deep, cinematic room. The thing under review — the
+ * prepared post — renders in its true platform colours, so it is literally
+ * the only lit object on screen. That is both more accurate (a Facebook post
+ * IS white) and the whole visual idea: a studio with the work under a lamp.
  *
- * Default: paper (warm paper + near-black actions — the accent is spent
- * on structure and type, not on filled blobs).
+ * Surface model, dark: --canvas is the room · --paper is recessed (wells,
+ * inputs) · --card is raised chrome (rails, nav, non-content cards). On dark,
+ * surfaces separate by LIGHTNESS, not shadow — shadow doesn't read on black.
+ * The light themes invert this: --card is the raised white object and shadow
+ * does the work.
  *
- * Each block is also exposed as [data-theme-preview="…"], so any element
- * can borrow a whole palette locally — that is how the theme swatches
- * show their real colours instead of eight hex values copied by hand and
- * left to drift.
+ * Colour model: --clay is the action · --moss is a win · --honey is
+ * protection. The rule is no longer "one accent element per screen" — it is
+ * **colour always means something, decoration gets none**. Violet is the
+ * brand accent in both the dark default and the light alternative, so the
+ * identity survives a theme switch.
+ *
+ * Dark-first craft: no pure black (halation around text), no pure white text
+ * (bloom), accents LIGHTEN for dark rather than darken, and nothing below
+ * font-weight 400. WCAG 2's formula overstates contrast at the dark end, so
+ * tests/theme/contrast.test.ts is the legal floor and APCA is the design
+ * check for this palette specifically.
+ *
+ * Each block is also exposed as [data-theme-preview="…"], so an element can
+ * borrow a whole palette locally. That is how the theme swatches show their
+ * real colours, and how the post preview stays lit inside a dark room.
  *
  * Shadow and scrim are their own tokens, NOT mixed from --ink. Deriving a
- * shadow from the text colour meant every card cast a white glow in night,
- * and the modal scrim lightened the page instead of dimming it.
+ * shadow from the text colour meant every card cast a white glow on dark, and
+ * the modal scrim lightened the page instead of dimming it.
  */
 
+/* ── Studio — the default ─────────────────────────────────────────────── */
 :root,
+:root[data-theme="studio"],
+[data-theme-preview="studio"] {
+  --canvas: #0a0c11;
+  --paper: #12151d;
+  --card: #1a1f29;
+  --ink: #edeef3;
+  /* Both greys are lighter than a light-theme port would suggest. APCA
+   * scores them ~15 Lc lower than WCAG 2 implies, and APCA is the one
+   * that matches what the eye does on a dark screen. */
+  --ink-2: #b9becb;
+  --ink-3: #9ba1b1;
+  /* The accent has to survive two opposite jobs: readable as text on the
+   * near-black canvas, AND light enough that near-black text reads on top
+   * of it as a button fill. Both want it lighter, which is why a vivid
+   * electric violet doesn't work here — it fails as a fill. */
+  --clay: #b0a4ff;
+  /* On dark, "deep" inverts: accent text sitting on the accent tint, so
+   * it has to be lighter than --clay, not darker. */
+  --clay-deep: #cbc3ff;
+  --clay-mist: #1c1a30;
+  --moss: #4ade9b;
+  --moss-mist: #0e2419;
+  --honey: #f7b955;
+  --honey-mist: #2a2014;
+  --line: #262c38;
+  --onact: #0a0c11;
+  /* Dark surfaces separate by lightness, so shadow only seats an object
+   * rather than lifting it. The scrim goes deeper than the canvas so an
+   * overlay still reads as "everything behind is paused". */
+  --shadow-1: rgb(0 0 0 / 0.34);
+  --shadow-2: rgb(0 0 0 / 0.46);
+  --shadow-3: rgb(0 0 0 / 0.62);
+  --scrim: rgb(0 0 0 / 0.66);
+}
+
+/* ── Paper — the light alternative, same brand accent ─────────────────── */
 :root[data-theme="paper"],
 [data-theme-preview="paper"] {
-  --canvas: #f6f3ee;
-  --paper: #edeae3;
+  --canvas: #f7f6f3;
+  --paper: #edebe6;
   --card: #ffffff;
-  --ink: #191713;
-  --ink-2: #55504a;
-  --ink-3: #6b665e;
-  --clay: #201d18;
-  --clay-deep: #000000;
-  --clay-mist: #ebe7df;
-  --moss: #2f6b46;
-  --moss-mist: #e7f0e9;
+  --ink: #16151a;
+  --ink-2: #4f4d57;
+  --ink-3: #6a6874;
+  --clay: #6b4eff;
+  --clay-deep: #5539e8;
+  --clay-mist: #eeeaff;
+  --moss: #17714b;
+  --moss-mist: #e4f2ea;
   --honey: #8a5a12;
-  --honey-mist: #f6eddc;
-  --line: #e2ddd3;
+  --honey-mist: #f7eeda;
+  --line: #e0ddd6;
   --onact: #ffffff;
   --shadow-1: rgb(28 24 18 / 0.05);
   --shadow-2: rgb(28 24 18 / 0.1);
@@ -88,30 +138,4 @@
   --shadow-2: rgb(18 32 24 / 0.11);
   --shadow-3: rgb(18 32 24 / 0.19);
   --scrim: rgb(12 24 18 / 0.45);
-}
-
-:root[data-theme="night"],
-[data-theme-preview="night"] {
-  --canvas: #0e1013;
-  --paper: #15181d;
-  --card: #1a1e24;
-  --ink: #f4f3f0;
-  --ink-2: #b6bac1;
-  --ink-3: #9ba0a8;
-  --clay: #d8f34a;
-  --clay-deep: #a8bf2f;
-  --clay-mist: #23281a;
-  --moss: #74d3a4;
-  --moss-mist: #16241d;
-  --honey: #e2b463;
-  --honey-mist: #2a2318;
-  --line: #2b313a;
-  --onact: #14171b;
-  /* Dark surfaces separate by lightness, not by shadow — so the shadow is
-   * there to seat an object, not to lift it. Scrim goes deeper than the
-   * canvas so an overlay still reads as "everything behind is paused". */
-  --shadow-1: rgb(0 0 0 / 0.3);
-  --shadow-2: rgb(0 0 0 / 0.42);
-  --shadow-3: rgb(0 0 0 / 0.58);
-  --scrim: rgb(0 0 0 / 0.62);
 }

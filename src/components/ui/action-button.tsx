@@ -60,9 +60,13 @@ export function ActionButton({
            * visible label; aria-describedby still resolves it, so the
            * consequence is announced as a description. */
           aria-hidden
+          /* t-meta carries `color: var(--ink-3)`, which silently overrode
+           * the button's own text colour and washed out against a
+           * saturated accent fill. Hierarchy here comes from size, never
+           * from thinning the ink. */
           className={cn(
             "mt-0.5 t-meta font-normal tracking-tight",
-            variant === "solid" && !disabled ? "opacity-95" : "text-ink-3",
+            variant === "solid" && !disabled ? "text-onact" : "text-ink-3",
           )}
         >
           {consequence}

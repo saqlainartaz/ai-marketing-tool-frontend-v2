@@ -98,7 +98,7 @@ describe("spacing scale", () => {
 describe("elevation and colour", () => {
   it("uses no raw Tailwind shadows", () => {
     // shadow-lg / shadow-2xl are opaque black and ignore the theme, so
-    // they were wrong in night and merely lucky in the other three.
+    // they were wrong on dark and merely lucky on the light themes.
     const offenders: string[] = [];
     for (const { file, text } of FILES) {
       for (const match of text.matchAll(
