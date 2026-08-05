@@ -112,7 +112,7 @@ export function MonthCalendar({
                     ? "font-semibold text-ink"
                     : isThisMonth
                       ? "text-ink-3"
-                      : "text-ink-3/40",
+                      : "text-ink-3 opacity-45",
                 )}
               >
                 {day.getDate()}

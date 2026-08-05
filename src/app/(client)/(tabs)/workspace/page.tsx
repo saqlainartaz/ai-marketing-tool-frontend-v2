@@ -105,7 +105,7 @@ export default function WorkspacePage() {
                 {/* The example lives in the hint, not the placeholder — a
                  * placeholder disappears the moment you type, isn't
                  * reliably announced, and rarely passes contrast. */}
-                <p id="ws-hint" className="t-hint mt-1">
+                <p id="ws-hint" className="t-sub mt-1">
                   One sentence is enough — for example, we&apos;re running a
                   spring gutter discount
                 </p>

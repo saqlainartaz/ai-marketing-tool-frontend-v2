@@ -69,7 +69,7 @@ export function BottomNav() {
     <>
       {menuOpen ? (
         <div
-          className="fixed inset-0 z-40 bg-ink/30 backdrop-blur-[2px]"
+          className="fixed inset-0 z-40 bg-scrim backdrop-blur-[2px]"
           onClick={() => setMenuOpen(false)}
         >
           <div

@@ -33,11 +33,10 @@ const css = readFileSync(
 );
 
 function blockFor(theme: string): string {
-  const selector =
-    theme === "paper"
-      ? String.raw`:root,\s*\n?:root\[data-theme="paper"\]`
-      : String.raw`:root\[data-theme="${theme}"\]`;
-  const match = css.match(new RegExp(selector + String.raw`\s*\{([^}]+)\}`));
+  // Each block's selector list also carries [data-theme-preview="…"], so
+  // anchor on the theme's own selector and skip the rest of the list.
+  const selector = String.raw`:root\[data-theme="${theme}"\]`;
+  const match = css.match(new RegExp(selector + String.raw`[^{]*\{([^}]+)\}`));
   if (!match) throw new Error(`theme block not found: ${theme}`);
   return match[1];
 }

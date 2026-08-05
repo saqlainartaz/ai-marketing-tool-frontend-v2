@@ -6,14 +6,6 @@ import { cn } from "@/lib/utils";
 export const THEMES = ["paper", "cobalt", "forest", "night"] as const;
 export type Theme = (typeof THEMES)[number];
 
-/** Swatch previews so the choice is visual, not a word-guess. */
-const SWATCH: Record<Theme, { bg: string; dot: string }> = {
-  paper: { bg: "#f6f3ee", dot: "#201d18" },
-  cobalt: { bg: "#f4f6f9", dot: "#1f37c7" },
-  forest: { bg: "#f1f4ef", dot: "#1c5c3d" },
-  night: { bg: "#0e1013", dot: "#d8f34a" },
-};
-
 const STORAGE_KEY = "v2theme";
 const DEFAULT_THEME: Theme = "paper";
 
@@ -60,21 +52,21 @@ export function ThemeSwitcher({ className }: { className?: string }) {
           aria-checked={theme === t}
           onClick={() => apply(t)}
           className={cn(
-            "flex cursor-pointer items-center gap-1.5 rounded-lg border px-2 py-1.5 text-[11px] capitalize transition-colors",
+            "pressable t-meta flex min-h-11 items-center gap-2 rounded-lg border px-3 capitalize",
             theme === t
-              ? "border-clay font-semibold text-ink shadow-[inset_0_0_0_1px_var(--clay)]"
+              ? "selected border-clay font-semibold text-ink"
               : "border-line text-ink-2 hover:border-ink-3 hover:text-ink",
           )}
         >
+          {/* The swatch borrows the real palette rather than repeating it:
+           * data-theme-preview scopes that theme's tokens to this element,
+           * so a token change can never leave the picker lying. */}
           <span
             aria-hidden
-            className="flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border border-line"
-            style={{ background: SWATCH[t].bg }}
+            data-theme-preview={t}
+            className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-line bg-canvas"
           >
-            <span
-              className="h-1.5 w-1.5 rounded-full"
-              style={{ background: SWATCH[t].dot }}
-            />
+            <span className="h-2 w-2 rounded-full bg-clay" />
           </span>
           {t}
         </button>

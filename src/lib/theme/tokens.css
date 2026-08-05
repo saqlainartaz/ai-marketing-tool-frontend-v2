@@ -9,10 +9,20 @@
  *
  * Default: paper (warm paper + near-black actions — the accent is spent
  * on structure and type, not on filled blobs).
+ *
+ * Each block is also exposed as [data-theme-preview="…"], so any element
+ * can borrow a whole palette locally — that is how the theme swatches
+ * show their real colours instead of eight hex values copied by hand and
+ * left to drift.
+ *
+ * Shadow and scrim are their own tokens, NOT mixed from --ink. Deriving a
+ * shadow from the text colour meant every card cast a white glow in night,
+ * and the modal scrim lightened the page instead of dimming it.
  */
 
 :root,
-:root[data-theme="paper"] {
+:root[data-theme="paper"],
+[data-theme-preview="paper"] {
   --canvas: #f6f3ee;
   --paper: #edeae3;
   --card: #ffffff;
@@ -28,9 +38,14 @@
   --honey-mist: #f6eddc;
   --line: #e2ddd3;
   --onact: #ffffff;
+  --shadow-1: rgb(28 24 18 / 0.05);
+  --shadow-2: rgb(28 24 18 / 0.1);
+  --shadow-3: rgb(28 24 18 / 0.18);
+  --scrim: rgb(20 17 12 / 0.45);
 }
 
-:root[data-theme="cobalt"] {
+:root[data-theme="cobalt"],
+[data-theme-preview="cobalt"] {
   --canvas: #f4f6f9;
   --paper: #eaeef4;
   --card: #ffffff;
@@ -46,9 +61,14 @@
   --honey-mist: #f7f1e2;
   --line: #dee3ec;
   --onact: #ffffff;
+  --shadow-1: rgb(16 22 38 / 0.06);
+  --shadow-2: rgb(16 22 38 / 0.11);
+  --shadow-3: rgb(16 22 38 / 0.2);
+  --scrim: rgb(10 14 26 / 0.45);
 }
 
-:root[data-theme="forest"] {
+:root[data-theme="forest"],
+[data-theme-preview="forest"] {
   --canvas: #f1f4ef;
   --paper: #e8ede5;
   --card: #ffffff;
@@ -64,9 +84,14 @@
   --honey-mist: #e6eef5;
   --line: #d8e0d5;
   --onact: #ffffff;
+  --shadow-1: rgb(18 32 24 / 0.06);
+  --shadow-2: rgb(18 32 24 / 0.11);
+  --shadow-3: rgb(18 32 24 / 0.19);
+  --scrim: rgb(12 24 18 / 0.45);
 }
 
-:root[data-theme="night"] {
+:root[data-theme="night"],
+[data-theme-preview="night"] {
   --canvas: #0e1013;
   --paper: #15181d;
   --card: #1a1e24;
@@ -82,4 +107,11 @@
   --honey-mist: #2a2318;
   --line: #2b313a;
   --onact: #14171b;
+  /* Dark surfaces separate by lightness, not by shadow — so the shadow is
+   * there to seat an object, not to lift it. Scrim goes deeper than the
+   * canvas so an overlay still reads as "everything behind is paused". */
+  --shadow-1: rgb(0 0 0 / 0.3);
+  --shadow-2: rgb(0 0 0 / 0.42);
+  --shadow-3: rgb(0 0 0 / 0.58);
+  --scrim: rgb(0 0 0 / 0.62);
 }

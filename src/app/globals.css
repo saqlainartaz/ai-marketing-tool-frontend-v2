@@ -3,7 +3,22 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* ══════════════════════════════════════════════════════════════════════
+ * The system has five scales, not one.
+ *
+ * Colour was the only layer with tokens, so colour was the only layer that
+ * stayed disciplined — 648 spacing values, 21 type sizes and 7 elevation
+ * treatments had nothing to conform to. Everything below exists so a call
+ * site can pick a NAME rather than invent a number.
+ *
+ * The rules that come with it:
+ *   1. No arbitrary values. If there isn't a token, the token is missing.
+ *   2. No half-steps in spacing. 4px grid, no 6px, no 10px, no 14px.
+ *   3. Type comes from a t-* role, never an inline font-size.
+ *   4. Elevation is one of three levels, never a raw Tailwind shadow.
+ *   5. Motion is one of two durations, and always has an easing.
+ * tests/design/scale.test.ts enforces 1–3 so this can't drift back.
+ * ══════════════════════════════════════════════════════════════════════ */
 
 @theme inline {
   --color-canvas: var(--canvas);
@@ -21,6 +36,7 @@
   --color-card: var(--card);
   --color-line: var(--line);
   --color-onact: var(--onact);
+  --color-scrim: var(--scrim);
 
   --font-display: var(--font-bricolage), Georgia, serif;
   --font-body: var(--font-inter), system-ui, sans-serif;
@@ -42,17 +58,45 @@
   --color-muted-foreground: var(--ink-2);
   --color-accent: var(--clay-mist);
   --color-accent-foreground: var(--clay-deep);
-  --color-destructive: #b3261e;
+  --color-destructive: var(--honey);
   --color-border: var(--line);
   --color-input: var(--line);
   --color-ring: var(--clay);
 
-  --radius: 0.875rem;
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
+  /* ── Radius: says what a thing IS ─────────────────────────────────
+   * Docs have claimed "cards 16 / buttons 12" since the rehaul. The
+   * multiplier chain used to compute 19.6 / 14, so the rule was fiction.
+   * These are the stated numbers, set literally. */
+  --radius-sm: 0.375rem; /*  6px — marks inside dense rows */
+  --radius-md: 0.5rem; /*  8px — calendar cells, small tiles */
+  --radius: 0.75rem; /* 12px — the default */
+  --radius-lg: 0.75rem; /* 12px — buttons, inputs, wells */
+  --radius-xl: 1rem; /* 16px — cards: the prepared object */
+  --radius-2xl: 1.25rem; /* 20px — sheets and overlays */
+
+  /* ── Elevation: three levels, neutral shadow colour ───────────────
+   * Never a raw Tailwind shadow — those are opaque black and ignore the
+   * theme entirely. */
+  --shadow-raise: 0 1px 2px var(--shadow-1);
+  --shadow-float:
+    0 1px 2px var(--shadow-1), 0 8px 20px -12px var(--shadow-2);
+  --shadow-overlay:
+    0 2px 8px var(--shadow-1), 0 24px 48px -24px var(--shadow-3);
+
+  /* ── Motion: two durations, two curves ────────────────────────────
+   * quick = a control answering you. enter = an object arriving. */
+  --ease-enter: cubic-bezier(0.2, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ── Spacing: named only where a number would be a magic number ───
+   * The bottom bar's height was previously guessed four different ways
+   * (pb-24, pb-20, pb-16, bottom-[76px]). It has one value now. */
+  --spacing-nav: 4.5rem; /* 72px — bottom bar + breathing room */
+}
+
+:root {
+  --motion-quick: 180ms;
+  --motion-enter: 380ms;
 }
 
 @layer base {
@@ -66,25 +110,33 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
-  :where(
-      button,
-      a,
-      [role="radio"],
-      [role="button"],
-      textarea,
-      input,
-      select
-    ):focus-visible {
+
+  /* Focus is NOT wrapped in :where(). At zero specificity any single
+   * Tailwind utility beat it, and three elements were already winning
+   * with `outline-none` — leaving the draft editor with no focus
+   * indicator at all. Element+pseudo-class (0,1,1) outranks a utility. */
+  button:focus-visible,
+  a:focus-visible,
+  textarea:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  summary:focus-visible,
+  [role="radio"]:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
     outline: 2px solid var(--clay);
     outline-offset: 2px;
-    border-radius: 4px;
   }
 }
 
-/* ── Type system ───────────────────────────────────────────────────────
+/* ── Type: eight roles, and nothing outside them ──────────────────────
  * Three voices: display (moments), body (content), mono (metadata).
  * Metadata in mono is the craft signal that separates a product from a
  * template — it says "this data is real."
+ *
+ * Every role binds size + line-height + weight together, because those
+ * three drifting apart is what produced 21 sizes with 12 of them inside
+ * a 5px band.
  */
 @layer components {
   .t-display {
@@ -99,50 +151,138 @@
     font-weight: 600;
     letter-spacing: -0.02em;
     line-height: 1.15;
-    font-size: 1.25rem;
+    font-size: 1.25rem; /* 20 */
+  }
+  /* The name of an object: card titles, row titles, idea headlines. */
+  .t-lead {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    font-size: 1.0625rem; /* 17 */
+  }
+  /* Reading text — draft bodies, paragraphs. Generous leading. */
+  .t-body {
+    font-size: 0.9375rem; /* 15 */
+    line-height: 1.62;
+  }
+  /* Interface text — controls, rows, chips. Tighter than reading text. */
+  .t-ui {
+    font-size: 0.875rem; /* 14 */
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  /* Secondary and help text. Absorbed the old .t-hint, which was the
+   * same 13px and differed only in a line-height nobody could see. */
+  .t-sub {
+    font-size: 0.8125rem; /* 13 */
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .t-meta {
+    font-family: var(--font-jetbrains), ui-monospace, monospace;
+    font-size: 0.6875rem; /* 11 */
+    line-height: 1.45;
+    letter-spacing: 0.01em;
+    color: var(--ink-3);
   }
   .t-label {
     font-family: var(--font-jetbrains), ui-monospace, monospace;
-    font-size: 0.625rem;
+    font-size: 0.625rem; /* 10 */
     font-weight: 500;
+    line-height: 1.4;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--ink-3);
   }
-  .t-meta {
-    font-family: var(--font-jetbrains), ui-monospace, monospace;
-    font-size: 0.6875rem;
-    letter-spacing: 0.01em;
-    color: var(--ink-3);
-  }
-  /* Form help text. Deliberately NOT the mono metadata voice: hint text
-   * is read, not scanned, and monospace at 11px is the wrong tool for a
-   * sentence someone needs to understand before they can answer. */
-  .t-hint {
-    font-size: 0.8125rem;
-    line-height: 1.5;
-    color: var(--ink-2);
-  }
-  .t-body {
-    font-size: 0.9375rem;
-    line-height: 1.62;
-  }
-  .t-sub {
-    font-size: 0.8125rem;
-    line-height: 1.55;
-    color: var(--ink-2);
-  }
+
+  /* ── Surfaces ─────────────────────────────────────────────────── */
 
   /* The raised prepared object. */
   .surface {
     background: var(--card);
     border: 1px solid var(--line);
-    box-shadow:
-      0 1px 1px color-mix(in srgb, var(--ink) 4%, transparent),
-      0 10px 24px -14px color-mix(in srgb, var(--ink) 22%, transparent);
+    box-shadow: var(--shadow-raise);
   }
   .rule {
     border-top: 1px solid var(--line);
+  }
+
+  /* ── Interaction, defined once ────────────────────────────────────
+   * Before this, `active:` existed in two places in the entire app and
+   * "selected" had three competing visual languages. */
+
+  /* Anything you can press. Whole surfaces use this, not inner links. */
+  .pressable {
+    cursor: pointer;
+    transition-property: background-color, border-color, color, box-shadow,
+      transform;
+    transition-duration: var(--motion-quick);
+    transition-timing-function: var(--ease-enter);
+  }
+  .pressable:active {
+    transform: translateY(1px);
+  }
+  .pressable:disabled,
+  .pressable[aria-disabled="true"] {
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Chosen. One treatment everywhere: a 2px accent edge that doesn't
+   * shift layout, plus the accent's own tint. */
+  .selected {
+    box-shadow: inset 0 0 0 2px var(--clay);
+    background: var(--card);
+  }
+
+  /* Not available, and visibly so — not merely un-clickable. */
+  .is-off {
+    background: var(--paper);
+    color: var(--ink-3);
+    border-color: var(--line);
+    opacity: 0.75;
+  }
+
+  /* ── The three product primitives ─────────────────────────────────
+   * These are the parts of the system that carry the product's argument
+   * rather than its taste: every claim traces to your words, risky
+   * claims are softened before you see them, nothing moves without your
+   * yes. They get tokens of their own so they stay identical wherever
+   * they appear — and so they can't be lifted as decoration. */
+
+  /* sourced — text that can show where it came from. */
+  .mark-sourced {
+    text-decoration: underline dotted var(--clay) 1.5px;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .mark-sourced:hover {
+    background: var(--clay-mist);
+  }
+
+  /* protected — a claim we changed on the client's behalf. */
+  .mark-protected {
+    background: var(--honey-mist);
+    color: var(--honey);
+    border: 1px solid color-mix(in srgb, var(--honey) 35%, transparent);
+  }
+
+  /* commitment — the one control on a screen that changes something. */
+  .mark-commitment {
+    background: var(--clay);
+    color: var(--onact);
+    box-shadow: var(--shadow-raise);
+  }
+
+  /* ── Motion helpers ───────────────────────────────────────────────
+   * Two durations, always with a curve. */
+  .motion-quick {
+    transition-duration: var(--motion-quick);
+    transition-timing-function: var(--ease-enter);
+  }
+  .motion-enter {
+    transition-duration: var(--motion-enter);
+    transition-timing-function: var(--ease-enter);
   }
 }
 
@@ -153,5 +293,8 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  .pressable:active {
+    transform: none;
   }
 }
