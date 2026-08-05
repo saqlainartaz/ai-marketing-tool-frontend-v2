@@ -186,7 +186,7 @@ export default function LibraryPage() {
               {item.pillar ? ` · ${item.pillar}` : ""}
               {item.postedAt ? ` · ${item.postedAt}` : ""}
             </span>
-            <span className="mt-0.5 line-clamp-1 text-[13.5px]">
+            <span className="mt-0.5 line-clamp-1 t-ui">
               {item.editedBody ?? item.body}
             </span>
           </span>
@@ -203,7 +203,7 @@ export default function LibraryPage() {
 
       <div className="mt-6 flex items-center gap-2.5 rounded-xl border border-moss/30 bg-moss-mist px-4 py-3">
         <ShieldCheck aria-hidden className="h-4 w-4 shrink-0 text-moss" />
-        <p className="text-[13px]">
+        <p className="t-ui">
           Published without your approval, all time:{" "}
           <b className="font-mono">{publishedWithoutApprovalCount()}</b>
         </p>
@@ -271,7 +271,7 @@ export default function LibraryPage() {
                  says which one this is and points at the one action that
                  changes it. */
               <div className="surface mt-3 rounded-xl px-4 py-8 text-center">
-                <p className="text-[13.5px] font-semibold">
+                <p className="t-ui font-semibold">
                   Nothing scheduled this week.
                 </p>
                 <p className="t-sub mx-auto mt-1 max-w-xs">
@@ -327,7 +327,7 @@ export default function LibraryPage() {
           })}
           {items.length === 0 ? (
             <div className="surface rounded-xl py-10 text-center">
-              <p className="text-[13.5px] font-semibold">
+              <p className="t-ui font-semibold">
                 Nothing in the record yet.
               </p>
               <p className="t-sub mx-auto mt-1 max-w-xs">

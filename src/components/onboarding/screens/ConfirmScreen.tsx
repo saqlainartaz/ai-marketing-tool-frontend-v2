@@ -42,7 +42,7 @@ export function ConfirmScreen({ onNext }: { onNext: () => void }) {
           {client.profileLines.map((line) => (
             <li
               key={line}
-              className="flex items-start justify-between gap-3 border-b border-line py-3 text-[14px] leading-snug last:border-0"
+              className="flex items-start justify-between gap-3 border-b border-line py-3 t-ui leading-snug last:border-0"
             >
               <span>{line}</span>
               <PenLine
@@ -56,7 +56,7 @@ export function ConfirmScreen({ onNext }: { onNext: () => void }) {
           <p className="t-label mb-1.5">Where this came from</p>
           <ul className="space-y-1">
             {client.checks.map((c) => (
-              <li key={c} className="flex items-center gap-1.5 text-[12px]">
+              <li key={c} className="flex items-center gap-1.5 t-sub">
                 <Check
                   aria-hidden
                   className="h-3 w-3 shrink-0 text-moss"

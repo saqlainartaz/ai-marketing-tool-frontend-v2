@@ -28,7 +28,7 @@ export function ChannelCard({
     >
       <div className="flex items-center gap-2">
         <PlatformMark platform={channel.platform} />
-        <span className="text-[14px] font-semibold">{channel.name}</span>
+        <span className="t-ui font-semibold">{channel.name}</span>
         <span
           className={cn(
             "t-meta ml-auto shrink-0 rounded-full border px-2 py-0.5",
@@ -38,7 +38,7 @@ export function ChannelCard({
           {active ? "running" : "next up"}
         </span>
       </div>
-      <p className="mt-2 text-[12.5px] leading-relaxed text-ink-2">
+      <p className="mt-2 t-sub leading-relaxed text-ink-2">
         {channel.why}
       </p>
       {active && count !== undefined ? (
@@ -68,7 +68,7 @@ export function PillarBar({
   return (
     <div className="py-2.5">
       <div className="flex items-baseline gap-3">
-        <span className="text-[13px] font-medium">{pillar}</span>
+        <span className="t-ui font-medium">{pillar}</span>
         <span className="t-meta ml-auto shrink-0">
           {count > 0 ? `${count} of ${total}` : "nothing yet"}
         </span>
@@ -102,7 +102,7 @@ export function RhythmStrip({
             <div key={d} className="flex-1 text-center">
               <div
                 className={cn(
-                  "flex h-9 items-center justify-center rounded-lg border font-mono text-[10px]",
+                  "flex h-9 items-center justify-center rounded-lg border t-meta",
                   on
                     ? "border-clay bg-clay text-onact"
                     : "border-line bg-paper/60 text-ink-3",

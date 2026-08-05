@@ -85,7 +85,7 @@ export function AssemblyMoment({
             <li
               key={step}
               data-step={i}
-              className="flex items-center gap-2.5 text-[13px]"
+              className="flex items-center gap-2.5 t-ui"
             >
               <span
                 aria-hidden

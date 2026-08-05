@@ -79,7 +79,7 @@ export function IdeaCard({
 
         {shown.length === 0 ? (
           <div className="px-4 py-8 text-center">
-            <p className="text-[13.5px] font-semibold">
+            <p className="t-ui font-semibold">
               That&apos;s every idea we had this week.
             </p>
             <p className="t-sub mx-auto mt-1 max-w-xs">

@@ -37,7 +37,7 @@ export default function SettingsPage() {
         <div>
           <SectionLabel>Your business</SectionLabel>
           <CardShell className="mt-3">
-            <p className="text-[13px] leading-relaxed text-ink-2">
+            <p className="t-ui leading-relaxed text-ink-2">
               Everything we know about you lives on your profile — one page,
               every line correctable.
             </p>

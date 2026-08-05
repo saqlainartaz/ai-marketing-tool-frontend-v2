@@ -71,7 +71,7 @@ export function PlanDocument({
 
       <div className="divide-y divide-line">
         <section data-doc-row className="px-4 py-4 sm:px-5">
-          <h3 className="flex items-center gap-1.5 text-[13px] font-semibold">
+          <h3 className="flex items-center gap-1.5 t-ui font-semibold">
             <MapPin aria-hidden className="h-3.5 w-3.5 text-ink-3" />
             Where to show up
           </h3>
@@ -83,7 +83,7 @@ export function PlanDocument({
         </section>
 
         <section data-doc-row className="px-4 py-4 sm:px-5">
-          <h3 className="flex items-center gap-1.5 text-[13px] font-semibold">
+          <h3 className="flex items-center gap-1.5 t-ui font-semibold">
             <MessageSquareText aria-hidden className="h-3.5 w-3.5 text-ink-3" />
             What to talk about
           </h3>
@@ -91,7 +91,7 @@ export function PlanDocument({
             {client.plan.pillars.map((p) => (
               <span
                 key={p}
-                className="rounded-full border border-line bg-paper px-2.5 py-1 text-[12px]"
+                className="rounded-full border border-line bg-paper px-2.5 py-1 t-sub"
               >
                 {p}
               </span>
@@ -100,7 +100,7 @@ export function PlanDocument({
         </section>
 
         <section data-doc-row className="px-4 py-4 sm:px-5">
-          <h3 className="flex items-center gap-1.5 text-[13px] font-semibold">
+          <h3 className="flex items-center gap-1.5 t-ui font-semibold">
             <CalendarClock aria-hidden className="h-3.5 w-3.5 text-ink-3" />
             Your rhythm
           </h3>

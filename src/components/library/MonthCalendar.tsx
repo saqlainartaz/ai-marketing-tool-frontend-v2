@@ -107,7 +107,7 @@ export function MonthCalendar({
             >
               <div
                 className={cn(
-                  "font-mono text-[10px]",
+                  "t-meta",
                   isToday
                     ? "font-semibold text-ink"
                     : isThisMonth

@@ -77,7 +77,7 @@ export function BottomNav() {
             role="dialog"
             aria-modal="true"
             aria-label="More"
-            className="absolute right-3 bottom-[76px] left-3 mx-auto max-w-md overflow-hidden rounded-2xl border border-line bg-card shadow-2xl"
+            className="absolute right-3 bottom-[76px] left-3 mx-auto max-w-md overflow-hidden rounded-2xl border border-line bg-card shadow-overlay"
             onClick={(e) => e.stopPropagation()}
           >
             {MORE.map((item) => {
@@ -94,7 +94,7 @@ export function BottomNav() {
                     className="mt-0.5 h-4 w-4 shrink-0 text-ink-3"
                   />
                   <span>
-                    <span className="block text-[13.5px] font-semibold">
+                    <span className="block t-ui font-semibold">
                       {item.label}
                     </span>
                     <span className="t-meta block">{item.desc}</span>
@@ -121,7 +121,7 @@ export function BottomNav() {
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex min-w-16 flex-col items-center gap-1 px-3 pt-3 pb-2.5 text-[11px]",
+                  "relative flex min-w-16 flex-col items-center gap-1 px-3 pt-3 pb-2.5 t-meta font-sans leading-tight",
                   active ? "font-semibold text-ink" : "text-ink-2",
                 )}
               >
@@ -145,7 +145,7 @@ export function BottomNav() {
             type="button"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex min-w-16 cursor-pointer flex-col items-center gap-1 px-3 pt-3 pb-2.5 text-[11px] text-ink-2"
+            className="flex min-w-16 cursor-pointer flex-col items-center gap-1 px-3 pt-3 pb-2.5 t-meta font-sans leading-tight text-ink-2"
           >
             <Menu aria-hidden className="h-5 w-5 text-ink-3" strokeWidth={2} />
             More

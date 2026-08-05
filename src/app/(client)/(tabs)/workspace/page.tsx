@@ -100,7 +100,7 @@ export default function WorkspacePage() {
           <CardShell className="mt-3">
             {phase === "idle" ? (
               <>
-                <label htmlFor="ws-input" className="text-[13.5px] font-semibold">
+                <label htmlFor="ws-input" className="t-ui font-semibold">
                   What&apos;s happening at the business this week?
                 </label>
                 {/* The example lives in the hint, not the placeholder — a
@@ -114,7 +114,7 @@ export default function WorkspacePage() {
                   <p
                     id="ws-error"
                     role="alert"
-                    className="mt-2 flex items-center gap-1.5 text-[12.5px] font-medium text-honey"
+                    className="mt-2 flex items-center gap-1.5 t-sub font-medium text-honey"
                   >
                     <TriangleAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />
                     {error}
@@ -151,7 +151,7 @@ export default function WorkspacePage() {
               />
             ) : (
               <div className="py-3 text-center" data-testid="ws-done">
-                <p className="text-[13.5px] font-semibold">
+                <p className="t-ui font-semibold">
                   Your post is drafted.
                 </p>
                 <p className="t-meta mt-1">

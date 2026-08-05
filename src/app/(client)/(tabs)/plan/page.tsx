@@ -54,7 +54,7 @@ export default function PlanPage() {
         </span>
         <div className="min-w-0">
           <p className="t-label">Everything here serves one goal</p>
-          <p className="mt-1 text-[15px] font-semibold">
+          <p className="mt-1 t-body font-semibold">
             {goal ?? "More calls & booked jobs"}
           </p>
         </div>
@@ -113,7 +113,7 @@ export default function PlanPage() {
           aria-expanded={whyOpen}
           className="flex w-full cursor-pointer items-center gap-2 rounded-xl border border-line bg-card px-4 py-3 text-left"
         >
-          <span className="text-[13.5px] font-semibold">
+          <span className="t-ui font-semibold">
             Why this plan, in plain words
           </span>
           <ChevronDown
@@ -125,7 +125,7 @@ export default function PlanPage() {
           />
         </button>
         {whyOpen ? (
-          <p className="mt-2 rounded-xl border border-line bg-paper px-4 py-3 text-[13px] leading-relaxed text-ink-2">
+          <p className="mt-2 rounded-xl border border-line bg-paper px-4 py-3 t-ui leading-relaxed text-ink-2">
             {client.plan.why}
           </p>
         ) : null}

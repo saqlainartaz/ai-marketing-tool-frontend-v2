@@ -56,7 +56,7 @@ export function EntryDoor({ destination, reason }: EntryDoorProps) {
     <main className="min-h-dvh lg:grid lg:grid-cols-[1.05fr_1fr]">
       {/* Brand */}
       <section className="flex flex-col justify-between bg-ink px-6 py-8 text-canvas lg:px-14 lg:py-12">
-        <p className="font-mono text-[11px] tracking-[0.16em] uppercase opacity-70">
+        <p className="t-meta tracking-[0.16em] uppercase opacity-70">
           InsideSuccess Marketing
         </p>
         <div className="py-10 lg:py-0">
@@ -65,7 +65,7 @@ export function EntryDoor({ destination, reason }: EntryDoorProps) {
             <br />
             prepared for you.
           </h2>
-          <p className="mt-4 max-w-sm text-[14px] leading-relaxed opacity-75">
+          <p className="mt-4 max-w-sm t-ui leading-relaxed opacity-75">
             We know your business, we draft in your voice, and nothing goes out
             without your yes.
           </p>
@@ -74,7 +74,7 @@ export function EntryDoor({ destination, reason }: EntryDoorProps) {
           {PROOF.map(({ icon: Icon, text }) => (
             <li
               key={text}
-              className="flex items-center gap-2 font-mono text-[11px] opacity-70"
+              className="flex items-center gap-2 t-meta opacity-70"
             >
               <Icon aria-hidden className="h-3.5 w-3.5 shrink-0" />
               {text}
@@ -109,7 +109,7 @@ export function EntryDoor({ destination, reason }: EntryDoorProps) {
             >
               <span
                 aria-hidden
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-paper font-display text-[15px] font-bold"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-paper font-display t-body font-bold"
               >
                 {link.initial}
               </span>

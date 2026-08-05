@@ -72,7 +72,7 @@ export function SourcedBody({
       {active ? (
         <span
           data-testid="source-pop"
-          className="mt-2.5 block rounded-xl bg-ink px-3.5 py-2.5 text-[11.5px] leading-snug text-paper"
+          className="mt-2.5 block rounded-xl bg-ink px-3.5 py-2.5 t-sub leading-snug text-paper"
         >
           <Quote aria-hidden className="mr-1.5 inline h-3 w-3 align-[-1px]" />
           <b>Your words</b> — {active.label}

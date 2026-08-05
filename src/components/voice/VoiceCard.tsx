@@ -15,7 +15,7 @@ import type { FixtureClient } from "@/lib/fixtures/clients";
 export function VoiceCard({ client }: { client: FixtureClient }) {
   return (
     <div className="surface overflow-hidden rounded-xl">
-      <p className="border-b border-line px-4 py-3.5 text-[13.5px] leading-relaxed text-ink-2 sm:px-5">
+      <p className="border-b border-line px-4 py-3.5 t-ui leading-relaxed text-ink-2 sm:px-5">
         {client.voice.summary}
       </p>
 
@@ -32,7 +32,7 @@ export function VoiceCard({ client }: { client: FixtureClient }) {
           </p>
           <ul className="mt-3 space-y-2.5">
             {client.voice.sounds.map((phrase) => (
-              <li key={phrase} className="text-[13.5px] leading-snug">
+              <li key={phrase} className="t-ui leading-snug">
                 “{phrase}”
               </li>
             ))}
@@ -53,7 +53,7 @@ export function VoiceCard({ client }: { client: FixtureClient }) {
             {client.voice.avoids.map((word) => (
               <li
                 key={word}
-                className="text-[13.5px] leading-snug text-ink-2"
+                className="t-ui leading-snug text-ink-2"
               >
                 {word}
               </li>

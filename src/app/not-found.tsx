@@ -12,7 +12,7 @@ export default function NotFound() {
         action={
           <Link
             href="/today"
-            className="inline-flex items-center justify-center rounded-lg bg-clay px-5 py-3 text-[15px] font-semibold text-onact transition-[filter] hover:brightness-110"
+            className="inline-flex items-center justify-center rounded-lg bg-clay px-5 py-3 t-body font-semibold text-onact transition-[filter] hover:brightness-110"
           >
             Go to Today
           </Link>

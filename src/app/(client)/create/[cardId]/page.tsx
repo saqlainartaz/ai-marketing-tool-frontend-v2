@@ -103,7 +103,7 @@ export default function CreatePage({
         {stepError && !picks[phase.step] ? (
           <p
             role="alert"
-            className="mb-3 flex items-center gap-1.5 text-[12.5px] font-medium text-honey"
+            className="mb-3 flex items-center gap-1.5 t-sub font-medium text-honey"
           >
             <TriangleAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />
             Pick one to carry on

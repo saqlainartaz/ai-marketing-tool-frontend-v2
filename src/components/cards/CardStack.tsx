@@ -170,7 +170,7 @@ export function CardStack({ clientId }: { clientId: string }) {
               data-testid="stamp"
               className="pointer-events-none absolute inset-0 flex items-center justify-center"
             >
-              <span className="animate-in fade-in zoom-in-95 flex items-center gap-2 rounded-full border border-moss bg-card px-4 py-2 font-display text-sm font-semibold text-moss shadow-lg duration-200">
+              <span className="animate-in fade-in zoom-in-95 flex items-center gap-2 rounded-full border border-moss bg-card px-4 py-2 font-display text-sm font-semibold text-moss shadow-overlay duration-200">
                 <Check className="h-4 w-4" strokeWidth={3} />
                 On its way
               </span>
@@ -182,7 +182,7 @@ export function CardStack({ clientId }: { clientId: string }) {
           <GuardrailLine guardrail={current.guardrail} />
         ) : null}
         {justChecked === current.id && !isEditing ? (
-          <p className="mt-2 flex items-center gap-2 rounded-lg bg-honey-mist px-3 py-2 text-[12px] font-medium text-honey">
+          <p className="mt-2 flex items-center gap-2 rounded-lg bg-honey-mist px-3 py-2 t-sub font-medium text-honey">
             <ShieldCheck aria-hidden className="h-3.5 w-3.5 shrink-0" />
             Still safe after your edit — checked just now
           </p>

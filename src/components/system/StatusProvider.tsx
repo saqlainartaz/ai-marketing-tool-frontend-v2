@@ -80,7 +80,7 @@ export function StatusProvider({ children }: { children: React.ReactNode }) {
           className="pointer-events-none fixed inset-x-0 bottom-24 z-50 flex justify-center px-4 lg:bottom-8"
         >
           <div
-            className={`pointer-events-auto flex items-center gap-3 rounded-xl px-4 py-2.5 shadow-lg ${
+            className={`pointer-events-auto flex items-center gap-3 rounded-xl px-4 py-2.5 shadow-overlay ${
               status.tone === "problem"
                 ? "border border-honey bg-honey-mist text-honey"
                 : "border border-line bg-ink text-paper"
@@ -89,7 +89,7 @@ export function StatusProvider({ children }: { children: React.ReactNode }) {
             {status.tone === "problem" ? (
               <TriangleAlert aria-hidden className="h-3.5 w-3.5 shrink-0" />
             ) : null}
-            <span className="text-[13px] font-medium">{status.message}</span>
+            <span className="t-ui font-medium">{status.message}</span>
             {status.undo ? (
               <button
                 type="button"
@@ -97,7 +97,7 @@ export function StatusProvider({ children }: { children: React.ReactNode }) {
                   status.undo?.();
                   setStatus(null);
                 }}
-                className="inline-flex min-h-6 cursor-pointer items-center gap-1.5 rounded-lg border border-current/30 px-2.5 py-1 text-[12.5px] font-semibold transition-colors hover:bg-current/10"
+                className="inline-flex min-h-6 cursor-pointer items-center gap-1.5 rounded-lg border border-current/30 px-2.5 py-1 t-sub font-semibold transition-colors hover:bg-current/10"
               >
                 <Undo2 aria-hidden className="h-3 w-3" />
                 Undo

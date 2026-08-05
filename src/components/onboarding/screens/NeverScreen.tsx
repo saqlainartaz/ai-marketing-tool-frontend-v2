@@ -64,7 +64,7 @@ export function NeverScreen({
       </div>
 
       <div className="mt-5 rounded-xl border border-honey/40 bg-honey-mist p-4">
-        <p className="flex items-center gap-2 text-[12px] font-semibold text-honey">
+        <p className="flex items-center gap-2 t-sub font-semibold text-honey">
           <ShieldCheck aria-hidden className="h-3.5 w-3.5 shrink-0" />
           {client.lockedReason}
         </p>
@@ -75,7 +75,7 @@ export function NeverScreen({
             </Chip>
           ))}
         </div>
-        <p className="mt-2.5 text-[11.5px] text-honey">
+        <p className="mt-2.5 t-sub text-honey">
           These stay on to protect you — they can&apos;t be switched off.
         </p>
       </div>

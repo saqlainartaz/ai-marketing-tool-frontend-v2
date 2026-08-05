@@ -13,7 +13,7 @@ type ChipProps = {
 };
 
 const SHAPE =
-  "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3.5 text-[13px]";
+  "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3.5 t-ui";
 
 /**
  * Selection is the system's `selected` edge plus a check, never a colour

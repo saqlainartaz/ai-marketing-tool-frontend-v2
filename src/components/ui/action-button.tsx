@@ -61,7 +61,7 @@ export function ActionButton({
            * consequence is announced as a description. */
           aria-hidden
           className={cn(
-            "mt-0.5 font-mono text-[11px] font-normal tracking-tight",
+            "mt-0.5 t-meta font-normal tracking-tight",
             variant === "solid" && !disabled ? "opacity-80" : "text-ink-3",
           )}
         >
@@ -73,8 +73,8 @@ export function ActionButton({
   const classes = cn(
     "pressable group inline-flex w-full flex-col items-center justify-center rounded-lg font-semibold",
     size === "lg"
-      ? "min-h-13 px-5 py-3 text-[15px]"
-      : "min-h-11 px-4 py-2.5 text-[14px]",
+      ? "min-h-13 px-5 py-3 t-body leading-tight"
+      : "min-h-11 px-4 py-2.5 t-ui leading-tight",
     disabled && "is-off",
     variant === "solid" && !disabled && "mark-commitment hover:brightness-110",
     variant === "solid" && disabled && "border border-line",

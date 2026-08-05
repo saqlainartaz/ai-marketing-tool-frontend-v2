@@ -112,7 +112,7 @@ export default function TodayPage() {
                     <span className="t-meta w-4 shrink-0 text-center">
                       {done + 2 + i}
                     </span>
-                    <span className="truncate text-[13px] text-ink-2">
+                    <span className="truncate t-ui text-ink-2">
                       {item.label}
                     </span>
                   </li>
@@ -146,7 +146,7 @@ export default function TodayPage() {
                   className="h-4 w-4 shrink-0 text-moss"
                 />
               </div>
-              <p className="mt-1.5 text-[12.5px] leading-snug">
+              <p className="mt-1.5 t-sub leading-snug">
                 {client.win.unit}
               </p>
               <p className="t-meta mt-0.5">{client.win.note}</p>
@@ -162,7 +162,7 @@ export default function TodayPage() {
               {client.plan.pillars.map((p) => (
                 <span
                   key={p}
-                  className="rounded-full border border-line bg-card px-2.5 py-1 text-[11.5px] text-ink-2"
+                  className="rounded-full border border-line bg-card px-2.5 py-1 t-sub text-ink-2"
                 >
                   {p}
                 </span>
@@ -184,7 +184,7 @@ export default function TodayPage() {
                 aria-hidden
                 className="h-4 w-4 shrink-0 text-ink-3"
               />
-              <span className="text-[12.5px] text-ink-2">
+              <span className="t-sub text-ink-2">
                 Tell us in a sentence
               </span>
               <ArrowRight

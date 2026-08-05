@@ -20,7 +20,7 @@ export function GuardrailLine({
         type="button"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="flex w-full cursor-pointer items-center gap-2 rounded-xl bg-honey-mist px-3 py-2 text-left text-[11.5px] font-medium text-honey"
+        className="flex w-full cursor-pointer items-center gap-2 rounded-xl bg-honey-mist px-3 py-2 text-left t-sub font-medium text-honey"
       >
         <ShieldCheck aria-hidden className="h-3.5 w-3.5 shrink-0" />
         <span className="flex-1">{guardrail.note}</span>
@@ -32,11 +32,11 @@ export function GuardrailLine({
       {open ? (
         <div
           data-testid="guardrail-diff"
-          className="mt-1.5 rounded-xl border border-honey/40 bg-honey-mist px-3 py-2 text-[12px]"
+          className="mt-1.5 rounded-xl border border-honey/40 bg-honey-mist px-3 py-2 t-sub"
         >
           <s className="text-ink-3">{guardrail.from}</s>
           <b className="block">→ {guardrail.to}</b>
-          <span className="mt-1 block text-[10.5px] text-honey">
+          <span className="mt-1 block t-meta text-honey">
             Softened automatically; your call to accept.
           </span>
         </div>

@@ -75,7 +75,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         href={item.href}
         aria-current={active ? "page" : undefined}
         className={cn(
-          "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] transition-colors",
+          "flex items-center gap-2.5 rounded-lg px-2.5 py-2 t-ui transition-colors",
           active
             ? "bg-card font-semibold text-ink shadow-[inset_0_0_0_1px_var(--line)]"
             : "text-ink-2 hover:bg-card/60 hover:text-ink",
@@ -101,7 +101,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* First stop for a keyboard user: jump past the rail to the work. */}
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2.5 focus:text-[13px] focus:font-semibold focus:text-paper"
+        className="t-ui sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2.5 focus:font-semibold focus:text-paper"
       >
         Skip to main content
       </a>
@@ -120,7 +120,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {client.avatarInitial}
           </span>
           <span className="min-w-0">
-            <span className="block truncate text-[13.5px] leading-tight font-semibold">
+            <span className="block truncate t-ui leading-tight font-semibold">
               {client.businessName}
             </span>
             <span className="t-meta block truncate">{client.firstName}</span>

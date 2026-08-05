@@ -116,7 +116,7 @@ export function WeekCalendar({
           >
             <span
               className={cn(
-                "font-mono text-[10px] tracking-wider",
+                "t-meta tracking-wider",
                 i === today ? "text-ink" : "text-ink-3",
               )}
             >
@@ -199,7 +199,7 @@ export function WeekCalendar({
                         className="h-2.5 w-2.5 shrink-0 text-ink-3"
                       />
                     </span>
-                    <span className="line-clamp-2 text-[10px] leading-tight text-ink-2">
+                    <span className="line-clamp-2 t-meta leading-tight text-ink-2">
                       {item.pillar ?? item.body.slice(0, 40)}
                     </span>
                   </button>
@@ -234,7 +234,7 @@ export function WeekCalendar({
                 key={item.id}
                 type="button"
                 onClick={() => onSelect(item.id)}
-                className="flex cursor-pointer items-center gap-1.5 rounded-full border border-line bg-card px-2.5 py-1.5 text-[11.5px] text-ink-2 hover:border-ink-3 hover:text-ink"
+                className="flex cursor-pointer items-center gap-1.5 rounded-full border border-line bg-card px-2.5 py-1.5 t-sub text-ink-2 hover:border-ink-3 hover:text-ink"
               >
                 <PlatformMark platform={item.platform} className="h-3 w-3" />
                 {item.pillar ?? "Untitled"}

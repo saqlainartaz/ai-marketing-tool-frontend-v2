@@ -78,7 +78,7 @@ export function ContentPreview({
                 aria-hidden
                 className="h-3.5 w-3.5 text-ink-3"
               />
-              <span className="text-[13px] font-semibold">
+              <span className="t-ui font-semibold">
                 {review.reviewer}
               </span>
               <span
@@ -94,7 +94,7 @@ export function ContentPreview({
                 ))}
               </span>
             </div>
-            <p className="mt-1 text-[13px] leading-relaxed text-ink-2 italic">
+            <p className="mt-1 t-ui leading-relaxed text-ink-2 italic">
               “{review.text}”
             </p>
           </div>
@@ -109,7 +109,7 @@ export function ContentPreview({
             <Mail aria-hidden className="h-3.5 w-3.5 shrink-0 text-ink-3" />
             <div className="min-w-0">
               <p className="t-meta truncate">{meta}</p>
-              <p className="truncate text-[13px] font-semibold">{subject}</p>
+              <p className="truncate t-ui font-semibold">{subject}</p>
             </div>
           </div>
           <div className="t-body px-4 py-3">{children}</div>

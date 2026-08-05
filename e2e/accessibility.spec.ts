@@ -38,36 +38,75 @@ test("changing page moves focus, so a screen reader isn't left behind", async ({
   await expect(page.locator("#main")).toBeFocused();
 });
 
-test("every control on Today clears the 24px minimum target size", async ({
+const SCREENS = [
+  "/today",
+  "/library",
+  "/plan",
+  "/workspace",
+  "/profile",
+  "/settings",
+];
+
+/**
+ * WCAG 2.2 SC 2.5.8 sets 24px as the floor. This used to run on Today
+ * alone, for Dave alone, in one work mode — so the branches that failed
+ * worst were never reached. It now sweeps every screen, and Amara as well
+ * as Dave, because their fixtures render different controls.
+ */
+async function sweepTargets(page: import("@playwright/test").Page) {
+  const undersized: string[] = [];
+  for (const route of SCREENS) {
+    await page.goto(route);
+    await page.waitForTimeout(300);
+    const controls = page.locator(
+      "main button:visible, main a:visible, main [role=button]:visible, main [role=radio]:visible",
+    );
+    const count = await controls.count();
+    for (let i = 0; i < count; i++) {
+      const control = controls.nth(i);
+      const box = await control.boundingBox();
+      if (!box) continue;
+      // Inline provenance spans are text, not targets — 2.5.8 exempts
+      // controls whose function is available in a sentence's flow.
+      const inline = await control.evaluate(
+        (el) => getComputedStyle(el).display === "inline",
+      );
+      if (inline) continue;
+      if (box.height < 24 || box.width < 24) {
+        const label = (await control.textContent())?.trim().slice(0, 30);
+        undersized.push(`${route} · ${label} → ${box.width}×${box.height}`);
+      }
+    }
+  }
+  return undersized;
+}
+
+test("every control clears the 24px minimum, on every screen (Dave)", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await signIn(page);
+  expect(await sweepTargets(page)).toEqual([]);
+});
 
-  const controls = page.locator(
-    "main button:visible, main a:visible, main [role=button]:visible",
-  );
-  const count = await controls.count();
-  expect(count).toBeGreaterThan(0);
+test("every control clears the 24px minimum, on every screen (Amara)", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/login");
+  await page.getByRole("link", { name: /amara · osei family law/i }).click();
+  await page.waitForURL(/onboarding|today/);
+  expect(await sweepTargets(page)).toEqual([]);
+});
 
-  const undersized: string[] = [];
-  for (let i = 0; i < count; i++) {
-    const control = controls.nth(i);
-    const box = await control.boundingBox();
-    if (!box) continue;
-    // Inline provenance spans are text, not targets — WCAG 2.5.8 exempts
-    // controls whose function is available in a sentence's flow.
-    const inline = await control.evaluate(
-      (el) => getComputedStyle(el).display === "inline",
-    );
-    if (inline) continue;
-    if (box.height < 24 || box.width < 24) {
-      undersized.push(
-        `${(await control.textContent())?.trim().slice(0, 30)} → ${box.width}×${box.height}`,
-      );
-    }
-  }
-  expect(undersized).toEqual([]);
+test("the work-mode dial's other position is swept too", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await signIn(page);
+  // Dave's fixture is "handle", so "show me ideas" renders controls the
+  // sweep would otherwise never see.
+  await page.goto("/settings");
+  await page.getByRole("radio", { name: /show me ideas/i }).click();
+  expect(await sweepTargets(page)).toEqual([]);
 });
 
 test("the decision is announced, and can be taken back", async ({ page }) => {

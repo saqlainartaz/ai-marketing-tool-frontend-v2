@@ -74,7 +74,7 @@ export function ChannelsScreen({
               onClick={() => toggle(channel)}
               data-state={state ?? "off"}
               className={cn(
-                "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border bg-card px-3 py-2 text-[13px] transition-colors",
+                "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border bg-card px-3 py-2 t-ui transition-colors",
                 !state && "border-line text-ink-2 hover:border-ink-3 hover:text-ink",
                 state === "now" &&
                   "border-clay font-semibold text-ink shadow-[inset_0_0_0_1px_var(--clay)]",

@@ -62,7 +62,7 @@ export function WorkSpine({
             <span
               aria-hidden
               className={cn(
-                "relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border font-mono text-[10px]",
+                "relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border t-meta",
                 item.state === "done" &&
                   "border-moss bg-moss-mist text-moss",
                 item.state === "current" &&
@@ -79,7 +79,7 @@ export function WorkSpine({
             </span>
             <span
               className={cn(
-                "pt-0.5 text-[12.5px] leading-snug",
+                "pt-0.5 t-sub leading-snug",
                 item.state === "current"
                   ? "font-semibold text-ink"
                   : item.state === "done"

@@ -92,7 +92,7 @@ export function PostPreview({
           </span>
         </div>
         <div className="min-w-0">
-          <div className="truncate text-[13px] font-semibold">
+          <div className="truncate t-ui font-semibold">
             {businessName}
           </div>
           <div className="t-meta truncate">{meta}</div>
@@ -112,7 +112,7 @@ export function PostPreview({
         {PLATFORM_ACTIONS[platform].map(({ icon: Icon, label }) => (
           <span
             key={label}
-            className="inline-flex items-center gap-1.5 text-[11px] text-ink-3"
+            className="inline-flex items-center gap-1.5 t-meta font-sans text-ink-3"
           >
             <Icon aria-hidden className="h-3.5 w-3.5" />
             {label}
