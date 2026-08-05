@@ -177,9 +177,7 @@ export default function WorkspacePage() {
         </div>
       </div>
       <div className="mt-10 border-t border-line pt-8">
-        <SectionLabel right={`${client.ideas.length}`}>
-          Give me ideas
-        </SectionLabel>
+        <SectionLabel>Give me ideas</SectionLabel>
         <p className="t-sub mt-2 max-w-xl">
           Things worth saying, mined from your episode, your calls and your
           reviews. Pick one and we write it.

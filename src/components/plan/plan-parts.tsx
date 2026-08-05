@@ -70,7 +70,7 @@ export function PillarBar({
       <div className="flex items-baseline gap-3">
         <span className="text-[13px] font-medium">{pillar}</span>
         <span className="t-meta ml-auto shrink-0">
-          {count > 0 ? `${count} · ${pct}%` : "nothing yet"}
+          {count > 0 ? `${count} of ${total}` : "nothing yet"}
         </span>
       </div>
       <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-line">

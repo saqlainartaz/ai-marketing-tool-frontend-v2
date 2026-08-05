@@ -210,6 +210,9 @@ export default function LibraryPage() {
       </div>
 
       {/* View switch */}
+      {/* Full labels wrapped to two ragged lines at 390px, so the phone
+          gets short ones. Both forms describe the view — neither is a
+          code the reader has to learn. */}
       <div className="mt-6 inline-flex rounded-lg border border-line bg-card p-0.5">
         {(["week", "month", "list"] as const).map((v) => (
           <button
@@ -231,11 +234,16 @@ export default function LibraryPage() {
             ) : (
               <List aria-hidden className="h-3.5 w-3.5" />
             )}
-            {v === "week"
-              ? "This week"
-              : v === "month"
-                ? "Full calendar"
-                : "Everything"}
+            <span className="whitespace-nowrap sm:hidden">
+              {v === "week" ? "Week" : v === "month" ? "Month" : "All"}
+            </span>
+            <span className="hidden whitespace-nowrap sm:inline">
+              {v === "week"
+                ? "This week"
+                : v === "month"
+                  ? "Full calendar"
+                  : "Everything"}
+            </span>
           </button>
         ))}
       </div>
@@ -249,7 +257,7 @@ export default function LibraryPage() {
           {/* The grid answers "when"; the week's items answer "what" —
               together they fill the page honestly, even on a light week. */}
           <div className="mt-8">
-            <SectionLabel right={`${weekItems.length}`}>
+            <SectionLabel right={`${weekItems.length} prepared`}>
               Prepared for this week
             </SectionLabel>
             {weekItems.length > 0 ? (
@@ -310,7 +318,7 @@ export default function LibraryPage() {
             if (rows.length === 0) return null;
             return (
               <div key={group.key}>
-                <SectionLabel right={`${rows.length}`}>
+                <SectionLabel right={`${rows.length} here`}>
                   {group.title}
                 </SectionLabel>
                 <ul className="surface mt-3 overflow-hidden rounded-xl">

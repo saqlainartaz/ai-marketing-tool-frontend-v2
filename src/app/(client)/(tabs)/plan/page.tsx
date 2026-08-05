@@ -62,7 +62,7 @@ export default function PlanPage() {
 
       {/* Channels */}
       <div className="mt-8">
-        <SectionLabel right={`${client.plan.channels.length}`}>
+        <SectionLabel right={`${client.plan.channels.length} channels`}>
           Where you show up
         </SectionLabel>
         <div className="mt-3 grid gap-2 sm:grid-cols-2">
