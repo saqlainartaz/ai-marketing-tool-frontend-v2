@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   CircleUser,
+  FileText,
   LibraryBig,
   Map,
   Settings,
@@ -28,6 +29,7 @@ const NAV = [
 
 const NAV_QUIET = [
   { href: "/workspace", label: "Workspace", icon: Sparkles },
+  { href: "/documents", label: "What we've read", icon: FileText },
   { href: "/profile", label: "Profile", icon: CircleUser },
   { href: "/settings", label: "Settings", icon: Settings },
 ] as const;

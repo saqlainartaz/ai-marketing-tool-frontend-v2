@@ -157,6 +157,17 @@ export default function ProfilePage() {
         <LegibleMemory clientId={clientId} />
       </div>
 
+      <div className="mt-8 rounded-xl border border-dashed border-line px-4 py-4">
+        <p className="t-ui">Something missing?</p>
+        <p className="t-sub mt-1">
+          Everything above came from what you&apos;ve given us. Add more and
+          we&apos;ll read it.
+        </p>
+        <QuietLink href="/documents" className="mt-2">
+          Teach us something
+        </QuietLink>
+      </div>
+
       <div className="mt-8 space-y-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-8 lg:space-y-0">
         <div className="space-y-6">
           <div>

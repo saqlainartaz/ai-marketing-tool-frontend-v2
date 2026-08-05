@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   CircleUser,
+  FileText,
   LibraryBig,
   Map,
   Menu,
@@ -27,6 +28,12 @@ const MORE = [
     label: "Workspace",
     desc: "Tell us what's happening · what we can make",
     icon: Sparkles,
+  },
+  {
+    href: "/documents",
+    label: "What we've read",
+    desc: "Everything you've given us, and what it taught us",
+    icon: FileText,
   },
   {
     href: "/profile",
