@@ -8,6 +8,7 @@ import {
   PillarBar,
   RhythmStrip,
 } from "@/components/plan/plan-parts";
+import { ActionButton } from "@/components/ui/action-button";
 import { SectionLabel } from "@/components/ui/section-label";
 import { useClientId } from "@/components/auth/ClientSession";
 import { QuietLink } from "@/components/ui/quiet-link";
@@ -32,6 +33,7 @@ export default function PlanPage() {
     typeof window !== "undefined" ? getStoredAnswers().goal : undefined;
 
   const made = items.filter((i) => i.status !== "skipped");
+  const waiting = items.filter((i) => i.status === "ready").length;
   const countFor = (pillar: string) =>
     made.filter((i) => i.pillar === pillar).length;
   const pillarTotal = client.plan.pillars.reduce(
@@ -131,12 +133,22 @@ export default function PlanPage() {
         ) : null}
       </div>
 
-      <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-4">
-        <QuietLink href="/settings">Change your goal</QuietLink>
-        <QuietLink href="/today">This week&apos;s work</QuietLink>
-        <span className="t-meta ml-auto">
-          Built from your episode and your answers
-        </span>
+      {/* A reference page still owes the reader a way onward. Reading the
+          plan doesn't change anything — doing this week's work does, so
+          that's the one action, and it says how much is waiting. */}
+      <div className="mt-8 border-t border-line pt-6">
+        <ActionButton size="lg" href="/today" className="sm:w-auto sm:px-8">
+          {waiting > 0
+            ? `Go to this week's work · ${waiting} waiting`
+            : "Go to this week's work"}
+          <ArrowRight className="h-4 w-4" />
+        </ActionButton>
+        <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+          <QuietLink href="/settings">Change your goal</QuietLink>
+          <span className="t-meta sm:ml-auto">
+            Built from your episode and your answers
+          </span>
+        </div>
       </div>
     </div>
   );

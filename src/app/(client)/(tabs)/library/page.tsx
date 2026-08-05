@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
+  ArrowRight,
   CalendarDays,
   CalendarRange,
   CheckCheck,
@@ -30,6 +31,7 @@ import { PlatformMark } from "@/components/preview/platform-mark";
 import { useStatus } from "@/components/system/StatusProvider";
 import { WeekCalendar } from "@/components/library/WeekCalendar";
 import { MonthCalendar } from "@/components/library/MonthCalendar";
+import { ActionButton } from "@/components/ui/action-button";
 import { Chip } from "@/components/ui/chip";
 import { SectionLabel } from "@/components/ui/section-label";
 import { QuietLink } from "@/components/ui/quiet-link";
@@ -74,6 +76,8 @@ export default function LibraryPage() {
   const [view, setView] = useState<"week" | "month" | "list">("week");
   const [openId, setOpenId] = useState<string | null>(null);
   const { announce } = useStatus();
+
+  const waiting = items.filter((i) => i.status === "ready").length;
 
   const weekItems = items.filter(
     (i) => i.scheduledFor && i.status !== "skipped",
@@ -208,6 +212,26 @@ export default function LibraryPage() {
           <b className="font-mono">{publishedWithoutApprovalCount()}</b>
         </p>
       </div>
+
+      {/* The archive answers "what went out". If something is still
+          waiting on a yes, that's the more urgent fact — so it's stated
+          here rather than left for the reader to notice in a status
+          group further down. */}
+      {waiting > 0 ? (
+        <div className="mt-4">
+          <ActionButton
+            size="lg"
+            href="/today"
+            className="sm:w-auto sm:px-8"
+            consequence="nothing goes out until you say so"
+          >
+            {waiting === 1
+              ? "1 still needs your yes"
+              : `${waiting} still need your yes`}
+            <ArrowRight className="h-4 w-4" />
+          </ActionButton>
+        </div>
+      ) : null}
 
       {/* View switch */}
       {/* Full-width and equal thirds on a phone: as a shrink-to-fit row
