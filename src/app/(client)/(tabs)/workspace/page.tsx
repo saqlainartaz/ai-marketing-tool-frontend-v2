@@ -112,10 +112,17 @@ export default function WorkspacePage() {
 
                 {/* This is the only free-text box in the product, and a
                  * blank box is the hardest thing to face for someone who
-                 * doesn't know where to start. It never ships empty:
-                 * these are real things this business might say, and
-                 * tapping one fills the box so it can be edited rather
-                 * than composed. */}
+                 * doesn't know where to start. So the starting points sit
+                 * above it and are the primary path: tapping one fills the
+                 * box, leaving something to edit rather than compose.
+                 *
+                 * The box itself stays empty on purpose, and this is the
+                 * one place "never a blank page" yields. These sentences
+                 * are plausible, not true — pre-filling one would have the
+                 * product assert a job that may never have happened, and
+                 * every claim tracing to the client's own words is the
+                 * promise the whole thing rests on. A starting point they
+                 * choose is theirs; one we typed for them isn't. */}
                 <ul className="mt-3 flex flex-wrap gap-2">
                   {client.promptSuggestions.map((s) => (
                     <li key={s}>
@@ -143,6 +150,7 @@ export default function WorkspacePage() {
                     {error}
                   </p>
                 ) : null}
+                <p className="t-label mt-4">Or in your own words</p>
                 <textarea
                   id="ws-input"
                   ref={inputRef}
@@ -151,7 +159,7 @@ export default function WorkspacePage() {
                   rows={3}
                   aria-describedby={error ? "ws-hint ws-error" : "ws-hint"}
                   aria-invalid={error ? true : undefined}
-                  className={`t-body mt-3 w-full resize-none rounded-lg border bg-paper p-3 focus:border-clay ${
+                  className={`t-body mt-1.5 w-full resize-none rounded-lg border bg-paper p-3 focus:border-clay ${
                     error ? "border-honey" : "border-line"
                   }`}
                 />

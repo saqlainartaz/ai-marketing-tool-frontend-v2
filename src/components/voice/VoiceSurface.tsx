@@ -108,19 +108,26 @@ function TraitList({
 
 function ToneMatrix({ version }: { version: VoiceProfileVersion }) {
   return (
-    <ul className="space-y-4">
+    /* Capped: an axis is a scale you read at a glance, and stretched the
+     * width of a desktop column it stops looking like one. */
+    <ul className="max-w-sm space-y-4">
       {version.tone.map((axis) => (
         <li key={axis.label}>
-          <div className="flex items-baseline justify-between">
-            <span className="t-ui">{axis.label}</span>
-            <span className="t-meta">
-              {axis.value < 40
+          {/* The reading sits beside the label, not opposite it. Pushed
+           * right it landed directly above the right-hand endpoint and
+           * read as a duplicate of it — "Warmth … Warm / Formal — Warm".
+           * Lower-cased for the same reason it isn't a heading. */}
+          <p className="t-ui">
+            {axis.label}
+            <span className="t-meta ml-2">
+              {(axis.value < 40
                 ? axis.leftLabel
                 : axis.value > 60
                   ? axis.rightLabel
-                  : "balanced"}
+                  : "balanced"
+              ).toLowerCase()}
             </span>
-          </div>
+          </p>
           <div className="relative mt-2 h-1.5 rounded-full bg-line">
             <span
               aria-hidden

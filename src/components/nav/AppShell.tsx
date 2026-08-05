@@ -36,6 +36,15 @@ const NAV_QUIET = [
   { href: "/settings", label: "Settings", icon: Settings },
 ] as const;
 
+/* Pages that earn the full width: each puts something in it — Today's
+ * context rail, Library's seven-day grid, Plan's channel pair, Workspace's
+ * two columns. Everything else is a single column of prose and rows, and
+ * at 980px that column runs to about 110 characters a line — well past the
+ * 65–75 where reading slows and rows stretch into dead space. So the
+ * reading measure is the default and width is the exception, which also
+ * means a page added later is narrow until someone decides otherwise. */
+const WIDE = ["/today", "/library", "/plan", "/workspace"];
+
 /**
  * The desk: a persistent rail on desktop (identity, work, quiet tools),
  * the bottom bar on phones. Same product, native furniture per device.
@@ -162,7 +171,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           id="main"
           ref={main}
           tabIndex={-1}
-          className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 pt-6 pb-4 outline-none lg:max-w-[980px] lg:px-12 lg:pt-10"
+          className={cn(
+            "mx-auto flex w-full max-w-md flex-1 flex-col px-5 pt-6 pb-4 outline-none lg:px-12 lg:pt-10",
+            WIDE.some((h) => pathname.startsWith(h))
+              ? "lg:max-w-[980px]"
+              : "lg:max-w-[724px]",
+          )}
         >
           {children}
         </main>

@@ -160,7 +160,42 @@ second opinion on dark themes.
 
 ---
 
-## 10. How to check a screen
+## 10. Measure
+
+The reading column is the default; full width is the exception, and a page
+has to earn it by putting something in it — a rail, a grid, a second
+column. `AppShell` holds the list (`WIDE`), so a page added later is narrow
+until someone decides otherwise.
+
+Why: at 980px a single column of prose runs to roughly 110 characters a
+line, well past the 65–75 where reading slows, and rows stretch until the
+label and its value are separated by a hand's width of nothing. Both read
+as unfinished before anyone can say why.
+
+Controls that are read at a glance — a tone axis, a slider, a segmented
+choice — get capped tighter still. A scale drawn the width of a desktop
+column stops looking like a scale.
+
+---
+
+## 11. Where "never a blank page" yields
+
+One rule outranks it: **never put words in the client's mouth.**
+
+The Workspace box is the only free-text input in the product and it ships
+empty on purpose. The suggestions above it are plausible sentences, not
+true ones — pre-filling one would have the product assert a job that may
+never have happened, and every claim tracing to the client's own words is
+the promise the rest of the product rests on. A starting point they choose
+is theirs; one we typed for them isn't.
+
+So the screen carries the burden instead: the starting points come first
+and are the primary path, and the box is labelled as the alternative.
+Nobody faces a blank page; nobody is handed a sentence they didn't say.
+
+---
+
+## 12. How to check a screen
 
 Run these against anything before calling it done:
 

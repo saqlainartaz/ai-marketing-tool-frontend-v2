@@ -76,9 +76,12 @@ export function ContentPreview({
       {/* Object header — what this is, where it came from, its state. */}
       <header className="flex items-center gap-2 border-b border-line bg-paper px-4 py-2">
         <PlatformMark platform={platform} size="sm" className="shrink-0" />
-        <span className="t-label truncate">
-          {label}
-          {pillar ? ` · ${pillar}` : ""}
+        {/* Truncating the pair as one string cut the channel itself on a
+         * phone — "GOOGLE BUSINESS POST · BEFO…". What this is has to
+         * survive; the pillar is context and can lose its tail. */}
+        <span className="t-label flex min-w-0 gap-1">
+          <span className="shrink-0">{label}</span>
+          {pillar ? <span className="truncate">· {pillar}</span> : null}
         </span>
         {status ? (
           <span className="t-label ml-auto shrink-0 text-ink-2">{status}</span>

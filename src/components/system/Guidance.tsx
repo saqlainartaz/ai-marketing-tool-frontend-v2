@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { HelpCircle, X } from "lucide-react";
 
@@ -73,7 +73,30 @@ const GUIDANCE: Record<string, { title: string; body: string[] }> = {
 export function Guidance() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const close = useRef<HTMLButtonElement>(null);
   const entry = GUIDANCE[pathname];
+
+  /* Every way in needs a way out that doesn't require finding a target.
+   * Escape closes it, focus moves into the panel when it opens so the
+   * next Tab is inside rather than back at the top of the page, and it
+   * returns to the button on close so the keyboard user's place is kept. */
+  useEffect(() => {
+    if (!open) return;
+    close.current?.focus();
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      setOpen(false);
+      trigger.current?.focus();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  function dismiss() {
+    setOpen(false);
+    trigger.current?.focus();
+  }
 
   if (!entry) return null;
 
@@ -85,6 +108,7 @@ export function Guidance() {
        * user says what they see and nothing happens. */}
       <button
         type="button"
+        ref={trigger}
         onClick={() => setOpen(true)}
         aria-expanded={open}
         className="pressable t-meta inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-line px-3 text-ink-3 hover:border-ink-3 hover:text-ink"
@@ -96,7 +120,7 @@ export function Guidance() {
       {open ? (
         <div
           className="fixed inset-0 z-50 flex items-end justify-center bg-scrim p-4 sm:items-center"
-          onClick={() => setOpen(false)}
+          onClick={dismiss}
         >
           <div
             data-testid="guidance"
@@ -110,7 +134,8 @@ export function Guidance() {
               <p className="t-title flex-1">{entry.title}</p>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                ref={close}
+                onClick={dismiss}
                 aria-label="Close"
                 className="pressable -mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-ink-3 hover:text-ink"
               >
