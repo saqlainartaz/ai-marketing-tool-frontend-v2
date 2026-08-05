@@ -10,6 +10,7 @@ import { CardShell } from "@/components/ui/card-shell";
 import { ContentPreview } from "@/components/preview/ContentPreview";
 import { SourcedBody } from "@/components/preview/SourcedBody";
 import { GuardrailLine } from "@/components/preview/GuardrailLine";
+import { WhyThis } from "@/components/preview/WhyThis";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import {
   useContentItems,
@@ -57,25 +58,43 @@ export function CardStack({ clientId }: { clientId: string }) {
 
   /* Each decision hands over to the next: the incoming object rises into
    * place, its actions follow. Motion confirms the handover — it is the
-   * only animation on this screen. */
+   * only animation on this screen.
+   *
+   * Kept deliberately short. This runs once per card in a loop a client is
+   * meant to finish in under a minute, so every 100ms here is spent five
+   * times over. The CSS reduced-motion rule can't reach GSAP, so the
+   * preference is checked directly. */
   useGSAP(
     () => {
+      const reduced =
+        typeof window !== "undefined" &&
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduced) return;
+
       gsap.from("[data-card-object]", {
         opacity: 0,
-        y: 16,
-        duration: 0.38,
+        y: 12,
+        duration: 0.22,
         ease: "power3.out",
       });
       gsap.from("[data-card-actions]", {
         opacity: 0,
-        y: 8,
-        duration: 0.3,
-        delay: 0.08,
+        y: 6,
+        duration: 0.18,
+        delay: 0.04,
         ease: "power2.out",
       });
     },
     { scope: root, dependencies: [current?.id ?? "none"] },
   );
+
+  /* The stamp is the product's one flourish and it stays — but it used to
+   * hold the primary action disabled for 700ms, which across a five-card
+   * week is three and a half seconds of a client waiting on an animation.
+   * The toast already confirms the approval and carries the undo, so the
+   * stamp only has to register; it doesn't have to be read. */
+  const STAMP_MS = 320;
 
   function approve(id: string) {
     setStamped(id);
@@ -83,7 +102,7 @@ export function CardStack({ clientId }: { clientId: string }) {
       setStamped(null);
       decideItem(clientId, id, "approved");
       announce("Approved", { undo: () => undecideItem(clientId, id) });
-    }, 700);
+    }, STAMP_MS);
   }
 
   function skip(id: string) {
@@ -236,6 +255,12 @@ export function CardStack({ clientId }: { clientId: string }) {
                   Skip {objectNoun(current.kind)}
                 </ActionButton>
               </div>
+              {/* Below the actions on purpose. Someone approving a week in
+                  a minute must never scroll past our reasoning to reach
+                  the button; someone who wants the reasoning will scroll. */}
+              {current.rationale ? (
+                <WhyThis rationale={current.rationale} />
+              ) : null}
             </>
           )}
         </div>

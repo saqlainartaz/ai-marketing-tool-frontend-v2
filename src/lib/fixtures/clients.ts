@@ -15,6 +15,23 @@ export type ProvenanceSpan = {
   quote?: string; // the exact grounding words
 };
 
+/**
+ * The marketing reasoning behind a prepared object.
+ *
+ * The product's through-line: we explain the marketing, not the interface.
+ * Three different lessons, one per line — so a client who reads it for a
+ * month learns something, and a client who never opens it loses nothing,
+ * because it stays collapsed.
+ */
+export type Rationale = {
+  /** Why now — a season, an event, something that just happened. */
+  moment: string;
+  /** Why this channel, in terms of where their customers actually are. */
+  channel: string;
+  /** Why it reads the way it does — the craft decision. */
+  shape: string;
+};
+
 export type FixtureDraft = {
   id: string;
   /** The marketing tool this came from — new tools add kinds, not screens. */
@@ -26,6 +43,8 @@ export type FixtureDraft = {
   consequence?: string;
   pillar?: string;
   provenance?: ProvenanceSpan[];
+  /** Why we made this — the "Why this?" disclosure. */
+  rationale?: Rationale;
   /** Protection already applied — shown as the honey line + diff. */
   guardrail?: { note: string; from: string; to: string };
   /** review_reply: the review being answered. */
@@ -182,6 +201,14 @@ const dave: FixtureClient = {
       withImage: true,
       consequence: "pull it back anytime",
       pillar: "Storm-season prep",
+      rationale: {
+        moment:
+          "Hail season starts in about six weeks. Austin homeowners start searching for roofers the week the first storm hits — the ones who already know your name call you first.",
+        channel:
+          "Facebook, because roof damage is what neighbours ask each other about. A post here gets shared into local groups you can't buy your way into.",
+        shape:
+          "It gives something away before it asks for anything. The ten-minute check is useful on its own, which is why people save it and come back to you later.",
+      },
       provenance: [
         {
           phrase: "we caught three roofs their owners thought were fine",
@@ -200,6 +227,14 @@ const dave: FixtureClient = {
       withImage: true,
       consequence: "pull it back anytime",
       pillar: "Before & after jobs",
+      rationale: {
+        moment:
+          "Before-and-afters work all year, so this one fills a Thursday rather than chasing an event.",
+        channel:
+          "Google Business, because this is what someone sees when they search \"roofer near me\" — photos of finished work do more there than words.",
+        shape:
+          "Two days and the family staying home are the details that answer the fear behind the search: how long will my life be disrupted?",
+      },
       provenance: [
         {
           phrase: "full replacement in two days",
@@ -221,6 +256,14 @@ const dave: FixtureClient = {
       body: 'The #1 question we get every storm season: "Should I file a claim?" Here\'s how to know in five minutes — before you call anyone.',
       consequence: "pull it back anytime",
       pillar: "Questions customers ask",
+      rationale: {
+        moment:
+          "Saturday morning, when people deal with the house things they put off all week.",
+        channel:
+          "Facebook, where a question in the first line stops the scroll better than a statement does.",
+        shape:
+          "It leads with the question they're already typing into Google. Answering it here means they never leave to find the answer somewhere else.",
+      },
     },
     {
       id: "dave-4",
@@ -236,6 +279,14 @@ const dave: FixtureClient = {
       body: "Thank you, Karen — the crew still talks about your dog supervising from the porch. Two days is what good prep looks like; glad the cleanup showed too. We're here whenever you need us.",
       consequence: "posts to your Google reviews · pull it back anytime",
       pillar: "Reviews",
+      rationale: {
+        moment:
+          "Within a day of the review going up. Replies posted quickly read as a business that's paying attention.",
+        channel:
+          "Google, where the reply sits under the review permanently — future customers read both.",
+        shape:
+          "It thanks her by name and repeats the detail she chose to praise, so the reply reinforces the thing you want to be known for rather than just saying thanks.",
+      },
       provenance: [
         {
           phrase: "Two days is what good prep looks like",
@@ -270,6 +321,14 @@ const dave: FixtureClient = {
         body: "Wrapped up another one this week — and the part the homeowner mentioned first wasn't the roof. It was that the crew explained every step before it happened. That's how we like it: no surprises up there, none on the bill either.",
         consequence: "pull it back anytime",
         pillar: "Before & after jobs",
+        rationale: {
+          moment:
+            "Finished work is evergreen — it fills a slot without waiting for an event.",
+          channel:
+            "Facebook, where a neighbour recognising the street does more than any advert.",
+          shape:
+            "The detail that matters is disruption, not craft. People want to know what living through it is like.",
+        },
         provenance: [
           {
             phrase: "the crew explained every step",
@@ -293,6 +352,14 @@ const dave: FixtureClient = {
         body: "After a storm, an adjuster is looking for three things — and homeowners almost never photograph them. Here's what to capture before anyone climbs up, so your claim tells the whole story.",
         consequence: "pull it back anytime",
         pillar: "Questions customers ask",
+        rationale: {
+          moment:
+            "Any week. These answer what people are already searching for, so they never go stale.",
+          channel:
+            "Facebook, because a question in the first line earns the read.",
+          shape:
+            "Answering properly here means they don't leave to find the answer somewhere else.",
+        },
         scheduledFor: "FRI",
         provenance: [
           {
@@ -315,6 +382,14 @@ const dave: FixtureClient = {
         body: "We told a homeowner last week that her roof had four good years left. No sale, no deposit. She'll call us in four years — and she already sent her neighbour.",
         consequence: "pull it back anytime",
         pillar: "Before & after jobs",
+        rationale: {
+          moment:
+            "Finished work is evergreen — it fills a slot without waiting for an event.",
+          channel:
+            "Facebook, where a neighbour recognising the street does more than any advert.",
+          shape:
+            "The detail that matters is disruption, not craft. People want to know what living through it is like.",
+        },
         scheduledFor: "SAT",
         provenance: [
           { phrase: "four good years left", label: "your onboarding call" },
@@ -334,6 +409,14 @@ const dave: FixtureClient = {
         body: "Spring gutter check, ten minutes: clear the corners, run the hose, watch where it pools. If it pools by the fascia, call someone before summer storms — that's where the damage starts.",
         consequence: "pull it back anytime",
         pillar: "Storm-season prep",
+        rationale: {
+          moment:
+            "Ahead of the season, while people can still act rather than react.",
+          channel:
+            "Google Business, where someone searches the moment they suspect damage.",
+          shape:
+            "Practical and specific. Advice they can use today is what makes them remember who gave it.",
+        },
         provenance: [
           { phrase: "that's where the damage starts", label: "your reviews · 3 mentions" },
         ],
@@ -420,6 +503,14 @@ const amara: FixtureClient = {
       body: "In fifteen years of family practice, the cases that end well usually start with a conversation months earlier — before positions harden. You don't need a crisis to book a consultation. You need twenty minutes and a list of what's keeping you up at night.",
       consequence: "nothing publishes without you · ever",
       pillar: "What to ask before a crisis",
+      rationale: {
+        moment:
+          "Mid-week, when people research quietly at their desk. Family-law enquiries spike on weekday afternoons, not weekends.",
+        channel:
+          "LinkedIn, because the people who refer you — accountants, therapists, other solicitors — are there, and referrals are where your best clients come from.",
+        shape:
+          "It lowers the barrier instead of selling. \"You don't need a crisis\" gives someone permission to enquire early, which is exactly the client you want.",
+      },
       provenance: [
         {
           phrase: "fifteen years of family practice",
@@ -440,6 +531,14 @@ const amara: FixtureClient = {
       body: 'Mediation isn\'t about "giving in." In my experience it\'s where families keep the most control over their own outcome. Three myths I hear every week — and what actually happens in the room.',
       consequence: "nothing publishes without you · ever",
       pillar: "Mediation myths",
+      rationale: {
+        moment:
+          "Monday. Weekend arguments are what push people to start looking on a Monday morning.",
+        channel:
+          "LinkedIn, where correcting a professional misconception builds authority faster than describing your services does.",
+        shape:
+          "Naming the myth first is what earns the read. People click to check whether they hold the belief you just named.",
+      },
       provenance: [
         {
           phrase: "families keep the most control over their own outcome",
@@ -502,6 +601,14 @@ const amara: FixtureClient = {
         body: '"Will we end up in court?" It\'s the question behind almost every first consultation. The honest answer: usually not — and the path that avoids it starts earlier than most people think.',
         consequence: "nothing publishes without you · ever",
         pillar: "How consultations actually work",
+        rationale: {
+          moment:
+            "Steady all year — the fear of the first meeting never goes out of season.",
+          channel:
+            "LinkedIn, where the professionals who refer you are reading.",
+          shape:
+            "Removing the unknown is the whole job. People delay because they don't know what happens in the room.",
+        },
         provenance: [
           {
             phrase: "usually not",
@@ -525,6 +632,14 @@ const amara: FixtureClient = {
         body: "People arrive at a first consultation braced for an interrogation. Bring two things: a rough timeline, and the questions keeping you up at night. That is genuinely enough for us to start.",
         consequence: "nothing publishes without you · ever",
         pillar: "How consultations actually work",
+        rationale: {
+          moment:
+            "Steady all year — the fear of the first meeting never goes out of season.",
+          channel:
+            "LinkedIn, where the professionals who refer you are reading.",
+          shape:
+            "Removing the unknown is the whole job. People delay because they don't know what happens in the room.",
+        },
         scheduledFor: "FRI",
         provenance: [
           {
@@ -547,6 +662,14 @@ const amara: FixtureClient = {
         body: "In custody matters, the parent who stays calm on paper tends to fare better than the one who is right and furious. Not because courts reward composure — because composure keeps options open.",
         consequence: "nothing publishes without you · ever",
         pillar: "What to ask before a crisis",
+        rationale: {
+          moment:
+            "Mid-week, when people quietly research at their desk.",
+          channel:
+            "LinkedIn, because early enquiries come through professional referral more often than search.",
+          shape:
+            "It gives permission to come early, which is exactly the client you want.",
+        },
         provenance: [
           { phrase: "composure keeps options open", label: "your episode, February · 26:05" },
         ],
@@ -565,6 +688,14 @@ const amara: FixtureClient = {
         body: "Families ask what mediation costs and get a shrug. Here is the honest shape of it: fewer sessions than you fear, priced per session, and the total is usually a fraction of a contested filing.",
         consequence: "nothing publishes without you · ever",
         pillar: "Mediation myths",
+        rationale: {
+          moment:
+            "Monday, after the weekend that made someone start looking.",
+          channel:
+            "LinkedIn, where correcting a misconception builds authority faster than describing services.",
+          shape:
+            "Naming the belief first is what earns the read.",
+        },
         provenance: [
           { phrase: "fewer sessions than you fear", label: "your onboarding call" },
         ],
