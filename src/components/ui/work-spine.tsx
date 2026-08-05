@@ -30,7 +30,7 @@ export function WorkSpine({
       <div className="lg:hidden">
         <div className="flex items-center gap-2">
           <span className="t-meta">
-            {done}/{items.length}
+            {done} of {items.length} done
           </span>
           <div className="flex flex-1 gap-1">
             {items.map((item) => (

@@ -62,7 +62,7 @@ export function ActionButton({
           aria-hidden
           className={cn(
             "mt-0.5 t-meta font-normal tracking-tight",
-            variant === "solid" && !disabled ? "opacity-80" : "text-ink-3",
+            variant === "solid" && !disabled ? "opacity-95" : "text-ink-3",
           )}
         >
           {consequence}
