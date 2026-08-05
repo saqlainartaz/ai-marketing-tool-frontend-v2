@@ -197,6 +197,9 @@ export default function WorkspacePage() {
           <div className="mt-3">
             <VoiceCard client={client} />
           </div>
+          <QuietLink href="/voice" className="mt-2">
+            See the evidence behind this
+          </QuietLink>
         </div>
       </div>
       <div className="mt-10 border-t border-line pt-8">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Camera, Check, Globe, Mail, PenLine, Phone } from "lucide-react";
 import { CardShell } from "@/components/ui/card-shell";
@@ -14,51 +14,58 @@ import { getFixtureClient } from "@/lib/fixtures/clients";
 import { getStoredAnswers } from "@/lib/store/answers";
 import type { OnboardingAnswers } from "@/components/onboarding/OnboardingProvider";
 import { QuietLink } from "@/components/ui/quiet-link";
+import { LegibleMemory } from "@/components/profile/LegibleMemory";
 
 /**
  * The client's legible memory: everything the system believes, on one
  * page, every line correctable. Unanswered rows are designed states with
  * a way to fix them — never a dead "set during onboarding".
  */
+/**
+ * Each unset row links with its own words. Three links all reading "Not
+ * set yet" are indistinguishable in a screen reader's link list, and they
+ * make the reader look back up at the label to know where they'd be going.
+ *
+ * Declared at module scope: defining a component inside another component
+ * makes React treat it as a new type on every render, remounting it and
+ * discarding its state.
+ */
+function Row({
+  label,
+  value,
+  fixHref,
+  setLabel,
+}: {
+  label: string;
+  value?: string | null;
+  fixHref: string;
+  /** Verb + the same noun as the row label, e.g. "Set your goal". */
+  setLabel: string;
+}) {
+  return (
+    <div className="border-b border-line py-2.5 last:border-0">
+      <p className="t-label">{label}</p>
+      {value ? (
+        <p className="mt-0.5 t-ui">{value}</p>
+      ) : (
+        <QuietLink href={fixHref}>{setLabel}</QuietLink>
+      )}
+    </div>
+  );
+}
+
 export default function ProfilePage() {
   const clientId = useClientId();
   const client = getFixtureClient(clientId);
   const { announce } = useStatus();
-  const [answers, setAnswers] = useState<Partial<OnboardingAnswers>>({});
-
-  useEffect(() => {
-    setAnswers(getStoredAnswers());
-  }, []);
+  /* Read once on mount rather than setState-inside-an-effect, which
+   * triggers a second render before the browser has painted the first. */
+  const [answers] = useState<Partial<OnboardingAnswers>>(() =>
+    typeof window === "undefined" ? {} : getStoredAnswers(),
+  );
 
   const channels = Object.entries(answers.channels ?? {});
 
-  /* Each unset row links with its own words. Three links all reading
-   * "Not set yet" are indistinguishable in a screen reader's link list,
-   * and they make the reader look back up at the label to know where
-   * they'd be going. */
-  function Row({
-    label,
-    value,
-    fixHref,
-    setLabel,
-  }: {
-    label: string;
-    value?: string | null;
-    fixHref: string;
-    /** Verb + the same noun as the row label, e.g. "Set your goal". */
-    setLabel: string;
-  }) {
-    return (
-      <div className="border-b border-line py-2.5 last:border-0">
-        <p className="t-label">{label}</p>
-        {value ? (
-          <p className="mt-0.5 t-ui">{value}</p>
-        ) : (
-          <QuietLink href={fixHref}>{setLabel}</QuietLink>
-        )}
-      </div>
-    );
-  }
 
   return (
     <div className="w-full lg:max-w-3xl">
@@ -146,7 +153,11 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="mt-7 space-y-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-8 lg:space-y-0">
+      <div className="mt-8">
+        <LegibleMemory clientId={clientId} />
+      </div>
+
+      <div className="mt-8 space-y-6 lg:grid lg:grid-cols-2 lg:items-start lg:gap-8 lg:space-y-0">
         <div className="space-y-6">
           <div>
             <SectionLabel>Your business</SectionLabel>
@@ -262,7 +273,7 @@ export default function ProfilePage() {
               <p className="t-ui leading-relaxed text-ink-2">
                 {client.voice.summary}
               </p>
-              <QuietLink href="/workspace" className="mt-1.5">
+              <QuietLink href="/voice" className="mt-1.5">
                 The full voice profile
               </QuietLink>
             </CardShell>

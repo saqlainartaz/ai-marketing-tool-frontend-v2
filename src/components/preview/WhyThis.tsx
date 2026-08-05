@@ -58,7 +58,7 @@ export function WhyThis({ rationale }: { rationale: Rationale }) {
             <li key={key} className="flex gap-3">
               <Icon
                 aria-hidden
-                className="mt-0.5 h-4 w-4 shrink-0 text-clay"
+                className="mt-1 h-4 w-4 shrink-0 text-clay"
                 strokeWidth={2}
               />
               <span className="min-w-0">

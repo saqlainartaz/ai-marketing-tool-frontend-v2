@@ -735,3 +735,21 @@ const CLIENTS: Record<string, FixtureClient> = { dave, amara };
 export function getFixtureClient(id?: string | null): FixtureClient {
   return CLIENTS[id ?? "dave"] ?? dave;
 }
+
+/**
+ * Find a draft by id without knowing whose it is.
+ *
+ * The review link is opened by someone with no session — a partner, a
+ * compliance officer — so there is no client context to scope the lookup
+ * by. Once the BFF exists this becomes a signed, expiring token that
+ * resolves server-side; the shape of the answer stays the same.
+ */
+export function findDraftAnywhere(
+  id: string,
+): { draft: FixtureDraft; client: FixtureClient } | null {
+  for (const client of Object.values(CLIENTS)) {
+    const draft = client.drafts.find((d) => d.id === id);
+    if (draft) return { draft, client };
+  }
+  return null;
+}

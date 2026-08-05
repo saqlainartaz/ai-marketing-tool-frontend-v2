@@ -108,7 +108,7 @@ export default function LibraryPage() {
   async function shareLink(item: ContentItem) {
     try {
       await navigator.clipboard.writeText(
-        `${window.location.origin}/review/${item.id} (no login needed)`,
+        `${window.location.origin}/review/${item.id}`,
       );
       announce("Review link copied");
     } catch {
