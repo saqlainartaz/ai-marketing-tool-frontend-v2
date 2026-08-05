@@ -228,6 +228,21 @@
     transform: none;
   }
 
+  /* If a row reads as one thing, the whole row is the target — but a
+   * content-rich row must not BE a button, or its title, reasoning and
+   * source all collapse into one long accessible name. So the action
+   * stretches its hit area over the row instead. The row needs
+   * `relative`; any other control in it needs .above-stretch. */
+  .stretch-target::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+  .above-stretch {
+    position: relative;
+    z-index: 1;
+  }
+
   /* Chosen. One treatment everywhere: a 2px accent edge that doesn't
    * shift layout, plus the accent's own tint. */
   .selected {

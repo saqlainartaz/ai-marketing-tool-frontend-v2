@@ -32,6 +32,7 @@ import { WeekCalendar } from "@/components/library/WeekCalendar";
 import { MonthCalendar } from "@/components/library/MonthCalendar";
 import { Chip } from "@/components/ui/chip";
 import { SectionLabel } from "@/components/ui/section-label";
+import { QuietLink } from "@/components/ui/quiet-link";
 import { cn } from "@/lib/utils";
 
 const STATUS_LABEL: Record<ContentStatus, string> = {
@@ -217,7 +218,7 @@ export default function LibraryPage() {
             onClick={() => setView(v)}
             aria-pressed={view === v}
             className={cn(
-              "inline-flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-1.5 text-[12.5px] transition-colors",
+              "pressable t-sub inline-flex min-h-10 items-center gap-1.5 rounded-md px-3.5",
               view === v
                 ? "bg-ink font-semibold text-paper"
                 : "text-ink-2 hover:text-ink",
@@ -272,12 +273,9 @@ export default function LibraryPage() {
                 <p className="t-sub mx-auto mt-1 max-w-xs">
                   Approve a draft on Today and it takes a slot here.
                 </p>
-                <Link
-                  href="/today"
-                  className="t-meta mt-3 inline-block py-1 underline underline-offset-4"
-                >
+                <QuietLink href="/today" className="mt-2">
                   Go to Today
-                </Link>
+                </QuietLink>
               </div>
             )}
           </div>
@@ -332,12 +330,9 @@ export default function LibraryPage() {
                 Approve a draft and it lands here, with its sources and its
                 history.
               </p>
-              <Link
-                href="/today"
-                className="t-meta mt-3 inline-block py-1 underline underline-offset-4"
-              >
+              <QuietLink href="/today" className="mt-2">
                 Go to Today
-              </Link>
+              </QuietLink>
             </div>
           ) : null}
         </div>

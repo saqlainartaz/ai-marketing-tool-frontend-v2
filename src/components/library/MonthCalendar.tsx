@@ -68,17 +68,17 @@ export function MonthCalendar({
             type="button"
             aria-label="Previous month"
             onClick={() => shift(-1)}
-            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg border border-line bg-card text-ink-2 hover:border-ink-3 hover:text-ink"
+            className="pressable flex h-11 w-11 items-center justify-center rounded-lg border border-line bg-card text-ink-2 hover:border-ink-3 hover:text-ink"
           >
-            <ChevronLeft className="h-3.5 w-3.5" />
+            <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             type="button"
             aria-label="Next month"
             onClick={() => shift(1)}
-            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg border border-line bg-card text-ink-2 hover:border-ink-3 hover:text-ink"
+            className="pressable flex h-11 w-11 items-center justify-center rounded-lg border border-line bg-card text-ink-2 hover:border-ink-3 hover:text-ink"
           >
-            <ChevronRight className="h-3.5 w-3.5" />
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -97,7 +97,7 @@ export function MonthCalendar({
             <div
               key={day.toISOString()}
               className={cn(
-                "min-h-12 rounded-lg border p-1 sm:min-h-16",
+                "relative min-h-14 rounded-lg border p-1 sm:min-h-18",
                 isToday
                   ? "border-clay bg-card"
                   : isThisMonth
@@ -124,20 +124,22 @@ export function MonthCalendar({
                     type="button"
                     onClick={() => onSelect(item.id)}
                     /* A tooltip is a description, not a name, and never
-                     * appears on touch — so the name is spelled out and the
-                     * target meets the 24px minimum. */
+                     * appears on touch — so the name is spelled out. 32px
+                     * so a thumb can land on it: several marks can share a
+                     * day, so stretching one over the cell would bury the
+                     * others. */
                     aria-label={`${item.pillar ?? "Draft"} — ${day.getDate()}`}
                     title={item.pillar ?? item.body.slice(0, 60)}
                     className={cn(
-                      "flex h-6 w-6 cursor-pointer items-center justify-center rounded border transition-colors hover:border-ink-3",
+                      "pressable flex h-8 w-8 items-center justify-center rounded-md border",
                       item.status === "posted" || item.status === "approved"
-                        ? "border-moss/40 bg-moss-mist"
-                        : "border-dashed border-line bg-card",
+                        ? "border-moss/40 bg-moss-mist hover:border-moss"
+                        : "border-dashed border-line bg-card hover:border-ink-3",
                     )}
                   >
                     <PlatformMark
                       platform={item.platform}
-                      className="h-2.5 w-2.5"
+                      className="h-3.5 w-3.5"
                     />
                   </button>
                 ))}

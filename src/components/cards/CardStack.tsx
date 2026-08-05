@@ -20,6 +20,7 @@ import {
 import { useWorkMode } from "@/lib/store/settings";
 import { IdeaCard } from "@/components/cards/IdeaCard";
 import { useStatus } from "@/components/system/StatusProvider";
+import { QuietLink } from "@/components/ui/quiet-link";
 
 /**
  * Action labels name the object they act on, so the button answers
@@ -102,25 +103,30 @@ export function CardStack({ clientId }: { clientId: string }) {
             <p className="t-label mb-3">
               Also prepared for you · {ready.length}
             </p>
-            <div className="space-y-2">
+            {/* Approving is the same commitment here as anywhere else, so
+                it gets the same control. It used to degrade to an 11px
+                underlined link — a fifth the size of the button that does
+                exactly this job in the other two modes. */}
+            <ul className="space-y-2">
               {ready.slice(0, 3).map((item) => (
-                <div
+                <li
                   key={item.id}
-                  className="flex items-center gap-3 rounded-lg border border-line bg-card px-3.5 py-2.5"
+                  className="flex items-center gap-3 rounded-lg border border-line bg-card py-2 pr-2 pl-3.5"
                 >
-                  <span className="t-meta truncate">
+                  <span className="t-sub min-w-0 flex-1 truncate">
                     {item.pillar ?? item.meta}
                   </span>
-                  <button
-                    type="button"
+                  <ActionButton
+                    variant="ghost"
                     onClick={() => approve(item.id)}
-                    className="t-meta ml-auto shrink-0 cursor-pointer py-1 underline underline-offset-4"
+                    className="w-auto shrink-0"
                   >
+                    <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
                     Approve {objectNoun(item.kind)}
-                  </button>
-                </div>
+                  </ActionButton>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         ) : null}
       </div>
@@ -152,7 +158,7 @@ export function CardStack({ clientId }: { clientId: string }) {
                 value={draftText}
                 onChange={(e) => setDraftText(e.target.value)}
                 rows={5}
-                className="t-body w-full resize-none rounded-lg border border-clay bg-paper p-2.5 outline-none"
+                className="t-body w-full resize-none rounded-lg border border-clay bg-paper p-3"
               />
             ) : (
               <SourcedBody body={body} provenance={current.provenance} />
@@ -254,12 +260,15 @@ export function CardStack({ clientId }: { clientId: string }) {
             {nextQuestion.questions.length} quick questions · we write it ·{" "}
             {nextQuestion.timeCost}
           </p>
-          <Link href={`/create/${nextQuestion.id}`} className="mt-4 block">
-            <ActionButton size="lg">
-              Answer {nextQuestion.questions.length} questions
-              <ArrowRight className="h-4 w-4" />
-            </ActionButton>
-          </Link>
+          {/* One interactive element, not a button nested inside a link. */}
+          <ActionButton
+            size="lg"
+            href={`/create/${nextQuestion.id}`}
+            className="mt-4"
+          >
+            Answer {nextQuestion.questions.length} questions
+            <ArrowRight className="h-4 w-4" />
+          </ActionButton>
         </CardShell>
       </div>
     );
@@ -280,12 +289,9 @@ export function CardStack({ clientId }: { clientId: string }) {
       <p className="t-sub mx-auto mt-2 max-w-xs">
         {`${approved} on their way — we'll take it from here. Nothing else needed today.`}
       </p>
-      <Link
-        href="/workspace"
-        className="t-meta mt-4 inline-block underline underline-offset-4"
-      >
-        Something happening this week? Tell us →
-      </Link>
+      <QuietLink href="/workspace" className="mt-4">
+        Something happening this week? Tell us
+      </QuietLink>
     </CardShell>
   );
 }

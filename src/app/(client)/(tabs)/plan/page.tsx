@@ -10,6 +10,7 @@ import {
 } from "@/components/plan/plan-parts";
 import { SectionLabel } from "@/components/ui/section-label";
 import { useClientId } from "@/components/auth/ClientSession";
+import { QuietLink } from "@/components/ui/quiet-link";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import { useContentItems } from "@/lib/store/content";
 import { getStoredAnswers } from "@/lib/store/answers";
@@ -131,20 +132,8 @@ export default function PlanPage() {
       </div>
 
       <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-line pt-4">
-        <Link
-          href="/settings"
-          className="t-meta inline-flex items-center gap-1 underline underline-offset-4"
-        >
-          Change your goal
-          <ArrowRight aria-hidden className="h-3 w-3" />
-        </Link>
-        <Link
-          href="/today"
-          className="t-meta inline-flex items-center gap-1 underline underline-offset-4"
-        >
-          This week&apos;s work
-          <ArrowRight aria-hidden className="h-3 w-3" />
-        </Link>
+        <QuietLink href="/settings">Change your goal</QuietLink>
+        <QuietLink href="/today">This week&apos;s work</QuietLink>
         <span className="t-meta ml-auto">
           Built from your episode and your answers
         </span>

@@ -12,9 +12,18 @@ type ChipProps = {
   className?: string;
 };
 
+const SHAPE =
+  "inline-flex min-h-11 items-center gap-1.5 rounded-full border px-3.5 text-[13px]";
+
 /**
- * Selection is a ring + a check, never a colour wash — so a chosen chip
- * is unmistakable at a glance and unselected chips never read as disabled.
+ * Selection is the system's `selected` edge plus a check, never a colour
+ * wash — so a chosen chip is unmistakable and unselected chips never read
+ * as disabled.
+ *
+ * Three renderings, and which one you get depends on what the chip can
+ * actually do. A chip with no handler used to render as a `<button>` that
+ * did nothing when pressed; now it renders as text, because a control
+ * that ignores you is worse than no control.
  */
 export function Chip({
   children,
@@ -28,30 +37,49 @@ export function Chip({
       <span
         aria-disabled="true"
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-full border border-dashed border-ink-3/60 bg-paper px-3 py-1.5 text-xs text-ink-2",
+          SHAPE,
+          "is-off border-dashed border-ink-3",
           className,
         )}
       >
-        <Lock aria-hidden className="h-3 w-3" />
+        <Lock aria-hidden className="h-3 w-3 shrink-0" />
         {children}
       </span>
     );
   }
+
+  if (!onToggle) {
+    return (
+      <span
+        className={cn(
+          SHAPE,
+          selected
+            ? "border-clay bg-clay-mist font-medium text-ink"
+            : "border-line bg-card text-ink-2",
+          className,
+        )}
+      >
+        {children}
+      </span>
+    );
+  }
+
   return (
     <button
       type="button"
       aria-pressed={selected ?? false}
       onClick={onToggle}
       className={cn(
-        "inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors",
+        SHAPE,
+        "pressable",
         selected
-          ? "border-clay bg-card font-semibold text-ink shadow-[inset_0_0_0_1px_var(--clay)]"
+          ? "selected border-clay font-semibold text-ink"
           : "border-line bg-card text-ink-2 hover:border-ink-3 hover:text-ink",
         className,
       )}
     >
       {selected ? (
-        <Check aria-hidden className="h-3 w-3 text-clay" strokeWidth={3} />
+        <Check aria-hidden className="h-3 w-3 shrink-0 text-clay" strokeWidth={3} />
       ) : null}
       {children}
     </button>

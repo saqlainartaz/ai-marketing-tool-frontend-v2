@@ -8,6 +8,7 @@ import { DialPill } from "@/components/ui/dial-pill";
 import { SectionLabel } from "@/components/ui/section-label";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { useClientId } from "@/components/auth/ClientSession";
+import { QuietLink } from "@/components/ui/quiet-link";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import { setWorkMode, useWorkMode } from "@/lib/store/settings";
 
@@ -40,13 +41,9 @@ export default function SettingsPage() {
               Everything we know about you lives on your profile — one page,
               every line correctable.
             </p>
-            <Link
-              href="/profile"
-              className="t-meta mt-2.5 inline-flex items-center gap-1 underline underline-offset-4"
-            >
+            <QuietLink href="/profile" className="mt-1.5">
               See what we know about you
-              <ArrowRight aria-hidden className="h-3 w-3" />
-            </Link>
+            </QuietLink>
           </CardShell>
         </div>
 

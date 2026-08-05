@@ -8,6 +8,7 @@ import { DialPill } from "@/components/ui/dial-pill";
 import { SectionLabel } from "@/components/ui/section-label";
 import { WorkSpine, type SpineItem } from "@/components/ui/work-spine";
 import { useClientId } from "@/components/auth/ClientSession";
+import { QuietLink } from "@/components/ui/quiet-link";
 import { getFixtureClient, type FixtureDraft } from "@/lib/fixtures/clients";
 import { useContentItems, type ContentItem } from "@/lib/store/content";
 import { useWorkMode } from "@/lib/store/settings";
@@ -167,13 +168,9 @@ export default function TodayPage() {
                 </span>
               ))}
             </div>
-            <Link
-              href="/plan"
-              className="t-meta mt-1.5 inline-flex min-h-6 items-center gap-1 py-1 underline underline-offset-4"
-            >
+            <QuietLink href="/plan" className="mt-1">
               See the whole plan
-              <ArrowRight aria-hidden className="h-3 w-3" />
-            </Link>
+            </QuietLink>
           </div>
 
           {/* An affordance, not a paragraph */}

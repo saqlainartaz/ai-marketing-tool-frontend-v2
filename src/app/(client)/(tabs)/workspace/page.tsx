@@ -20,6 +20,7 @@ import { AssemblyMoment } from "@/components/motion/AssemblyMoment";
 import { VoiceCard } from "@/components/voice/VoiceCard";
 import { IdeaCard } from "@/components/cards/IdeaCard";
 import { useClientId } from "@/components/auth/ClientSession";
+import { QuietLink } from "@/components/ui/quiet-link";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import { addItem } from "@/lib/store/content";
 
@@ -127,7 +128,7 @@ export default function WorkspacePage() {
                   rows={3}
                   aria-describedby={error ? "ws-hint ws-error" : "ws-hint"}
                   aria-invalid={error ? true : undefined}
-                  className={`mt-3 w-full resize-none rounded-lg border bg-paper p-3 text-[13.5px] outline-none focus:border-clay ${
+                  className={`t-body mt-3 w-full resize-none rounded-lg border bg-paper p-3 focus:border-clay ${
                     error ? "border-honey" : "border-line"
                   }`}
                 />
@@ -156,13 +157,9 @@ export default function WorkspacePage() {
                 <p className="t-meta mt-1">
                   It&apos;s waiting on Today. Nothing goes out until you say so.
                 </p>
-                <Link
-                  href="/today"
-                  className="t-meta mt-2 inline-flex items-center gap-1 py-1 underline underline-offset-4"
-                >
+                <QuietLink href="/today" className="mt-1">
                   Review post
-                  <ArrowRight aria-hidden className="h-3 w-3" />
-                </Link>
+                </QuietLink>
               </div>
             )}
           </CardShell>
@@ -200,44 +197,46 @@ export default function WorkspacePage() {
           Your plan picks the tools that fit your business — whatever we make
           arrives as a card on Today.
         </p>
-        <div
+        {/* These are capabilities, not objects. They used to wear the
+            raised `surface` treatment — which in this system means "a
+            prepared thing you can act on" — while having no handler at
+            all. Six cards that look pressable and ignore you is worse
+            than six that don't ask. Flat, informational, and the on/off
+            difference is stated in words rather than only in styling. */}
+        <ul
           className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-3"
           data-testid="tool-gallery"
         >
           {TOOLS.map((tool) => {
             const Icon = tool.icon;
             return (
-              <div
+              <li
                 key={tool.label}
-                className={
+                className={`rounded-xl border p-3.5 ${
                   tool.on
-                    ? "surface rounded-xl p-3.5"
-                    : "rounded-xl border border-dashed border-line p-3.5"
-                }
+                    ? "border-line bg-card"
+                    : "border-dashed border-line bg-transparent"
+                }`}
               >
                 <span
                   aria-hidden
                   className={`mb-2.5 flex h-8 w-8 items-center justify-center rounded-lg ${
-                    tool.on ? "bg-clay text-onact" : "bg-paper text-ink-3"
+                    tool.on ? "bg-clay-mist text-clay" : "bg-paper text-ink-3"
                   }`}
                 >
                   <Icon className="h-4 w-4" />
                 </span>
-                <p
-                  className={`text-[13.5px] font-semibold ${tool.on ? "" : "text-ink-2"}`}
-                >
+                <p className={`t-ui ${tool.on ? "" : "text-ink-2"}`}>
                   {tool.label}
                 </p>
                 <p className="t-meta mt-0.5">{tool.desc}</p>
-                {!tool.on ? (
-                  <p className="t-meta mt-1.5 text-ink-3">
-                    joins when your plan calls for it
-                  </p>
-                ) : null}
-              </div>
+                <p className="t-meta mt-1.5">
+                  {tool.on ? "in your plan" : "joins when your plan calls for it"}
+                </p>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
 
     </div>

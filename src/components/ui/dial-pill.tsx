@@ -70,10 +70,10 @@ export function DialPill({ mode, onChange, className }: DialPillProps) {
             aria-checked={active}
             onClick={() => onChange(m)}
             className={cn(
-              "flex w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left text-[13px] transition-colors",
+              "pressable t-ui flex min-h-12 w-full items-center gap-3 rounded-lg border px-3 text-left",
               active
-                ? "border-clay bg-card font-semibold text-ink shadow-[inset_0_0_0_1px_var(--clay)]"
-                : "border-line bg-card text-ink-2 hover:border-ink-3",
+                ? "selected border-clay text-ink"
+                : "border-line bg-card font-normal text-ink-2 hover:border-ink-3 hover:text-ink",
             )}
           >
             <ModeIcon

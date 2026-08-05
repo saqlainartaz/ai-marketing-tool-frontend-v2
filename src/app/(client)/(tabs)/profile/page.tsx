@@ -13,6 +13,7 @@ import { useClientId } from "@/components/auth/ClientSession";
 import { getFixtureClient } from "@/lib/fixtures/clients";
 import { getStoredAnswers } from "@/lib/store/answers";
 import type { OnboardingAnswers } from "@/components/onboarding/OnboardingProvider";
+import { QuietLink } from "@/components/ui/quiet-link";
 
 /**
  * The client's legible memory: everything the system believes, on one
@@ -53,13 +54,7 @@ export default function ProfilePage() {
         {value ? (
           <p className="mt-0.5 text-[13.5px]">{value}</p>
         ) : (
-          <Link
-            href={fixHref}
-            className="mt-0.5 inline-flex min-h-6 items-center gap-1 py-0.5 text-[13px] text-ink-2 underline underline-offset-4"
-          >
-            {setLabel}
-            <ArrowRight aria-hidden className="h-3 w-3" />
-          </Link>
+          <QuietLink href={fixHref}>{setLabel}</QuietLink>
         )}
       </div>
     );
@@ -233,13 +228,9 @@ export default function ProfilePage() {
                   ))}
                 </div>
               ) : (
-                <Link
-                  href="/onboarding/channels"
-                  className="inline-flex min-h-6 items-center gap-1 py-0.5 text-[13px] text-ink-2 underline underline-offset-4"
-                >
+                <QuietLink href="/onboarding/channels">
                   Pick your channels
-                  <ArrowRight aria-hidden className="h-3 w-3" />
-                </Link>
+                </QuietLink>
               )}
             </CardShell>
           </div>
@@ -271,13 +262,9 @@ export default function ProfilePage() {
               <p className="text-[13px] leading-relaxed text-ink-2">
                 {client.voice.summary}
               </p>
-              <Link
-                href="/workspace"
-                className="t-meta mt-2.5 inline-flex items-center gap-1 underline underline-offset-4"
-              >
+              <QuietLink href="/workspace" className="mt-1.5">
                 The full voice profile
-                <ArrowRight aria-hidden className="h-3 w-3" />
-              </Link>
+              </QuietLink>
             </CardShell>
           </div>
         </div>

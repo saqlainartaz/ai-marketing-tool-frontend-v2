@@ -29,6 +29,33 @@ function columnFor(item: ContentItem): number | null {
 }
 
 /**
+ * A ribbon day: a real control when it has work, plain structure when it
+ * doesn't. A button that does nothing is worse than no button.
+ */
+function DayCell({
+  asButton,
+  onSelect,
+  className,
+  children,
+}: {
+  asButton: boolean;
+  onSelect: () => void;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  if (!asButton) return <div className={className}>{children}</div>;
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className={cn("pressable", className)}
+    >
+      {children}
+    </button>
+  );
+}
+
+/**
  * The week as it will actually happen. Clients ask "when does this go
  * out?" before they ask anything else — a list can't answer that at a
  * glance, a week can. Nothing here publishes: it shows what is prepared
@@ -74,10 +101,16 @@ export function WeekCalendar({
           list below already carries the words. */}
       <div className="grid grid-cols-7 gap-1 sm:hidden">
         {DAYS.map((day, i) => (
-          <div
+          /* The ribbon used to be seven inert divs: on a phone, the week
+             view had no touch targets at all. A day with work is now a
+             button that opens it; an empty day stays a plain div rather
+             than a control that does nothing. */
+          <DayCell
             key={day}
+            asButton={placed[i].length > 0}
+            onSelect={() => onSelect(placed[i][0].id)}
             className={cn(
-              "flex flex-col items-center gap-1.5 rounded-lg border py-2",
+              "flex min-h-14 flex-col items-center justify-center gap-1.5 rounded-lg border py-2",
               i === today ? "border-clay bg-card" : "border-line bg-paper/60",
             )}
           >
@@ -116,7 +149,7 @@ export function WeekCalendar({
                   } approved`
                 : null}
             </span>
-          </div>
+          </DayCell>
         ))}
       </div>
 

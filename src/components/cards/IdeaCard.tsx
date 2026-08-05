@@ -5,6 +5,7 @@ import { ArrowRight, Lightbulb, Quote, RefreshCw } from "lucide-react";
 import { ActionButton } from "@/components/ui/action-button";
 import { AssemblyMoment } from "@/components/motion/AssemblyMoment";
 import { PlatformMark } from "@/components/preview/platform-mark";
+import { QuietLink } from "@/components/ui/quiet-link";
 import { getFixtureClient, type IdeaFixture } from "@/lib/fixtures/clients";
 import { addItem } from "@/lib/store/content";
 import { cn } from "@/lib/utils";
@@ -89,9 +90,17 @@ export function IdeaCard({
         ) : (
           <ul className="divide-y divide-line">
             {shown.map((idea, i) => (
-              <li key={idea.id} className="px-4 py-3.5">
+              /* The whole row picks the idea. "Write this one" stretches
+                 its hit area across the row, so there is no precision tap
+                 — and because the row itself isn't a button, the title,
+                 angle and source stay readable to a screen reader instead
+                 of collapsing into one long label. */
+              <li
+                key={idea.id}
+                className="relative px-4 py-4 transition-colors hover:bg-paper/50 has-[button:hover]:bg-paper/50"
+              >
                 <div className="flex items-start gap-3">
-                  <span className="t-meta w-5 shrink-0 pt-0.5">
+                  <span className="t-meta w-5 shrink-0 pt-1">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div className="min-w-0 flex-1">
@@ -99,33 +108,27 @@ export function IdeaCard({
                       <PlatformMark platform={idea.platform} size="sm" />
                       <span className="t-meta truncate">{idea.pillar}</span>
                     </p>
-                    <p className="mt-1 text-[14.5px] leading-snug font-semibold">
-                      {idea.title}
-                    </p>
-                    <p className="mt-1 text-[12.5px] leading-relaxed text-ink-2">
-                      {idea.angle}
-                    </p>
-                    <p className="t-meta mt-1.5 flex items-center gap-1">
-                      <Quote aria-hidden className="h-2.5 w-2.5" />
+                    <p className="t-lead mt-1">{idea.title}</p>
+                    <p className="t-sub mt-1">{idea.angle}</p>
+                    <p className="t-meta mt-2 flex items-center gap-1">
+                      <Quote aria-hidden className="h-2.5 w-2.5 shrink-0" />
                       {idea.source}
                     </p>
-                    <div className="mt-2.5 flex items-center gap-3">
+                    <div className="mt-3 flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() => write(idea)}
                         className={cn(
-                          "inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-line bg-card px-3 py-1.5 text-[12.5px] font-semibold transition-colors hover:border-clay",
+                          "stretch-target pressable t-ui inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-line bg-card px-3.5 hover:border-clay",
                         )}
                       >
                         Write this one
-                        <ArrowRight aria-hidden className="h-3 w-3" />
+                        <ArrowRight aria-hidden className="h-3.5 w-3.5" />
                       </button>
                       <button
                         type="button"
-                        onClick={() =>
-                          setDismissed((d) => [...d, idea.id])
-                        }
-                        className="t-meta cursor-pointer hover:text-ink"
+                        onClick={() => setDismissed((d) => [...d, idea.id])}
+                        className="above-stretch pressable t-sub inline-flex min-h-11 items-center rounded-lg px-3 hover:text-ink"
                       >
                         Not for me
                       </button>
@@ -142,14 +145,14 @@ export function IdeaCard({
             Every idea traces to something you already said.
           </p>
           {dismissed.length > 0 ? (
-            <button
-              type="button"
+            <QuietLink
               onClick={() => setDismissed([])}
-              className="t-meta inline-flex shrink-0 cursor-pointer items-center gap-1 underline underline-offset-4"
+              arrow={false}
+              className="shrink-0"
             >
-              <RefreshCw aria-hidden className="h-2.5 w-2.5" />
+              <RefreshCw aria-hidden className="h-3 w-3 shrink-0" />
               Show the ones I skipped
-            </button>
+            </QuietLink>
           ) : null}
         </footer>
       </article>
