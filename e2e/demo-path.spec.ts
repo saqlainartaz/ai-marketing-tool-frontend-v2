@@ -95,7 +95,9 @@ test("desktop is a real app: sidebar, two-column Today, context rail", async ({
   await page.setViewportSize({ width: 1366, height: 850 });
   await page.goto("/login");
   // Desktop login shows the brand panel.
-  await expect(page.getByText(/Every claim traces back to your own words/)).toBeVisible();
+  await expect(
+    page.getByText(/Every claim traces to your words/),
+  ).toBeVisible();
   await page.getByRole("link", { name: /amara · osei family law/i }).click();
   await page.goto("/today");
   // Sidebar with full nav, no bottom tab bar duplication in view.

@@ -210,10 +210,11 @@ export default function LibraryPage() {
       </div>
 
       {/* View switch */}
-      {/* Full labels wrapped to two ragged lines at 390px, so the phone
-          gets short ones. Both forms describe the view — neither is a
-          code the reader has to learn. */}
-      <div className="mt-6 inline-flex rounded-lg border border-line bg-card p-0.5">
+      {/* Full-width and equal thirds on a phone: as a shrink-to-fit row
+          the three labels overflowed 390px and wrapped to two ragged
+          lines. Same words at every size — a label that changes with the
+          viewport is a second thing to learn. */}
+      <div className="mt-6 flex w-full rounded-lg border border-line bg-card p-0.5 sm:inline-flex sm:w-auto">
         {(["week", "month", "list"] as const).map((v) => (
           <button
             key={v}
@@ -221,7 +222,7 @@ export default function LibraryPage() {
             onClick={() => setView(v)}
             aria-pressed={view === v}
             className={cn(
-              "pressable t-sub inline-flex min-h-10 items-center gap-1.5 rounded-md px-3.5",
+              "pressable t-sub inline-flex min-h-10 flex-1 items-center justify-center gap-1.5 rounded-md px-2 whitespace-nowrap sm:flex-none sm:px-3.5",
               view === v
                 ? "bg-ink font-semibold text-paper"
                 : "text-ink-2 hover:text-ink",
@@ -234,16 +235,11 @@ export default function LibraryPage() {
             ) : (
               <List aria-hidden className="h-3.5 w-3.5" />
             )}
-            <span className="whitespace-nowrap sm:hidden">
-              {v === "week" ? "Week" : v === "month" ? "Month" : "All"}
-            </span>
-            <span className="hidden whitespace-nowrap sm:inline">
-              {v === "week"
-                ? "This week"
-                : v === "month"
-                  ? "Full calendar"
-                  : "Everything"}
-            </span>
+            {v === "week"
+              ? "This week"
+              : v === "month"
+                ? "Full calendar"
+                : "Everything"}
           </button>
         ))}
       </div>
