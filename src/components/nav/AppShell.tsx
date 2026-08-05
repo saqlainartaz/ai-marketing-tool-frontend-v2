@@ -13,6 +13,8 @@ import {
   Sun,
 } from "lucide-react";
 import { BottomNav } from "@/components/nav/BottomNav";
+import { DemoBar } from "@/components/demo/DemoBar";
+import { Guidance } from "@/components/system/Guidance";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { DialPill } from "@/components/ui/dial-pill";
 import { useClientId } from "@/components/auth/ClientSession";
@@ -151,6 +153,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <p className="t-label mb-1.5">Appearance</p>
             <ThemeSwitcher />
           </div>
+          <Guidance />
         </div>
       </aside>
 
@@ -167,6 +170,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <BottomNav />
         </div>
       </div>
+      <DemoBar />
     </div>
   );
 }
