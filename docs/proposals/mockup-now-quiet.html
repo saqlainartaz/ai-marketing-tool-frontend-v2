@@ -1,0 +1,403 @@
+<title>Now — Meridian Roofing</title>
+<style>
+  :root {
+    /* Off-white and off-black, never pure. One accent: deep spruce — the colour
+       of the only action that matters here, and nobody else in SaaS uses it. */
+    --paper:    #FBFBFA;
+    --raised:   #F2F2F0;
+    --ink:      #17171A;
+    --ink-2:    #6C6C74;
+    --ink-3:    #A2A2A9;
+    --accent:   #14584A;
+    --accent-t: #E4EFEA;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --ease: cubic-bezier(.32,.72,0,1);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #0E0E10; --raised: #191A1D; --ink: #F2F2F0;
+      --ink-2: #9A9AA2; --ink-3: #63636B; --accent: #58C0A2; --accent-t: #16241F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0E0E10; --raised: #191A1D; --ink: #F2F2F0;
+    --ink-2: #9A9AA2; --ink-3: #63636B; --accent: #58C0A2; --accent-t: #16241F;
+  }
+  :root[data-theme="light"] {
+    --paper: #FBFBFA; --raised: #F2F2F0; --ink: #17171A;
+    --ink-2: #6C6C74; --ink-3: #A2A2A9; --accent: #14584A; --accent-t: #E4EFEA;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 17px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  @media (min-width: 860px) {
+    body { padding: 40px 20px; background: #E8E8E6; }
+    :root[data-theme="dark"] body, body:has(#dummy) { }
+    @media (prefers-color-scheme: dark) { body { background: #060607; } }
+    .screen { border-radius: 34px; box-shadow: 0 50px 100px -40px rgba(0,0,0,.45); overflow: hidden; }
+  }
+  :root[data-theme="dark"] body { background: #060607; }
+  :root[data-theme="light"] body { background: #E8E8E6; }
+  @media (max-width: 859px) {
+    body, :root[data-theme="dark"] body, :root[data-theme="light"] body { background: var(--paper); padding: 0; }
+  }
+
+  .screen { max-width: 440px; margin: 0 auto; background: var(--paper); padding: 0 0 140px; }
+
+  /* --- Two type sizes that matter, and one whisper. Nothing in between. --- */
+  .display {
+    margin: 0; font-size: clamp(2.6rem, 2rem + 3.4vw, 3.4rem); font-weight: 800;
+    letter-spacing: -.038em; line-height: 1.02; text-wrap: balance;
+  }
+  .whisper {
+    font-family: var(--mono); font-size: .6875rem; letter-spacing: .13em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+  .figure { font-weight: 800; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+
+  /* --- No borders anywhere. Space is the only separator. --- */
+  .pad { padding-left: 28px; padding-right: 28px; }
+  .top { display: flex; justify-content: space-between; align-items: center; padding-top: 26px; }
+  .hero { padding-top: 52px; }
+  .hero p.sub { margin: 14px 0 0; color: var(--ink-2); font-size: 1.0625rem; max-width: 30ch; }
+
+  /* --- The one contained thing on the screen --- */
+  .object {
+    margin: 44px 16px 0; background: var(--raised); border-radius: 22px; padding: 22px;
+    display: flex; flex-direction: column; gap: 18px;
+    transition: opacity .3s var(--ease);
+  }
+  .object .meta { display: flex; align-items: center; gap: 8px; }
+  .post {
+    margin: 0; font-size: 1.1875rem; line-height: 1.6; letter-spacing: -.011em;
+  }
+  .photo {
+    aspect-ratio: 3/2; border-radius: 14px; background: var(--paper);
+    display: grid; place-items: center;
+  }
+  .photo span { color: var(--ink-3); }
+
+  /* The signature: their own words, with the moment they said them. */
+  .receipt { display: flex; flex-direction: column; gap: 7px; }
+  .receipt .tc { color: var(--accent); font-weight: 600; }
+  .receipt blockquote {
+    margin: 0; font-size: 1rem; line-height: 1.5; color: var(--ink-2); font-style: italic;
+  }
+
+  .checked { color: var(--ink-3); font-size: .9375rem; }
+
+  details.why { margin-top: -4px; }
+  details.why > summary {
+    list-style: none; cursor: pointer; color: var(--accent); font-size: .9375rem; font-weight: 600;
+    width: fit-content; border-radius: 6px;
+  }
+  details.why > summary::-webkit-details-marker { display: none; }
+  details.why > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .why-body { display: flex; flex-direction: column; gap: 12px; padding-top: 14px; }
+  .why-body p { margin: 0; color: var(--ink-2); font-size: 1rem; line-height: 1.5; }
+  .why-body b { color: var(--ink); font-weight: 600; }
+
+  /* --- Actions: one filled pill, one bare word. --- */
+  .actions { padding: 26px 28px 0; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  button { font: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .primary {
+    width: 100%; min-height: 54px; border-radius: 27px; background: var(--accent);
+    color: var(--paper); font-size: 1.0625rem; font-weight: 600; letter-spacing: -.01em;
+    transition: transform .12s var(--ease);
+  }
+  :root[data-theme="dark"] .primary, .primary { color: #FBFBFA; }
+  @media (prefers-color-scheme: dark) { .primary { color: #0E0E10; } }
+  :root[data-theme="dark"] .primary { color: #0E0E10; }
+  :root[data-theme="light"] .primary { color: #FBFBFA; }
+  .primary:active { transform: scale(.985); }
+  .secondary { min-height: 48px; color: var(--ink-2); font-size: 1rem; border-radius: 10px; padding: 0 14px; }
+  .secondary:hover { color: var(--ink); }
+
+  /* --- Everything after this is text on paper. No rows, no rules, no chips. --- */
+  .later { padding-top: 64px; }
+  .later ul { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .later li { display: flex; gap: 14px; align-items: baseline; }
+  .later .day { flex: none; width: 42px; }
+  .later .what { color: var(--ink-2); font-size: 1.0625rem; }
+
+  .goal { padding-top: 64px; }
+  .goal .num { font-size: 4.5rem; line-height: .9; display: block; }
+  .goal .of { margin: 10px 0 0; color: var(--ink-2); font-size: 1.0625rem; }
+  .goal .src { margin-top: 6px; }
+
+  .never { padding-top: 64px; }
+  .never ul { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .never li { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+  .never .rule { font-size: 1.0625rem; }
+  .never .from { margin-left: auto; flex: none; }
+  .never .drop {
+    all: unset; cursor: pointer; color: var(--ink-3); font-size: 1.375rem; line-height: 1;
+    width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; margin-right: -12px;
+  }
+  .never .drop:hover { color: var(--ink); background: var(--raised); }
+  .never .drop:focus-visible { outline: 2px solid var(--accent); outline-offset: -4px; }
+  .never form { display: flex; align-items: center; gap: 10px; margin-top: 18px; }
+  .never input {
+    flex: 1; min-width: 0; all: unset; font: inherit; font-size: 1.0625rem; color: var(--ink);
+    background: var(--raised); border-radius: 14px; padding: 14px 16px;
+  }
+  .never input::placeholder { color: var(--ink-3); }
+  .never input:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; }
+  .never .add { flex: none; min-height: 48px; padding: 0 18px; border-radius: 14px; background: var(--raised);
+                font-size: 1rem; font-weight: 600; color: var(--ink); }
+
+  /* --- The ask bar: a floating pill, the Wispr move. --- */
+  .ask {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 10;
+    padding: 20px 22px 26px; max-width: 440px; margin: 0 auto;
+    background: linear-gradient(to top, var(--paper) 58%, transparent);
+    pointer-events: none;
+  }
+  .ask > * { pointer-events: auto; }
+  .ask-pill {
+    display: flex; align-items: center; gap: 12px; background: var(--raised);
+    border-radius: 30px; padding: 8px 8px 8px 22px; box-shadow: 0 2px 6px rgba(0,0,0,.05), 0 18px 40px -18px rgba(0,0,0,.28);
+  }
+  .ask-pill input { flex: 1; min-width: 0; all: unset; font: inherit; font-size: 1.0625rem; color: var(--ink); }
+  .ask-pill input::placeholder { color: var(--ink-3); }
+  .ask-go { width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: var(--paper);
+            display: grid; place-items: center; flex: none; font-size: 1.125rem; }
+  @media (prefers-color-scheme: dark) { .ask-go { color: #0E0E10; } }
+  :root[data-theme="dark"] .ask-go { color: #0E0E10; }
+  :root[data-theme="light"] .ask-go { color: #FBFBFA; }
+  .hint { text-align: center; margin: 0 0 12px; }
+
+  /* --- Teaching sheet --- */
+  .scrim { position: fixed; inset: 0; background: rgba(10,10,12,.45); opacity: 0; pointer-events: none;
+           transition: opacity .26s var(--ease); z-index: 20; backdrop-filter: blur(3px); }
+  .scrim[data-open="true"] { opacity: 1; pointer-events: auto; }
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 21; max-width: 440px; margin: 0 auto;
+    background: var(--paper); border-radius: 26px 26px 0 0; padding: 30px 28px 34px;
+    transform: translateY(101%); transition: transform .34s var(--ease);
+    display: flex; flex-direction: column;
+  }
+  .sheet[data-open="true"] { transform: translateY(0); }
+  .sheet h2 { margin: 12px 0 22px; font-size: 1.75rem; font-weight: 800; letter-spacing: -.028em; line-height: 1.1; }
+  .sheet .opt { text-align: left; min-height: 60px; font-size: 1.125rem; color: var(--ink);
+                display: flex; flex-direction: column; justify-content: center; gap: 2px; border-radius: 12px; }
+  .sheet .opt small { color: var(--ink-3); font-size: .9375rem; }
+  .sheet .opt:hover { color: var(--accent); }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 108px; transform: translate(-50%, 200%); z-index: 30;
+    background: var(--ink); color: var(--paper); padding: 13px 20px; border-radius: 24px;
+    font-size: 1rem; display: flex; align-items: center; gap: 18px; white-space: nowrap;
+    transition: transform .3s var(--ease);
+  }
+  .toast[data-open="true"] { transform: translate(-50%, 0); }
+  .toast button { color: var(--paper); font-weight: 700; text-decoration: underline; font-size: 1rem; }
+
+  .colophon { padding: 84px 28px 0; color: var(--ink-3); font-size: .875rem; line-height: 1.55; }
+  .colophon b { color: var(--ink-2); font-weight: 600; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="screen">
+  <div class="pad top">
+    <span class="whisper">Thu 6 Aug</span>
+    <span class="whisper">Handled for you</span>
+  </div>
+
+  <div class="pad hero">
+    <h1 class="display">Two posts ready, Dave.</h1>
+    <p class="sub">Both from your own words. Nothing goes out until you say so.</p>
+  </div>
+
+  <article class="object" id="object">
+    <div class="meta">
+      <span class="whisper">Facebook</span>
+      <span class="whisper" aria-hidden="true">·</span>
+      <span class="whisper">Tuesday 9am</span>
+    </div>
+
+    <p class="post">
+      Hail season's coming, Austin. Last month we caught three roofs their owners
+      thought were fine. Here's the 10-minute check you can do from the ground —
+      no ladder needed.
+    </p>
+
+    <div class="photo"><span class="whisper">Photo · ground-level check</span></div>
+
+    <div class="receipt">
+      <span class="whisper tc">22:14 · your episode, March</span>
+      <blockquote>“…just last month we had three inspections where the homeowner had no idea…”</blockquote>
+    </div>
+
+    <p class="checked">No guarantee wording. No price promises.</p>
+
+    <details class="why">
+      <summary>Why this one?</summary>
+      <div class="why-body">
+        <p><b>Now.</b> Hail season starts in about six weeks. Homeowners search the week the first storm hits, and they call the name they already know.</p>
+        <p><b>Facebook.</b> Roof damage is what neighbours ask each other about. This gets shared into local groups you can't buy your way into.</p>
+        <p><b>Written this way.</b> It gives something away before it asks for anything, so people save it and come back to you later.</p>
+      </div>
+    </details>
+  </article>
+
+  <div class="actions">
+    <button class="primary" id="approve">Approve post</button>
+    <button class="secondary" id="reject">Not this one</button>
+  </div>
+
+  <section class="pad later">
+    <p class="whisper">Later this week</p>
+    <ul>
+      <li><span class="day whisper">Thu</span><span class="what">Before &amp; after — Lakeway Ave</span></li>
+      <li><span class="day whisper">Mon</span><span class="what">The question every customer asks</span></li>
+    </ul>
+  </section>
+
+  <section class="pad goal">
+    <p class="whisper">Booked jobs</p>
+    <span class="figure num">2</span>
+    <p class="of">of six by the end of September</p>
+    <p class="whisper src">Logged by your strategist</p>
+  </section>
+
+  <section class="pad never">
+    <p class="whisper">Never say</p>
+    <ul id="rules">
+      <li>
+        <span class="rule">Guarantee claims</span>
+        <span class="whisper from">Licensed trade</span>
+      </li>
+      <li>
+        <span class="rule">Price promises</span>
+        <span class="whisper from">Licensed trade</span>
+      </li>
+    </ul>
+    <form id="ruleForm">
+      <label class="sr" for="rule">Add something you never want said</label>
+      <input id="rule" type="text" placeholder="Add your own" />
+      <button type="submit" class="add">Add</button>
+    </form>
+  </section>
+
+  <p class="colophon">
+    <b>Mockup.</b> Real content from your Dave fixture. Second attempt — quiet premium this time:
+    two type sizes and a whisper, no borders anywhere, one accent used twice, seven elements
+    instead of fourteen. Try <b>Not this one</b>: a rejection becomes a permanent rule.
+    Faces are the system stack, since Artifacts can't load webfonts — judge the spacing and scale.
+  </p>
+</div>
+
+<div class="ask">
+  <p class="hint whisper">Or just tell us what's going on</p>
+  <div class="ask-pill">
+    <label class="sr" for="ask">Tell us what's going on</label>
+    <input id="ask" type="text" placeholder="We're getting storm calls already…" />
+    <button class="ask-go" id="askGo" aria-label="Send">↑</button>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <p class="whisper">Teach us</p>
+  <h2 id="sheetTitle">What's wrong with it?</h2>
+  <button class="opt" data-act="tone">Doesn't sound like me<small>We'll adjust how you sound</small></button>
+  <button class="opt" data-act="claim">Can't claim that<small>We'll drop it and find proof</small></button>
+  <button class="opt" data-act="never">Never say this again<small>Becomes a permanent rule</small></button>
+  <button class="opt" data-act="later">Not right now<small>We'll bring it back later</small></button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toastMsg">Approved</span>
+  <button id="undo">Undo</button>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const sheet = $("sheet"), scrim = $("scrim"), toast = $("toast"), object = $("object");
+  let timer, lastFocus;
+
+  function say(msg, undoable) {
+    $("toastMsg").textContent = msg;
+    $("undo").hidden = !undoable;
+    toast.dataset.open = "true";
+    clearTimeout(timer);
+    timer = setTimeout(() => (toast.dataset.open = "false"), 4400);
+  }
+  function openSheet() {
+    lastFocus = document.activeElement;
+    sheet.dataset.open = scrim.dataset.open = "true";
+    sheet.querySelector(".opt").focus();
+  }
+  function closeSheet() {
+    sheet.dataset.open = scrim.dataset.open = "false";
+    if (lastFocus) lastFocus.focus();
+  }
+
+  $("approve").addEventListener("click", () => { object.style.opacity = ".4"; say("Approved", true); });
+  $("reject").addEventListener("click", openSheet);
+  scrim.addEventListener("click", closeSheet);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && sheet.dataset.open === "true") closeSheet();
+  });
+  $("undo").addEventListener("click", () => { object.style.opacity = "1"; toast.dataset.open = "false"; });
+
+  /* A rejection is the one moment the client knows exactly what's wrong.
+     Turning it into a rule is the cheapest learning the product will ever get. */
+  function addRule(text, mine) {
+    const li = document.createElement("li");
+    const label = document.createElement("span");
+    label.className = "rule";
+    label.textContent = text;
+    li.appendChild(label);
+    if (mine) {
+      const drop = document.createElement("button");
+      drop.className = "drop";
+      drop.type = "button";
+      drop.setAttribute("aria-label", "Remove rule: " + text);
+      drop.textContent = "×";
+      drop.addEventListener("click", () => { li.remove(); say("Removed", false); });
+      const from = document.createElement("span");
+      from.className = "whisper from";
+      from.textContent = "You added this";
+      li.append(from, drop);
+    }
+    $("rules").appendChild(li);
+    li.animate([{ opacity: 0, transform: "translateY(-4px)" }, { opacity: 1, transform: "none" }],
+      { duration: 320, easing: "cubic-bezier(.32,.72,0,1)" });
+  }
+
+  sheet.querySelectorAll(".opt").forEach((b) =>
+    b.addEventListener("click", () => {
+      closeSheet();
+      object.style.opacity = ".4";
+      const act = b.dataset.act;
+      if (act === "never") { addRule("Ground-level checks", true); say("Rule added", false); }
+      else if (act === "tone") say("Noted — we'll adjust how you sound", false);
+      else if (act === "claim") say("Dropped — we'll find proof first", false);
+      else say("Saved for later", false);
+    })
+  );
+
+  $("ruleForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const input = $("rule");
+    const v = input.value.trim();
+    if (!v) { input.focus(); say("Type what you never want said", false); return; }
+    addRule(v, true);
+    input.value = "";
+    say("Rule added", false);
+  });
+
+  $("askGo").addEventListener("click", () => {
+    const v = $("ask").value.trim();
+    say(v ? "Working on it" : "Tell us anything about your week", false);
+  });
+</script>

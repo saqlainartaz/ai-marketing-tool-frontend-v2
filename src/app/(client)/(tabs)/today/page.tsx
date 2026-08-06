@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, MessageSquarePlus, TrendingUp } from "lucide-react";
 import { CardStack } from "@/components/cards/CardStack";
+import { GoalLine } from "@/components/goal/GoalLine";
 import { CardShell } from "@/components/ui/card-shell";
 import { DialPill } from "@/components/ui/dial-pill";
 import { SectionLabel } from "@/components/ui/section-label";
@@ -87,6 +88,11 @@ export default function TodayPage() {
             : "All clear."}
         </span>
       </h1>
+
+      {/* What all of it is for. Sits under the greeting because it frames
+       * every decision below, and above the queue because a client who
+       * reads nothing else should still know the target and who counts it. */}
+      <GoalLine goal={client.goal} outcomes={client.outcomes} />
 
       <div className="mt-5 lg:hidden">
         <WorkSpine items={spine} />

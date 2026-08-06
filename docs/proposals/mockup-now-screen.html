@@ -1,0 +1,514 @@
+<title>Now — Meridian Roofing</title>
+<style>
+  :root {
+    /* Studio neutral with a blue bias toward the signal — chosen, not inherited */
+    --studio: #EBEEF1;
+    --studio-2: #E1E5EA;
+    --card: #FFFFFF;
+    --ink: #13171D;
+    --ink-2: #59616B;
+    --ink-3: #8A929C;
+    --line: #D5DAE0;
+    --signal: #1442D4;
+    --signal-soft: #E8EDFB;
+    --good: #1C7A54;
+    /* SMPTE-derived category marks. Small marks only, never text, never ground. */
+    --bar-cyan: #0A8FA0;
+    --bar-magenta: #A61C74;
+    --bar-yellow: #9A7B00;
+    --shadow: 0 1px 2px rgba(19,23,29,.05), 0 8px 24px -8px rgba(19,23,29,.18);
+
+    --display: 800 clamp(1.6rem, 1.3rem + 1.6vw, 2rem)/1.05 var(--sans);
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --studio: #111419;
+      --studio-2: #171B21;
+      --card: #1D222A;
+      --ink: #E8EBEF;
+      --ink-2: #A0A8B2;
+      --ink-3: #737B85;
+      --line: #2C333C;
+      --signal: #7A9CFF;
+      --signal-soft: #1B2436;
+      --good: #4FBF8F;
+      --bar-cyan: #34C0CE;
+      --bar-magenta: #DE6BAE;
+      --bar-yellow: #D9B62E;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -8px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --studio: #111419; --studio-2: #171B21; --card: #1D222A;
+    --ink: #E8EBEF; --ink-2: #A0A8B2; --ink-3: #737B85; --line: #2C333C;
+    --signal: #7A9CFF; --signal-soft: #1B2436; --good: #4FBF8F;
+    --bar-cyan: #34C0CE; --bar-magenta: #DE6BAE; --bar-yellow: #D9B62E;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -8px rgba(0,0,0,.6);
+  }
+  :root[data-theme="light"] {
+    --studio: #EBEEF1; --studio-2: #E1E5EA; --card: #FFFFFF;
+    --ink: #13171D; --ink-2: #59616B; --ink-3: #8A929C; --line: #D5DAE0;
+    --signal: #1442D4; --signal-soft: #E8EDFB; --good: #1C7A54;
+    --bar-cyan: #0A8FA0; --bar-magenta: #A61C74; --bar-yellow: #9A7B00;
+    --shadow: 0 1px 2px rgba(19,23,29,.05), 0 8px 24px -8px rgba(19,23,29,.18);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--studio-2);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- type roles: five, with real gaps (40 / 26 / 17 / 15 / 12) ---- */
+  .t-display { font: var(--display); letter-spacing: -.02em; text-wrap: balance; margin: 0; }
+  .t-title   { font-size: 1.5rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.15; margin: 0; }
+  .t-body    { font-size: 1.0625rem; line-height: 1.5; margin: 0; }
+  .t-ui      { font-size: .9375rem; line-height: 1.4; margin: 0; }
+  .t-code    { font-family: var(--mono); font-size: .75rem; letter-spacing: .01em; font-variant-numeric: tabular-nums; }
+  /* Broadcast titling: weight + width + case, since webfonts can't load here */
+  .eyebrow {
+    font-size: .6875rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .14em; color: var(--ink-3); margin: 0;
+  }
+
+  .frame { max-width: 430px; margin: 0 auto; min-height: 100vh; background: var(--studio); position: relative; }
+  @media (min-width: 800px) {
+    body { padding: 32px 16px; }
+    .frame { border-radius: 28px; box-shadow: 0 40px 80px -32px rgba(0,0,0,.35); min-height: 0; overflow: hidden; }
+  }
+
+  .pad { padding: 0 18px; }
+  .stack { display: flex; flex-direction: column; }
+
+  header.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 18px 0; }
+  .mode {
+    display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line);
+    border-radius: 999px; padding: 4px 10px; font-size: .8125rem; color: var(--ink-2); background: var(--card);
+  }
+  .mode b { color: var(--ink); font-weight: 600; }
+
+  /* ---- the goal: the only figure in the chrome ---- */
+  .goal { padding: 14px 18px 0; }
+  .goal-row { display: flex; align-items: baseline; gap: 10px; }
+  .goal-num { font: 800 2.5rem/1 var(--sans); letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .goal-of { color: var(--ink-3); font-weight: 700; font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+  .goal-label { margin-top: 2px; color: var(--ink-2); font-size: .9375rem; }
+  .goal-src { margin-top: 1px; color: var(--ink-3); }
+
+  /* ---- rundown: a real sequence, so numbering earns its place ---- */
+  .rundown { display: flex; gap: 4px; padding: 16px 18px 0; }
+  .r-seg { flex: 1; height: 3px; border-radius: 2px; background: var(--line); }
+  .r-seg[data-state="done"] { background: var(--good); }
+  .r-seg[data-state="current"] { background: var(--signal); }
+
+  /* ---- THE dominant object: the only card on the screen ---- */
+  .object {
+    margin: 18px 0 0; background: var(--card); box-shadow: var(--shadow);
+    border-top: 3px solid var(--bar-cyan);
+  }
+  @media (min-width: 430px) { .object { border-radius: 14px; margin: 18px 12px 0; } }
+
+  .obj-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .avatar {
+    width: 34px; height: 34px; border-radius: 8px; background: var(--ink);
+    color: var(--card); display: grid; place-items: center; font-weight: 700; font-size: .9375rem; flex: none;
+  }
+  .obj-head .who { font-weight: 600; font-size: .9375rem; }
+  .obj-head .when { color: var(--ink-3); }
+  .pillar {
+    margin-left: auto; font-size: .6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    color: var(--bar-cyan); border: 1px solid currentColor; border-radius: 4px; padding: 2px 6px; white-space: nowrap;
+  }
+
+  .obj-body { padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .post-text { font-size: 1.0625rem; line-height: 1.55; }
+  .post-text mark {
+    background: var(--signal-soft); color: inherit; border-radius: 3px; padding: 0 2px;
+    box-shadow: inset 0 -1px 0 var(--signal);
+  }
+  .photo {
+    aspect-ratio: 16/10; border-radius: 8px; border: 1px solid var(--line);
+    background:
+      linear-gradient(160deg, transparent 46%, rgba(0,0,0,.06) 46%, rgba(0,0,0,.06) 54%, transparent 54%),
+      repeating-linear-gradient(105deg, var(--studio-2) 0 9px, var(--studio) 9px 18px);
+    display: grid; place-items: end start; padding: 10px; color: var(--ink-3);
+  }
+
+  /* ---- the signature: the timecode receipt ---- */
+  .receipt { border: 1px solid var(--line); border-radius: 8px; background: var(--studio); overflow: hidden; }
+  .receipt > summary {
+    display: flex; align-items: center; gap: 10px; padding: 9px 12px; cursor: pointer; list-style: none;
+  }
+  .receipt > summary::-webkit-details-marker { display: none; }
+  .receipt .tc { color: var(--signal); font-weight: 600; }
+  .receipt .tc-label { color: var(--ink-2); font-size: .8125rem; flex: 1; min-width: 0; }
+  .receipt .chev { color: var(--ink-3); transition: transform .18s ease; flex: none; }
+  .receipt[open] .chev { transform: rotate(90deg); }
+  .receipt .quote {
+    padding: 0 12px 12px; margin: 0; color: var(--ink-2); font-size: .9375rem;
+    border-left: 2px solid var(--bar-cyan); margin-left: 12px;
+  }
+
+  .guard { display: flex; align-items: flex-start; gap: 8px; color: var(--ink-2); font-size: .8125rem; }
+  .guard .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--good); margin-top: 6px; flex: none; }
+
+  .why > summary { list-style: none; cursor: pointer; color: var(--signal); font-size: .9375rem; font-weight: 500; }
+  .why > summary::-webkit-details-marker { display: none; }
+  .why-body { display: flex; flex-direction: column; gap: 10px; padding-top: 10px; }
+  .why-body p { margin: 0; color: var(--ink-2); font-size: .9375rem; }
+  .why-body b { color: var(--ink); font-weight: 600; }
+
+  /* ---- decision bar: 44px targets, verb + noun ---- */
+  .decide { display: flex; gap: 10px; padding: 0 16px 16px; }
+  button {
+    font: inherit; font-size: .9375rem; font-weight: 600; border-radius: 10px; min-height: 48px;
+    padding: 0 16px; cursor: pointer; border: 1px solid transparent; transition: transform .06s ease;
+  }
+  button:active { transform: translateY(1px); }
+  button:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .btn-primary { flex: 1; background: var(--signal); color: #fff; }
+  .btn-quiet { background: var(--card); color: var(--ink-2); border-color: var(--line); }
+
+  /* ---- everything below is a flat row. No cards. That is the whole trick. ---- */
+  section.flat { padding: 22px 18px 0; display: flex; flex-direction: column; gap: 10px; }
+  section.flat > .eyebrow { margin-bottom: -2px; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+  .row:last-child { border-bottom: 0; }
+  .row .n { font-family: var(--mono); font-size: .75rem; color: var(--ink-3); width: 14px; flex: none; font-variant-numeric: tabular-nums; }
+  .row .txt { color: var(--ink-2); font-size: .9375rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row .tag { margin-left: auto; font-size: .75rem; color: var(--ink-3); white-space: nowrap; }
+  .cat { width: 8px; height: 8px; border-radius: 2px; flex: none; }
+
+  .result { display: flex; align-items: baseline; gap: 8px; }
+  .result .fig { font: 800 1.75rem/1 var(--sans); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+
+  /* ---- never-say list: client-editable, asymmetric ---- */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); background: var(--card);
+    border-radius: 999px; padding: 6px 10px 6px 12px; font-size: .875rem; color: var(--ink);
+  }
+  .chip[data-locked="true"] { background: transparent; color: var(--ink-2); border-style: dashed; }
+  .chip .x {
+    all: unset; cursor: pointer; color: var(--ink-3); font-size: 1rem; line-height: 1;
+    width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%;
+  }
+  .chip .x:hover { background: var(--studio-2); color: var(--ink); }
+  .chip .x:focus-visible { outline: 2px solid var(--signal); outline-offset: 1px; }
+  .chip .lock { font-size: .6875rem; color: var(--ink-3); font-family: var(--mono); }
+  .add-wrap { display: flex; gap: 8px; }
+  .add-wrap input {
+    flex: 1; min-width: 0; font: inherit; font-size: .9375rem; padding: 11px 12px; color: var(--ink);
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  }
+  .add-wrap input::placeholder { color: var(--ink-3); }
+  .add-wrap input:focus-visible { outline: 2px solid var(--signal); outline-offset: -1px; border-color: var(--signal); }
+  .add-wrap button { min-height: 44px; }
+
+  /* ---- ask bar: one line, never blank ---- */
+  .ask { position: sticky; bottom: 0; margin-top: 26px; padding: 12px 18px 18px;
+         background: linear-gradient(to top, var(--studio) 62%, transparent); }
+  .ask-sugg { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+  .ask-sugg::-webkit-scrollbar { display: none; }
+  .sugg {
+    all: unset; cursor: pointer; white-space: nowrap; font-size: .875rem; color: var(--ink-2);
+    border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 7px 12px;
+  }
+  .sugg:hover { color: var(--ink); border-color: var(--ink-3); }
+  .sugg:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+  .ask-input { display: flex; align-items: center; gap: 10px; background: var(--card);
+               border: 1px solid var(--line); border-radius: 999px; padding: 6px 6px 6px 16px; box-shadow: var(--shadow); }
+  .ask-input input { flex: 1; min-width: 0; all: unset; font: inherit; font-size: 1rem; color: var(--ink); }
+  .ask-input input::placeholder { color: var(--ink-3); }
+  .ask-send { all: unset; cursor: pointer; width: 40px; height: 40px; border-radius: 50%;
+              background: var(--signal); color: #fff; display: grid; place-items: center; flex: none; }
+  .ask-send:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+  /* ---- the teaching sheet: a rejection becomes a rule ---- */
+  .sheet-scrim {
+    position: fixed; inset: 0; background: rgba(19,23,29,.5); opacity: 0; pointer-events: none;
+    transition: opacity .2s ease; z-index: 20;
+  }
+  .sheet-scrim[data-open="true"] { opacity: 1; pointer-events: auto; }
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 21; background: var(--card);
+    border-radius: 18px 18px 0 0; padding: 20px 18px 24px; max-width: 430px; margin: 0 auto;
+    transform: translateY(101%); transition: transform .26s cubic-bezier(.32,.72,0,1);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .sheet[data-open="true"] { transform: translateY(0); }
+  .sheet .opt {
+    all: unset; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 14px 4px;
+    border-bottom: 1px solid var(--line); font-size: 1.0625rem; color: var(--ink);
+  }
+  .sheet .opt:last-of-type { border-bottom: 0; }
+  .sheet .opt small { margin-left: auto; color: var(--ink-3); font-size: .8125rem; }
+  .sheet .opt:hover { color: var(--signal); }
+  .sheet .opt:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; border-radius: 8px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 140%); z-index: 30;
+    background: var(--ink); color: var(--studio); padding: 11px 16px; border-radius: 999px;
+    font-size: .9375rem; display: flex; align-items: center; gap: 14px;
+    transition: transform .24s cubic-bezier(.32,.72,0,1); max-width: calc(100vw - 32px);
+  }
+  .toast[data-open="true"] { transform: translate(-50%, 0); }
+  .toast button { all: unset; cursor: pointer; color: var(--studio); font-weight: 700; text-decoration: underline; font-size: .9375rem; }
+  .toast button:focus-visible { outline: 2px solid var(--signal); outline-offset: 2px; }
+
+  .note { padding: 26px 18px 20px; color: var(--ink-3); font-size: .8125rem; border-top: 1px solid var(--line); margin-top: 22px; }
+  .note b { color: var(--ink-2); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<div class="frame">
+  <header class="bar">
+    <p class="eyebrow">Thursday, 6 Aug</p>
+    <span class="mode">Mode <b>Handle it for me</b></span>
+  </header>
+
+  <div class="goal">
+    <div class="goal-row">
+      <span class="goal-num">2</span><span class="goal-of">/ 6</span>
+    </div>
+    <p class="goal-label">booked jobs by 30 September</p>
+    <p class="goal-src t-code">LOGGED BY YOUR STRATEGIST</p>
+  </div>
+
+  <div class="rundown" aria-hidden="true">
+    <span class="r-seg" data-state="done"></span>
+    <span class="r-seg" data-state="done"></span>
+    <span class="r-seg" data-state="current"></span>
+    <span class="r-seg"></span>
+  </div>
+  <p class="sr">Two of four prepared. One waiting on you.</p>
+
+  <article class="object" id="object">
+    <div class="obj-head">
+      <span class="avatar" aria-hidden="true">M</span>
+      <div>
+        <div class="who">Meridian Roofing</div>
+        <div class="when t-code">FACEBOOK · READY FOR TUE 9AM</div>
+      </div>
+      <span class="pillar">Storm prep</span>
+    </div>
+
+    <div class="obj-body">
+      <p class="post-text">
+        Hail season's coming, Austin. Last month
+        <mark>we caught three roofs their owners thought were fine</mark>.
+        Here's the 10-minute check you can do from the ground — no ladder needed.
+      </p>
+
+      <div class="photo"><span class="t-code">PHOTO · GROUND-LEVEL ROOF CHECK</span></div>
+
+      <details class="receipt">
+        <summary>
+          <span class="tc t-code">22:14</span>
+          <span class="tc-label">Your episode, March — where this came from</span>
+          <span class="chev" aria-hidden="true">›</span>
+        </summary>
+        <p class="quote">“…just last month we had three inspections where the homeowner had no idea…”</p>
+      </details>
+
+      <div class="guard">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Checked against your never-say list. No guarantee wording, no price promises.</span>
+      </div>
+
+      <details class="why">
+        <summary>Why this post?</summary>
+        <div class="why-body">
+          <p><b>Now —</b> hail season starts in about six weeks. Austin homeowners search for roofers the week the first storm hits, and the ones who already know your name call first.</p>
+          <p><b>Facebook —</b> roof damage is what neighbours ask each other about. A post here gets shared into local groups you can't buy your way into.</p>
+          <p><b>Written this way —</b> it gives something away before it asks for anything. The ten-minute check is useful on its own, so people save it and come back to you later.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="decide">
+      <button class="btn-primary" id="approve">Approve post</button>
+      <button class="btn-quiet" id="reject">Not this one</button>
+    </div>
+  </article>
+
+  <section class="flat">
+    <p class="eyebrow">Next up</p>
+    <div class="row">
+      <span class="n">03</span>
+      <span class="cat" style="background: var(--bar-magenta)" aria-hidden="true"></span>
+      <span class="txt">Before &amp; after — Lakeway Ave</span>
+      <span class="tag t-code">THU</span>
+    </div>
+    <div class="row">
+      <span class="n">04</span>
+      <span class="cat" style="background: var(--bar-yellow)" aria-hidden="true"></span>
+      <span class="txt">The question every customer asks</span>
+      <span class="tag t-code">NEXT WEEK</span>
+    </div>
+  </section>
+
+  <section class="flat">
+    <p class="eyebrow">Last week</p>
+    <div class="result">
+      <span class="fig">412</span>
+      <span class="t-ui" style="color: var(--ink-2)">neighbours reached — your best week yet</span>
+    </div>
+  </section>
+
+  <section class="flat">
+    <p class="eyebrow">Never say</p>
+    <div class="chips" id="chips">
+      <span class="chip" data-locked="true">No guarantee claims <span class="lock">LICENSED TRADE</span></span>
+      <span class="chip" data-locked="true">No pricing promises <span class="lock">LICENSED TRADE</span></span>
+    </div>
+    <div class="add-wrap">
+      <label class="sr" for="add">Add something you never want said</label>
+      <input id="add" type="text" placeholder="Add your own — e.g. never say “cheap”" />
+      <button class="btn-quiet" id="addBtn">Add rule</button>
+    </div>
+    <p class="t-ui" style="color: var(--ink-3); margin-top: 2px">
+      You can remove anything you added. The two dashed ones came from your trade licence — ask us to change those.
+    </p>
+  </section>
+
+  <div class="ask">
+    <div class="ask-sugg">
+      <button class="sugg">We're getting storm calls already</button>
+      <button class="sugg">Make one about the Lakeway job</button>
+      <button class="sugg">What worked last month?</button>
+    </div>
+    <div class="ask-input">
+      <label class="sr" for="ask">Tell us anything about your week</label>
+      <input id="ask" type="text" placeholder="Tell us anything — we'll do the writing" />
+      <button class="ask-send" aria-label="Send message">↑</button>
+    </div>
+  </div>
+
+  <p class="note">
+    <b>Mockup, not the product.</b> One screen, real fixture content (Dave / Meridian Roofing).
+    Demonstrates three claims: only the decision object is a card · five type roles instead of eight ·
+    the timecode receipt. Try <b>Not this one</b> — a rejection becomes a permanent rule.
+    Display face is approximated with a system stack, since Artifacts can't load webfonts.
+  </p>
+</div>
+
+<div class="sheet-scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <p class="eyebrow">Teach us</p>
+  <h2 class="t-title" id="sheetTitle">What's wrong with it?</h2>
+  <button class="opt" data-act="tone">Doesn't sound like me <small>we'll adjust the voice</small></button>
+  <button class="opt" data-act="claim">Can't claim that <small>we'll drop it</small></button>
+  <button class="opt" data-act="never">Never say this again <small>becomes a rule</small></button>
+  <button class="opt" data-act="later">Not right now <small>we'll bring it back</small></button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <span id="toastMsg">Approved</span>
+  <button id="undo">Undo</button>
+</div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const sheet = $("sheet"), scrim = $("scrim"), toast = $("toast");
+  let toastTimer, lastFocus;
+
+  function say(msg, undoable) {
+    $("toastMsg").textContent = msg;
+    $("undo").style.display = undoable ? "" : "none";
+    toast.dataset.open = "true";
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => (toast.dataset.open = "false"), 4200);
+  }
+
+  function openSheet() {
+    lastFocus = document.activeElement;
+    sheet.dataset.open = scrim.dataset.open = "true";
+    sheet.querySelector(".opt").focus();
+  }
+  function closeSheet() {
+    sheet.dataset.open = scrim.dataset.open = "false";
+    if (lastFocus) lastFocus.focus();
+  }
+
+  $("approve").addEventListener("click", () => {
+    $("object").style.opacity = ".45";
+    say("Approved", true);
+  });
+  $("reject").addEventListener("click", openSheet);
+  scrim.addEventListener("click", closeSheet);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && sheet.dataset.open === "true") closeSheet();
+  });
+
+  // A rejection is the highest-signal moment in the product: the one time the
+  // client knows exactly what's wrong. "Never say this" turns that into a rule.
+  function addRule(text, opts) {
+    const chip = document.createElement("span");
+    chip.className = "chip";
+    chip.textContent = text + " ";
+    const x = document.createElement("button");
+    x.className = "x";
+    x.setAttribute("aria-label", "Remove rule: " + text);
+    x.textContent = "×";
+    x.addEventListener("click", () => { chip.remove(); say("Rule removed", false); });
+    chip.appendChild(x);
+    $("chips").appendChild(chip);
+    if (opts && opts.flash) {
+      chip.animate(
+        [{ background: "var(--signal-soft)" }, { background: "var(--card)" }],
+        { duration: 1200, easing: "ease-out" }
+      );
+    }
+  }
+
+  sheet.querySelectorAll(".opt").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const act = btn.dataset.act;
+      closeSheet();
+      $("object").style.opacity = ".45";
+      if (act === "never") {
+        addRule("Never mention ground-level checks", { flash: true });
+        say("Rule added — we won't say it again", false);
+      } else if (act === "tone") { say("Noted — we'll adjust the voice", false); }
+      else if (act === "claim") { say("Dropped — we'll find proof first", false); }
+      else { say("Saved for later", false); }
+    });
+  });
+
+  function submitRule() {
+    const input = $("add");
+    const v = input.value.trim();
+    if (!v) { input.focus(); say("Type what you never want said", false); return; }
+    addRule(v, { flash: true });
+    input.value = "";
+    say("Rule added", false);
+  }
+  $("addBtn").addEventListener("click", submitRule);
+  $("add").addEventListener("keydown", (e) => { if (e.key === "Enter") submitRule(); });
+
+  $("undo").addEventListener("click", () => {
+    $("object").style.opacity = "1";
+    toast.dataset.open = "false";
+  });
+
+  document.querySelectorAll(".sugg").forEach((s) =>
+    s.addEventListener("click", () => {
+      $("ask").value = s.textContent;
+      $("ask").focus();
+    })
+  );
+</script>

@@ -29,9 +29,20 @@ export function WorkSpine({
       {/* Phone: compact segmented bar */}
       <div className="lg:hidden">
         <div className="flex items-center gap-2">
-          <span className="t-meta">
-            {done} of {items.length} done
+          {/* No denominator here on purpose. This sat directly beneath the
+           * goal's "2 of 6" and the greeting's count — three counters in
+           * 100px, two of them fractions, which is the comprehension tax
+           * UX_RULES §9 names. The goal keeps the fraction because it's the
+           * one that means something; this keeps the bar and drops to a
+           * plain count, and says nothing at all when nothing is done. */}
+          <span className="sr-only">
+            {done} of {items.length} decided
           </span>
+          {done > 0 ? (
+            <span aria-hidden className="t-meta">
+              {done} done
+            </span>
+          ) : null}
           <div className="flex flex-1 gap-1">
             {items.map((item) => (
               <span

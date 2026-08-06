@@ -1,5 +1,7 @@
 import type { Platform } from "@/components/preview/post-preview";
 import type { WorkMode } from "@/components/ui/dial-pill";
+import type { Goal } from "@/lib/brief/types";
+import type { RecordedOutcome } from "@/lib/outcomes";
 
 /**
  * M1 fixture clients — Dave and Amara from the walkthrough (the visual
@@ -108,6 +110,19 @@ export type FixtureClient = {
     days: ("MON" | "TUE" | "WED" | "THU" | "FRI" | "SAT" | "SUN")[];
     effort: string;
   };
+  /**
+   * The one number the work is for, with its deadline — and a metric that
+   * records who counts it. Dave's is logged by a person; Amara's is
+   * reported by the platforms. Both are honest, and the difference is
+   * visible on screen, which is the whole point of having two shapes.
+   */
+  goal: Goal;
+  /**
+   * What has actually been counted toward it. Empty is a real state and
+   * renders as "nothing measured yet" — never as a zero, which reads as
+   * failure when the truth is that it's early.
+   */
+  outcomes: RecordedOutcome[];
   winLine: string;
   /** The headline result, split so it can be shown as a stat. */
   win: { value: string; unit: string; note: string };
@@ -196,6 +211,19 @@ const dave: FixtureClient = {
     effort: "about 10 minutes of your time",
   },
   winLine: "Your last post reached 412 neighbors",
+  /* Dave's goal is the one no platform can report. A booked job happens on
+   * a phone call we never see, so a person logs it and we say who — and
+   * marking a post as posted cannot move this number, by construction. */
+  goal: {
+    statement: "Book 6 jobs by the end of September",
+    metric: { kind: "logged", name: "booked jobs", loggedBy: "operator" },
+    target: 6,
+    deadline: "2026-09-30",
+  },
+  outcomes: [
+    { value: 1, at: "2026-07-02", source: "operator" },
+    { value: 1, at: "2026-07-21", source: "operator" },
+  ],
   win: { value: "412", unit: "neighbours reached", note: "your best week yet" },
   drafts: [
     {
@@ -504,6 +532,16 @@ const amara: FixtureClient = {
     effort: "reviewed by you, line by line",
   },
   winLine: "Your last post was read by 89 people in your network",
+  /* Amara's goal is the other shape: something the platforms genuinely
+   * count. Real, and deliberately modest — reach is not instructions, and
+   * the product never implies it is. */
+  goal: {
+    statement: "Reach 4,000 people in Manchester by the end of October",
+    metric: { kind: "platform", name: "views" },
+    target: 4000,
+    deadline: "2026-10-31",
+  },
+  outcomes: [{ value: 1180, at: "2026-07-28", source: "platform" }],
   win: { value: "89", unit: "people in your network", note: "read your last post" },
   drafts: [
     {
