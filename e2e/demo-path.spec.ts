@@ -26,7 +26,21 @@ for (const theme of THEMES) {
     ).toBeVisible();
     await expect(page.getByText(/Meridian Roofing/).first()).toBeVisible();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
-    await page.getByRole("button", { name: /that's me/i }).click();
+
+    /* The first button press after a page load is the one that can land
+     * before React has hydrated. Playwright's actionability checks all
+     * pass — the button is visible, enabled and stable — but no handler is
+     * attached yet, so the click goes nowhere and the next assertion waits
+     * out its timeout on a page that never moved. It only showed up under
+     * parallel workers, where the contended CPU makes hydration slow enough
+     * to lose the race. Retrying the click until the app answers is the
+     * honest wait: we want it interactive, not merely painted. */
+    await expect(async () => {
+      await page.getByRole("button", { name: /that's me/i }).click();
+      await expect(
+        page.getByRole("heading", { name: /what do you want more of/i }),
+      ).toBeVisible({ timeout: 1000 });
+    }).toPass({ timeout: 15_000 });
 
     // S2 — goal
     await expect(

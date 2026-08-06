@@ -10,7 +10,11 @@ export default defineConfig({
   },
   webServer: {
     command: "npx next start -p 3100",
-    port: 3100,
+    /* A real page, not `port`. A port probe passes the moment the socket
+     * is listening, which `next start` does before it can actually render
+     * a route — so the first test of a cold run raced the server and failed
+     * on its own once. Waiting for /login to return means ready is ready. */
+    url: "http://localhost:3100/login",
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
     env: {
