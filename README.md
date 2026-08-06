@@ -1,5 +1,20 @@
 # marketing-tool-v2
 
+> ## ⏸ PAUSED — 2026-08-06
+>
+> **This repo is not the active track.** From 2026-08-06 the work is Abdul's v2
+> frontend plus his backend documentation: wire it to the backend, then modify it.
+> Saqlain is forking that into a separate "final frontend" repo, and that repo —
+> not this one — is where things happen next.
+>
+> Nothing here is a specification for that work, and nothing here should be copied
+> into it unless Saqlain asks by name. If a memory or a doc sent you here while
+> working on the final frontend, that pointer is stale — stop and ask.
+>
+> Read **[docs/HANDOFF.md](docs/HANDOFF.md)** first: state at pause, the audit of
+> `docs/proposals/`, and the plan that was in flight. Do not resume without
+> Saqlain saying so.
+
 The v2 client product: one card-based UI with persona-driven defaults and
 backend personalization, wired to the Client Content Engine. Fresh Next.js
 app, deployed on Vercel.
